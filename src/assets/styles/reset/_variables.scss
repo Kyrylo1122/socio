@@ -1,0 +1,65 @@
+@import "./fonts";
+
+$font-size-base:              12px !default;
+$line-height-base:            32px !default;
+
+$base-min-width:              320px;
+$max-width-center-container:  1400px;
+
+$links-mobile-font-size:      12px;
+$links-font-size:             13px;
+$middle-font-size:            14px;
+$title-font-size:             15px;
+$big-font-size:               16px;
+$upper-font-size:             18px;
+$price-font-size:             20px;
+$middle-title-font-size:      24px;
+$page-title:                  33px;
+$price-title:                 27px;
+
+$base-font:                   'OpenSans', Arial, Helvetica, sans-serif;
+$bold-font:                   'OpenSans Bold', Arial, Helvetica, sans-serif;
+$light-font:                   'OpenSans Light', Arial, Helvetica, sans-serif;
+
+$white:                       #fff;
+$black:                       #000;
+$light-black:                 #444;
+$phone:                       #666;
+$brown:                       #999;
+$phoneIcon:                   #245d58;
+$darkGreen:                   #064031;
+$green:                       #22B699;
+$hover-green:                 #278e7a;
+$middle-green:                #008000;
+$blue:                        #5b8bfb;
+$red:                         #ff0000;
+$light-red:                   #f94040;
+$footer-color:                #2f2f2f;
+$title-gray:                  #eee;
+$light-gray:                  #ddd;
+$dark-gray:                   #5a5a5a;
+$low-opacity-white:           #ababab;
+$gray:                        #888;
+$product-borders:             #f5f5f5;
+$light-blue:                  #b1b6e0;
+$middle-blue:                 #4b4f72;
+$dark-blue:                   #111744;
+$black-pearl:                 #090D2E;
+$jordy-blue:                  #97C6F4;
+$link-color:                  #587EFA;
+$input-border-color:          #587efa;
+$warning:                     #e16e6e;
+
+$btn-bg:                      linear-gradient(270deg, #587EFA 9%, #5E98FB 91%);
+$btn-bg-hover:                linear-gradient(270deg, #3a63e9 100%, #5E98FB 9%);
+$btn-shadow:                  0px 4px 20px rgba(83, 106, 250, 0.3);
+
+$mobile-portrait:             375px;
+$mobile-small:                568px;
+$mobile:                      768px;
+$tablet:                      1024px;
+$screen:                      1199px;
+$laptop:	 				  1400px;
+$big-screen:	 		      1420px;
+
+$base-min-width:              320px;

@@ -1,0 +1,91 @@
+// breakpoints mixin
+// @include breakpoint($mobile) {}
+@mixin breakpoint($rule){
+  @media only screen and (min-width: #{$rule}){
+    @content;
+  }
+}
+
+@mixin breakpoint_max($rule){
+  @media only screen and (max-width: #{$rule}){
+    @content;
+  }
+}
+
+//@include inline-block(top);
+@mixin inline-block($align:top) {
+  display:inline-block;
+  vertical-align:$align;
+}
+
+//@extend %clearfix;
+// clearfix
+%clearfix {
+  &:after {
+    content: " ";
+    display: block;
+    clear: both;
+  }
+}
+
+//@extend %listreset;
+// reset for list
+%listreset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// @include placeholder {color:#999;}
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+
+  &::-moz-placeholder {
+    opacity: 1;
+    @content;
+  }
+
+  &:-moz-placeholder {
+    @content;
+  }
+
+  &:-ms-input-placeholder {
+    @content;
+  }
+
+  &.placeholder {
+    @content;
+  }
+}
+
+@mixin transition {
+  transition:all 0.2s linear;
+}
+
+//@include fill-parent;
+@mixin fill-parent() {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+//@include no-select;
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+//@include burger-laptop
+@mixin burger-laptop {
+  @media (min-width: #{$mobile}) and (max-width: #{$laptop}) {
+    @content;
+  }
+}
