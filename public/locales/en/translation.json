@@ -1,0 +1,18 @@
+{
+  "greeting": "Welcome everybody on my page",
+  "navigation_homepage": "Home",
+  "navigation_contacts": "Contacts",
+  "navigation_chat": "Chat",
+
+  "language": "language",
+  "online_friends": "Online friends",
+  "user_info": "My info",
+  "user_friends": "My friends",
+  "comments": "Comments",
+  "liked_it": "Liked it",
+  "city": "City",
+  "country": "Country",
+  "status": "Status",
+  "login": "Login or username",
+  "password": "Password"
+}

@@ -5,19 +5,26 @@ import Box from "@mui/material/Box";
 
 import { users } from "@Assets/data/Users";
 import { AvatarGroup, Badge, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const UserFriends = () => {
   const onlineUsers = users.filter((user) => user.isOnline);
+  const { t } = useTranslation();
 
   return (
-    <>
+    <Box sx={{ p: 2 }}>
       <Typography
         variant="h2"
-        sx={{ fontSize: "24px", color: "white", p: "10px 0" }}
+        sx={{
+          fontSize: "24px",
+          fontWeight: 400,
+          color: "text.primary",
+          p: "10px 0",
+        }}
       >
-        Online friends
+        {t("online_friends")}
       </Typography>
-      <Divider sx={{ backgroundColor: "white" }} />
+      <Divider />
       <AvatarGroup
         total={onlineUsers.length}
         max={5}
@@ -34,10 +41,9 @@ const UserFriends = () => {
             key={user.id}
             sx={{ display: "flex", alignItems: "center", gap: "10px" }}
           >
-            {" "}
             <Badge
               key={user.id}
-              color="primary"
+              color="success"
               overlap="circular"
               badgeContent=" "
               variant="dot"
@@ -54,14 +60,14 @@ const UserFriends = () => {
             </Badge>
             <Typography
               variant="body2"
-              sx={{ display: "inline", color: "white" }}
+              sx={{ display: "inline", color: "text.primary", fontWeight: 500 }}
             >
               {user.username}
             </Typography>
           </Box>
         ))}
       </AvatarGroup>
-    </>
+    </Box>
   );
 };
 const Sidebar = () => {
@@ -72,10 +78,7 @@ const Sidebar = () => {
         flexDirection: "column",
         height: "100vh",
         width: "500px",
-        backgroundColor: "primary",
-        color: "white",
       }}
-      className="sidebar"
     >
       <Navigation />
       <Divider />

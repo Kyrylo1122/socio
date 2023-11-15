@@ -1,14 +1,3 @@
-// // import navigation from "../routes/navigation";
-// // import { NavLink } from "react-router-dom";
-
-// const Navigation = () => {
-//   return (
-//     <nav>
-//       <ul></ul>
-//     </nav>
-//   );
-// };
-// export default Navigation;
 import * as React from "react";
 import List from "@mui/material/List";
 import Box from "@mui/material/Box";
@@ -16,18 +5,18 @@ import ListItem from "@mui/material/ListItem";
 import Paper from "@mui/material/Paper";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
+import { useTranslation } from "react-i18next";
 
-import Typography from "@mui/material/Typography";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from "react-router-dom";
-import { PeopleAlt, Event, Home } from "@mui/icons-material";
+import { PeopleAlt, Home, Chat } from "@mui/icons-material";
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
-  primary: string;
+  children?: string;
+  primary?: string;
   to: string;
 }
 
@@ -35,42 +24,42 @@ const Link = React.forwardRef<HTMLAnchorElement, RouterLinkProps>(function Link(
   itemProps,
   ref
 ) {
-  return <RouterLink ref={ref} {...itemProps} role={undefined} />;
+  return <RouterLink color="red" ref={ref} {...itemProps} role={undefined} />;
 });
 
 function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
+  const { icon, to, primary, children } = props;
 
   return (
     <li>
-      <ListItem component={Link} to={to}>
+      <ListItem
+        sx={{ color: "text.primary", ":hover": { color: "text.accent" } }}
+        component={Link}
+        to={to}
+      >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
+        {primary && <ListItemText title={primary} />}
+        {children}{" "}
       </ListItem>
     </li>
   );
 }
 
 const Navigation = () => {
+  const { t } = useTranslation();
   return (
     <Box>
-      <Paper
-        sx={{ borderRadius: 0, backgroundColor: "secondary" }}
-        elevation={0}
-      >
+      <Paper sx={{ backgroundColor: "background.default" }} elevation={0}>
         <List aria-label="main navigation">
-          <ListItemLink to="/" primary="Home" icon={<Home />} />
-          <ListItemLink
-            to="/contacts"
-            primary="Contacts"
-            icon={<PeopleAlt />}
-          />
-          <ListItemLink to="/drafts" primary="Events" icon={<Event />} />
-        </List>
-        <Divider />
-        <List aria-label="secondary mailbox folders">
-          <ListItemLink to="/trash" primary="Trash" />
-          <ListItemLink to="/spam" primary="Spam" />
+          <ListItemLink to="/" icon={<Home />}>
+            {t("navigation_homepage")}
+          </ListItemLink>
+          <ListItemLink to="/contacts" icon={<PeopleAlt />}>
+            {t("navigation_contacts")}
+          </ListItemLink>
+          <ListItemLink to="/chat" icon={<Chat />}>
+            {t("navigation_chat")}
+          </ListItemLink>
         </List>
       </Paper>
     </Box>

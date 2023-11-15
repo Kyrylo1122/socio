@@ -12,12 +12,12 @@ import {
   IconButtonProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 import profileAvatar from "/usa.jpg";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -33,7 +33,14 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const PostCard = ({ image, desc, date, like }) => {
+interface IPostCardProps {
+  image?: string;
+  desc?: string;
+  date: string;
+  like: number;
+}
+const PostCard = ({ image, desc, date, like }: IPostCardProps) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -44,26 +51,21 @@ const PostCard = ({ image, desc, date, like }) => {
     <Card
       sx={{
         width: "100%",
-        backgroundColor: "inherit",
-        color: "white",
+        backgroundImage: "none",
       }}
     >
       <CardHeader
         avatar={
-          <Avatar
-            src={profileAvatar}
-            sx={{ bgcolor: "red", color: "primary" }}
-            aria-label="profile avatar"
-          >
+          <Avatar src={profileAvatar} aria-label="profile avatar">
             R
           </Avatar>
         }
         title="Kyrylo Bereznov"
         subheader={date}
-        sx={{ "& .MuiCardHeader-subheader": { color: "white" } }}
+        sx={{ "& .MuiCardHeader-subheader": { color: "text.light" } }}
       />
       <CardContent>
-        <Typography variant="body2" color="white">
+        <Typography variant="body2" color="text.light">
           {desc}
         </Typography>
       </CardContent>
@@ -74,14 +76,14 @@ const PostCard = ({ image, desc, date, like }) => {
         disableSpacing
       >
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon sx={{ color: "white" }} />
+          <FavoriteIcon sx={{ color: "primary.accent" }} />
         </IconButton>
         <Typography sx={{ p: 0, m: 0 }} paragraph>
-          {like} people like it
+          {like} {t("liked_it")}
         </Typography>
 
         <IconButton aria-label="share">
-          <ShareIcon sx={{ color: "white" }} />
+          <ShareIcon sx={{ color: "text.dark" }} />
         </IconButton>
       </CardActions>
 
@@ -97,7 +99,12 @@ const PostCard = ({ image, desc, date, like }) => {
         </Typography>
       </ExpandMore>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit title="Comment">
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+        title={t("comments")}
+      >
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>

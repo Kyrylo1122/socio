@@ -1,0 +1,21 @@
+1. PopUp with list of friends.
+2.Friend card with image, button write a message, delete.
+3.Chat with a friends. List of friends and every new single chat page.
+
+
+==================================MAIN===============
+1. Storage of friends.
+2. Storage of posts.
+3. Create post maker.
+
+
+===============================Secondary==============
+1.Write everything in Ukranian.
+2. Add language flag.
+3.Add spinner.
+4. Refactor types in typescript style
+
+5. Add mobile/tablet version
+6. Add spinner
+7.Add skeleton
+6. Add animation for forms
