@@ -4,8 +4,12 @@ import { IUserNew } from "src/types";
 import {
   createNewPost,
   createUserAccount,
+  deleteFile,
   signInAccount,
   signOutAccount,
+  updateFile,
+  updateUserInfo,
+  uploadFile,
 } from "../api";
 
 const useQueryUser = () => {
@@ -35,11 +39,24 @@ const useSignOutAccount = () =>
     mutationFn: signOutAccount,
   });
 
+const useDeleteFile = () =>
+  useMutation({
+    mutationFn: (id: string) => deleteFile(id),
+  });
+
+const useUploadFile = () => useMutation({ mutationFn: uploadFile });
+
 const useCreatePost = () => useMutation({ mutationFn: createNewPost });
+const useUpdateUserInfo = () =>
+  useMutation({ mutationFn: (data: any) => updateUserInfo(data) });
+
 export {
   useCreatePost,
   useSignOutAccount,
   useQueryUser,
   useCreateUserAccountMutation,
   useSignInAccountMutation,
+  useDeleteFile,
+  useUploadFile,
+  useUpdateUserInfo,
 };

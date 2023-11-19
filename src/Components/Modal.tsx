@@ -1,7 +1,8 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 
 import { Modal as BasicModal } from "@mui/material";
+import { SxProps, Theme } from "@mui/material/styles";
 
 const style = {
   position: "absolute",
@@ -13,24 +14,23 @@ const style = {
   borderRadius: "5px",
   boxShadow: 24,
 };
-interface IBasicModal {
+export interface IBasicModal {
   open: boolean;
   close: () => void;
   children: React.ReactNode;
+  sx?: SxProps<Theme>;
 }
 
-const Modal: React.FC<IBasicModal> = ({ open, close, children }) => {
+const Modal: React.FC<IBasicModal> = ({ sx = [], open, close, children }) => {
   return (
-    <div>
-      <BasicModal
-        open={open}
-        onClose={close}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>{children}</Box>
-      </BasicModal>
-    </div>
+    <BasicModal
+      open={open}
+      onClose={close}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={[style, ...(Array.isArray(sx) ? sx : [sx])]}>{children}</Box>
+    </BasicModal>
   );
 };
 

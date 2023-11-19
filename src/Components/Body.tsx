@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
-import { Box } from "@mui/joy";
+import { Box } from "@mui/material";
 import { useUserContext } from "src/context/AuthContext";
 
 export default function Body() {

@@ -1,22 +1,25 @@
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, useCallback } from "react";
 import { IUser } from "src/types";
 
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserAccount } from "src/lib/api";
 import { AuthContext } from "./AuthContext";
 import { INITIAL_USER } from "src/constant";
+import { avatars } from "src/Components/ProfileAvatars/ProfilePictures";
+import { useTranslation } from "react-i18next";
 
 interface IAuthContextProvider {
   children: ReactNode;
 }
 
 export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
+  const { t } = useTranslation();
   const [user, setUser] = useState<IUser>(INITIAL_USER);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-  const checkAuthUser = async () => {
+  const checkAuthUser = useCallback(async () => {
     setIsLoading(true);
     try {
       const currentAccount = await getCurrentUserAccount();
@@ -24,13 +27,28 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
         const {
           $id: id,
           name,
-          username,
           email,
           imageUrl,
+          imageId,
           bio,
+          defaultCharacter,
+          backgroundImage,
+          userInfo,
         } = currentAccount;
-        setUser({ id, name, username, email, imageUrl, bio });
+        setUser({
+          id,
+          name,
+          email,
+          imageId,
+          imageUrl: imageUrl ? imageUrl : avatars[defaultCharacter].image,
+          bio: bio ? bio : t("default_bio"),
+          defaultCharacter: defaultCharacter,
+          backgroundImage,
+          userInfo: userInfo ? userInfo : [],
+        });
         setIsAuthenticated(true);
+        navigate("/");
+
         return true;
       }
     } catch (error) {
@@ -39,8 +57,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
+  }, [navigate, t]);
   useEffect(() => {
     const cookieFallback = localStorage.getItem("cookieFallback");
     if (
@@ -48,14 +65,13 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
       cookieFallback === null ||
       cookieFallback === undefined
     ) {
+      setIsAuthenticated(false);
+
       navigate("/sign-in");
     }
 
     checkAuthUser();
-  }, []);
-  //   useEffect(() => {
-  //     navigate(`${isAuthenticated ? "/" : "/sign-in"}`);
-  //   }, [isAuthenticated, navigate]);
+  }, [checkAuthUser, navigate]);
 
   const value = {
     user,

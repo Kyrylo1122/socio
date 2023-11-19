@@ -3,7 +3,7 @@ import { Path, UseFormRegister } from "react-hook-form";
 
 export interface IFormValues {
   name: string;
-  username: string;
+  surname: string;
   email: string;
   password: string;
 }

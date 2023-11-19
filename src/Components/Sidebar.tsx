@@ -1,7 +1,7 @@
 import { Navigation } from "../Components";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 
 import { users } from "@Assets/data/Users";
 import { AvatarGroup, Badge, Typography } from "@mui/material";

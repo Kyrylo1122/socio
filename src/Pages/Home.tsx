@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 
 import Typography from "@mui/material/Typography";
 import { users } from "@Assets/data/Users";
@@ -8,19 +8,23 @@ import ListItem from "@mui/material/ListItem";
 import Avatar from "@mui/material/Avatar";
 import profileAvatar from "/usa.jpg";
 
-import { Divider, TextField } from "@mui/material";
+import { Divider, Skeleton, TextField } from "@mui/material";
 import { posts } from "@Assets/data/Posts";
 import PostCard from "src/Components/PostCard";
-import { useTranslation } from "react-i18next";
 import CreatePost from "src/Components/CreatePost";
 import { useState } from "react";
 import Modal from "src/Components/Modal";
-
-const userInfoContent = [
-  { key: "city", value: "Kharkiv" },
-  { key: "country", value: "Ukraine" },
-  { key: "status", value: "Have girlfriend" },
-];
+import { useUserContext } from "src/context/AuthContext";
+import { useTranslation } from "react-i18next";
+import UserInfo from "src/Components/UserInfo";
+import MouseImageOver from "src/Components/MouseImageOver";
+import UpdateImageModalContent from "src/Components/UpdateImageModal";
+import {
+  useDeleteFile,
+  useUpdateUserInfo,
+} from "src/lib/react-query/react-query";
+import { toast } from "react-toastify";
+import Spinner from "src/Components/Spinner";
 
 const PostList = () => {
   return (
@@ -72,23 +76,15 @@ const PostCreater = () => (
 const Home = () => {
   const { t } = useTranslation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { user, isLoading, checkAuthUser } = useUserContext();
+  const { mutateAsync: deleteFile, isPending } = useDeleteFile();
+  const { mutateAsync: uploadUserInfo, isPending: isLoad } =
+    useUpdateUserInfo();
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
-  const UserInfo = () => (
-    <Box>
-      <Typography variant="h4">{t("user_info")}</Typography>
-      <Divider />{" "}
-      <List>
-        {userInfoContent.map(({ key, value }) => (
-          <ListItem key={key} sx={{ pt: 0, pb: 0 }}>
-            {t(key)} : {value}
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  const [updateAvatarModal, setUpdateAvatarModal] = useState(true);
   const UserFriends = () => {
     return (
       <>
@@ -118,6 +114,17 @@ const Home = () => {
       </>
     );
   };
+  const deleteAvatarImage = async () => {
+    if (!user.imageId) return toast.info(t("no_avatar_image"));
+    try {
+      await deleteFile(user.imageId);
+      await uploadUserInfo({ imageId: null, imageUrl: null });
+      await checkAuthUser();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  if (isLoading) return <>loading</>;
   return (
     <Box
       sx={{
@@ -125,8 +132,6 @@ const Home = () => {
         color: "text.light",
       }}
     >
-      <Box sx={{ display: "inline-block" }}></Box>
-
       <Box>
         <img
           className="background-img"
@@ -134,6 +139,7 @@ const Home = () => {
           alt="background profile page"
         />
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -144,13 +150,44 @@ const Home = () => {
           mt: "-100px",
         }}
       >
-        <img className="avatar-img" src="./usa.jpg" alt="avatar-img" />
+        <MouseImageOver
+          onDelete={deleteAvatarImage}
+          onEdit={() => setUpdateAvatarModal(true)}
+        >
+          {isLoad || isPending ? (
+            <Skeleton
+              variant="circular"
+              width={150}
+              height={150}
+              sx={{ bgcolor: "primary.accent" }}
+            />
+          ) : (
+            <Avatar
+              sx={{
+                width: 150,
+                height: 150,
+                backgroundColor: "primary.accent",
+                border: "2px solid white",
+              }}
+              src={user.imageUrl}
+              alt={user.name}
+            />
+          )}
+        </MouseImageOver>
+        {updateAvatarModal ? (
+          <UpdateImageModalContent
+            imageId={user.imageId}
+            defaultImage={user.imageUrl}
+            open={updateAvatarModal}
+            close={() => setUpdateAvatarModal(false)}
+          />
+        ) : null}
 
         <Box sx={{ textAlign: "center", lineHeight: "1" }}>
           <Typography variant="h1" sx={{ fontSize: "36px" }}>
-            Kyrylo Bereznov
+            {user.name}
           </Typography>
-          <Typography variant="body1">{t("greeting")}</Typography>
+          <Typography variant="body1">{user.bio}</Typography>
         </Box>
         <Box sx={{ display: "flex", width: "100%" }}>
           <Box sx={{ flex: 2, padding: "15px" }}>
@@ -172,7 +209,7 @@ const Home = () => {
             <PostList />
           </Box>
           <Box sx={{ flex: 1, padding: "15px" }}>
-            <UserInfo />
+            <UserInfo userInfo={user.userInfo} />
             <UserFriends />
           </Box>
         </Box>

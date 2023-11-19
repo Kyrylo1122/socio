@@ -1,38 +1,13 @@
-import { Body, Header } from "./Components";
-import {
-  ThemeProvider,
-  THEME_ID,
-  CssBaseline,
-  Box,
-  CardMedia,
-} from "@mui/material";
+import { ThemeProvider, THEME_ID, CssBaseline } from "@mui/material";
 import useThemeContext from "./hooks/useThemeContext";
 import QueryProvider from "./lib/react-query/QueryProvider";
 import { AuthContextProvider } from "./context/AuthContextProvider";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { ModeType } from "./types";
-
-const DecorateImage = ({ mode }: { mode: ModeType }) => (
-  <Box
-    sx={{
-      position: "fixed",
-      bottom: 0,
-      right: 0,
-      width: 100,
-    }}
-  >
-    <CardMedia
-      component="img"
-      image={
-        mode === "light" ? "/GroovySittingDoodle.png" : "/LayingDoodle.png"
-      }
-    />
-  </Box>
-);
+import App from "./App";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainLayout = () => {
-  const { theme, mode } = useThemeContext();
+  const { theme } = useThemeContext();
 
   return (
     <>
@@ -41,9 +16,7 @@ const MainLayout = () => {
         <ThemeProvider theme={{ [THEME_ID]: theme }}>
           <CssBaseline />
           <QueryProvider>
-            {/* <Header /> */}
-            <Body />
-            <DecorateImage mode={mode} />
+            <App />
           </QueryProvider>
         </ThemeProvider>
       </AuthContextProvider>

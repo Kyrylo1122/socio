@@ -1,6 +1,6 @@
 import * as React from "react";
 import List from "@mui/material/List";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import Paper from "@mui/material/Paper";
 import ListItemIcon from "@mui/material/ListItemIcon";

@@ -295,7 +295,15 @@ export default function Header() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <Avatar alt={user.name} src={user.imageUrl} />
+                  <Avatar
+                    alt={user.name}
+                    src={user.imageUrl}
+                    sx={{
+                      backgroundColor: "primary.accent",
+                      border: "2px solid white",
+                      transform: "scalex(-1)",
+                    }}
+                  />
                 </IconButton>
               </Box>
               <Box sx={{ display: { xs: "flex", md: "none" } }}>

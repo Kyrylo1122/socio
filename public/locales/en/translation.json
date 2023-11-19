@@ -1,5 +1,4 @@
 {
-  "greeting": "Welcome everybody on my page",
   "navigation_homepage": "Home",
   "navigation_contacts": "Contacts",
   "navigation_chat": "Chat",
@@ -14,5 +13,18 @@
   "country": "Country",
   "status": "Status",
   "login": "Login or username",
-  "password": "Password"
+  "password": "Password",
+
+  "default_bio": "Welcome everybody on my page",
+  "add_city": "Add city",
+  "remove_city": "Remove city",
+  "add_status": "Add relations status",
+  "remove_status": "Remove relations status",
+  "delete_image": "Delete image",
+  "update_image": "Update image",
+  "update_image_header": "Uploading a new photo",
+  "update_image_body": "You can upload the image in JPG, GIF or PNG format.",
+  "update_image_footer": "If you're having trouble loading, try selecting a smaller photo.",
+
+  "no_avatar_image": "You do not have avatar image"
 }

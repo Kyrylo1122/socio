@@ -1,9 +1,9 @@
 import {
   Avatar,
-  Box,
   Container,
   CssBaseline,
   Grow,
+  Box,
   Typography,
 } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -45,6 +45,7 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     const user = await createUserAccount({
       ...data,
+      name: `${data.name} ${data.surname}`,
       defaultCharacter: avatar.id,
     });
     if (!user) return toast.warn("SignUp failed. Please repeat it again");
@@ -135,12 +136,12 @@ const SignUp = () => {
               )}
 
               <Input
-                label="Username*"
-                autoComplete="username"
-                name="username"
+                label="Surname*"
+                autoComplete="surname"
+                name="surname"
                 register={register}
               />
-              {errors.username && (
+              {errors.surname && (
                 <Typography color="error" variant="body2">
                   This field is required
                 </Typography>

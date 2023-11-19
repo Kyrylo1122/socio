@@ -1,7 +1,6 @@
 export interface IUserNew {
   name: string;
   email: string;
-  username: string;
   password: string;
   defaultCharacter: number;
 }
@@ -9,10 +8,31 @@ export interface IUserNew {
 export interface IUser {
   id: string;
   name: string;
-  username: string;
   email: string;
   imageUrl: string;
   bio: string;
+  backgroundImage?: string | null;
+  defaultCharacter: AvatarType;
+  userInfo: IUserInfo[];
+  imageId?: string | null;
+}
+
+export interface IUserInfo {
+  key: string;
+  value: string;
+}
+export interface IUserResponse {
+  accountId?: string;
+  id?: string;
+  email: string;
+  name: string;
+  imageUrl: URL | null;
+  imageId: string | null;
+  password: string;
+  defaultCharacter: number;
+  bio?: string | null;
+  userInfo: IUserInfo[];
+  backgroundImage?: URL | null;
 }
 
 export interface IUserContext {

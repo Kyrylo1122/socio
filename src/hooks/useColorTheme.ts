@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { getDesignTokens } from "src/theme/theme";
 
 const useColorTheme = () => {
-  const [mode, setMode] = useState<"light" | "dark">("dark");
+  const [mode, setMode] = useState<"light" | "dark">("light");
   const toggleColorMode = () =>
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
 

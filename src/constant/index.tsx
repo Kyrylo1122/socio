@@ -1,10 +1,13 @@
+import { avatars } from "src/Components/ProfileAvatars/ProfilePictures";
+
 export const INITIAL_USER = {
   id: "",
   name: "",
-  username: "",
   email: "",
   imageUrl: "",
   bio: "",
+  defaultCharacter: avatars[0],
+  userInfo: [],
 };
 
 export const INITIAL_STATE = {

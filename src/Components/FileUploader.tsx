@@ -1,7 +1,6 @@
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { useCallback } from "react";
 import resizeFile from "src/utils/ResizeFile";
-
 interface IFileUploader {
   onChange: (value: File) => void;
   setFileUrl: (value: string) => void;
@@ -29,6 +28,7 @@ const FileUploader = ({ onChange, setFileUrl }: IFileUploader) => {
 
   return (
     <div {...getRootProps()}>
+      {/* <AvatarEditor width={250} height={250} image={image} /> */}
       <input {...getInputProps()} />
     </div>
   );
