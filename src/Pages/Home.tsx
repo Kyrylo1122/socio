@@ -124,7 +124,7 @@ const Home = () => {
       console.error(error);
     }
   };
-  if (isLoading) return <>loading</>;
+  if (isLoading) return <Spinner />;
   return (
     <Box
       sx={{

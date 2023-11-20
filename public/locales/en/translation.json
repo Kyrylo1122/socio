@@ -21,7 +21,7 @@
   "add_status": "Add relations status",
   "remove_status": "Remove relations status",
   "delete_image": "Delete image",
-  "update_image": "Update image",
+  "update_image": "Choose another image",
   "update_image_header": "Uploading a new photo",
   "update_image_body": "You can upload the image in JPG, GIF or PNG format.",
   "update_image_footer": "If you're having trouble loading, try selecting a smaller photo.",

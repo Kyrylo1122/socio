@@ -1,16 +1,9 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Box, Button, Divider, Typography, styled } from "@mui/material";
 import Modal, { IBasicModal } from "./Modal";
 import { useTranslation } from "react-i18next";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FileUploader from "./FileUploader";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import {
   useDeleteFile,
@@ -18,6 +11,9 @@ import {
   useUploadFile,
 } from "src/lib/react-query/react-query";
 import { useUserContext } from "src/context/AuthContext";
+import AvatarEditor from "./CustomAvatarEditor";
+import dataURLtoFile from "src/utils/dataURLtoFile";
+import Spinner from "./Spinner";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -46,21 +42,29 @@ const UpdateImageModalContent = ({
   const [file, setFile] = useState<File | null>(null);
   const { mutateAsync: uploadFile, isPending } = useUploadFile();
   const { mutateAsync: deleteFile, isPending: isLoading } = useDeleteFile();
-  const { mutateAsync: uploadUserInfo, isPending: isLoad } =
-    useUpdateUserInfo();
+  const { mutateAsync: uploadUserInfo } = useUpdateUserInfo();
 
   const { checkAuthUser } = useUserContext();
-  const handleClick = async () => {
-    if (!file) return;
+
+  const Uploader = () => (
+    <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
+  );
+  const editor = useRef(null);
+
+  const handleSubmit = async () => {
     try {
+      if (!editor.current) throw Error;
+
+      const image = dataURLtoFile(
+        editor.current.getImage().toDataURL(),
+        "imageUrl"
+      );
       if (imageId) {
         await deleteFile(imageId);
       }
-
-      const uploadedFile = await uploadFile(file);
+      const uploadedFile = await uploadFile(image);
 
       if (!uploadedFile) throw Error;
-
       await uploadUserInfo({
         imageUrl: uploadedFile.imageUrl,
         imageId: uploadedFile.id,
@@ -72,10 +76,7 @@ const UpdateImageModalContent = ({
     }
   };
 
-  const Uploader = () => (
-    <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
-  );
-  if (isPending || isLoading || isLoad) return <>Loading...</>;
+  if (isPending || isLoading) return <Spinner />;
   return (
     <Modal sx={{ width: "300px" }} open={open} close={close}>
       <>
@@ -102,19 +103,8 @@ const UpdateImageModalContent = ({
               alignItems: "center",
             }}
           >
-            {fileUrl && (
-              <Avatar
-                sx={{
-                  width: 150,
-                  height: 150,
-                  backgroundColor: "primary.accent",
-                  border: "2px solid white",
-                }}
-                src={fileUrl}
-                alt="avatar"
-              />
-            )}
-            {fileUrl ? (
+            {file && <AvatarEditor file={file} ref={editor} />}
+            {file ? (
               <StyledBox
                 sx={{
                   "&:hover": {
@@ -149,7 +139,7 @@ const UpdateImageModalContent = ({
           <Divider />
           <Box sx={{ p: 3, textAlign: "center" }}>
             {fileUrl ? (
-              <StyledBtn onClick={handleClick}>Share</StyledBtn>
+              <StyledBtn onClick={handleSubmit}>Share</StyledBtn>
             ) : (
               <Typography variant="body1">
                 {t("update_image_footer")}
