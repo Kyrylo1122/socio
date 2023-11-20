@@ -13,7 +13,6 @@ import {
 import { useUserContext } from "src/context/AuthContext";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
-import Spinner from "./Spinner";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -40,11 +39,11 @@ const UpdateImageModalContent = ({
   const { t } = useTranslation();
   const [fileUrl, setFileUrl] = useState(defaultImage);
   const [file, setFile] = useState<File | null>(null);
-  const { mutateAsync: uploadFile, isPending } = useUploadFile();
-  const { mutateAsync: deleteFile, isPending: isLoading } = useDeleteFile();
+  const { mutateAsync: uploadFile } = useUploadFile();
+  const { mutateAsync: deleteFile } = useDeleteFile();
   const { mutateAsync: uploadUserInfo } = useUpdateUserInfo();
 
-  const { checkAuthUser } = useUserContext();
+  const { checkAuthUser, setIsLoading } = useUserContext();
 
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
@@ -53,6 +52,8 @@ const UpdateImageModalContent = ({
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
+
       if (!editor.current) throw Error;
 
       const image = dataURLtoFile(
@@ -73,10 +74,12 @@ const UpdateImageModalContent = ({
       close();
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
+      close();
     }
   };
 
-  if (isPending || isLoading) return <Spinner />;
   return (
     <Modal sx={{ width: "300px" }} open={open} close={close}>
       <>

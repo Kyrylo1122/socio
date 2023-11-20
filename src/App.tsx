@@ -4,11 +4,13 @@ import DecorateImage from "./Components/DecorateImage";
 import useThemeContext from "./hooks/useThemeContext";
 import { Header, Sidebar } from "./Components";
 import { Outlet } from "react-router-dom";
+import Spinner from "./Components/Spinner";
 
 const App = () => {
-  const { isAuthenticated } = useUserContext();
+  const { isAuthenticated, isLoading } = useUserContext();
   const { mode } = useThemeContext();
 
+  if (isLoading) return <Spinner />;
   return (
     <Box>
       {isAuthenticated ? <Header /> : null}

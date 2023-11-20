@@ -15,6 +15,7 @@ export const INITIAL_STATE = {
   isLoading: false,
   isAuthenticated: false,
   setUser: () => {},
+  setIsLoading: () => {},
   setIsAuthenticated: () => {},
   checkAuthUser: async () => false as boolean,
 };

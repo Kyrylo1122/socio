@@ -8,7 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import Avatar from "@mui/material/Avatar";
 import profileAvatar from "/usa.jpg";
 
-import { Divider, Skeleton, TextField } from "@mui/material";
+import { Divider, TextField } from "@mui/material";
 import { posts } from "@Assets/data/Posts";
 import PostCard from "src/Components/PostCard";
 import CreatePost from "src/Components/CreatePost";
@@ -24,8 +24,7 @@ import {
   useUpdateUserInfo,
 } from "src/lib/react-query/react-query";
 import { toast } from "react-toastify";
-import Spinner from "src/Components/Spinner";
-
+import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 const PostList = () => {
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -76,7 +75,7 @@ const PostCreater = () => (
 const Home = () => {
   const { t } = useTranslation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { user, isLoading, checkAuthUser } = useUserContext();
+  const { user, checkAuthUser } = useUserContext();
   const { mutateAsync: deleteFile, isPending } = useDeleteFile();
   const { mutateAsync: uploadUserInfo, isPending: isLoad } =
     useUpdateUserInfo();
@@ -84,7 +83,7 @@ const Home = () => {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
-  const [updateAvatarModal, setUpdateAvatarModal] = useState(true);
+  const [updateAvatarModal, setUpdateAvatarModal] = useState(false);
   const UserFriends = () => {
     return (
       <>
@@ -124,7 +123,6 @@ const Home = () => {
       console.error(error);
     }
   };
-  if (isLoading) return <Spinner />;
   return (
     <Box
       sx={{
@@ -155,12 +153,7 @@ const Home = () => {
           onEdit={() => setUpdateAvatarModal(true)}
         >
           {isLoad || isPending ? (
-            <Skeleton
-              variant="circular"
-              width={150}
-              height={150}
-              sx={{ bgcolor: "primary.accent" }}
-            />
+            <AvatarSkeleton />
           ) : (
             <Avatar
               sx={{

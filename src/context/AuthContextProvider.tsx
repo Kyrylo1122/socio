@@ -79,6 +79,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     isAuthenticated,
     setUser,
     setIsAuthenticated,
+    setIsLoading,
     checkAuthUser,
   };
 

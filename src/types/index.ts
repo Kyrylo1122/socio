@@ -41,6 +41,7 @@ export interface IUserContext {
   isAuthenticated: boolean;
   setUser: (state: IUser) => void;
   setIsAuthenticated: (state: boolean) => void;
+  setIsLoading: (state: boolean) => void;
   checkAuthUser: () => Promise<boolean | undefined>;
 }
 

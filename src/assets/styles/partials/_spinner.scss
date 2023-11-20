@@ -1,0 +1,20 @@
+@keyframes logo-spin {
+  //   from {
+  //     transform: rotate(-30deg) translateY(100%) translateX(-100%) scale(100%);
+  //   }
+  //   to {
+  //     transform: rotate(0deg) translateY(0) translateX(100%) scale(0%);
+  //   }
+  //   to {
+  //     transform: rotate(360deg);
+  //   }
+}
+
+.logo {
+  height: 16em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+
+  animation: logo-spin 1s steps(5, start) infinite;
+}
