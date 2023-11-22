@@ -19,7 +19,7 @@ const createUserAccount = async ({
       name: newAccount.name,
       imageUrl: null,
       imageId: null,
-      defaultCharacter,
+      defaultCharacter: defaultCharacter ?? 0,
       password,
       userInfo: [],
       bio: null,

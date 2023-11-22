@@ -5,7 +5,7 @@ import { ModeType } from "src/types";
 
 interface ICreateContext {
   mode: ModeType;
-  toggleColorMode: (value: ModeType) => void;
+  toggleColorMode: () => void;
   theme: ThemeOptions | undefined;
 }
 

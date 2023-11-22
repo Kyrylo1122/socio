@@ -12,7 +12,7 @@ import {
   Switch,
   Avatar,
 } from "@mui/material";
-
+import LanguageIcon from "@mui/icons-material/Language";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -24,6 +24,7 @@ import LanguageSelect from "./LanguageSelect";
 import { useSignOutAccount } from "src/lib/react-query/react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "src/context/AuthContext";
+import Logo from "./Logo";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -68,7 +69,6 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
   padding: 7,
-  marginRight: 1,
 
   "& .MuiSwitch-switchBase": {
     margin: 1,
@@ -115,6 +115,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     borderRadius: 20 / 2,
   },
 }));
+
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -221,18 +222,70 @@ export default function Header() {
   React.useEffect(() => {
     if (isSuccess) navigate(0);
   }, [isSuccess, navigate]);
+  const MobileHeader = () => (
+    <Box
+      sx={{
+        display: { xs: "flex", sm: "none" },
+        justifyContent: "space-between",
+        width: "100%",
+        position: "fixed",
+        backgroundColor: "background.paper",
+        borderBottom: "1px solid",
+        borderColor: "primary.dark",
+        zIndex: 5,
+        p: 1,
+      }}
+    >
+      <Logo />
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <SearchIcon sx={{ width: "32px", height: "32px" }} />
+        {/* <LanguageIcon sx={{ width: "32px", height: "32px" }} /> */}
+        <LanguageSelect />
+        <MaterialUISwitch
+          onChange={() => toggleColorMode()}
+          checked={mode === "dark"}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <IconButton
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          // aria-controls={menuId}
+          aria-haspopup="true"
+          // onClick={handleProfileMenuOpen}
+          color="inherit"
+        >
+          <Avatar
+            alt={user.name}
+            src={user.imageUrl}
+            sx={{
+              backgroundColor: "primary.accent",
+              border: "2px solid white",
+              transform: "scalex(-1)",
+            }}
+          />
+        </IconButton>
+      </Box>
+    </Box>
+  );
 
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <AppBar
         position="static"
         sx={{
-          p: 1,
+          //   p: 1,
           backgroundColor: "background.paper",
           backgroundImage: "none",
         }}
       >
-        <Toolbar
+        {/* <Toolbar
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -248,24 +301,23 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
+          <Logo />
 
-          {isAuthenticated ? (
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-          ) : null}
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+            />
+          </Search>
 
           <Box sx={{ display: "flex" }}>
             {" "}
             <MaterialUISwitch
               sx={{ m: 2 }}
-              onChange={toggleColorMode}
+              onChange={() => toggleColorMode()}
               checked={mode === "dark"}
             />
             <Box sx={{ marginRight: 1 }}>
@@ -320,9 +372,10 @@ export default function Header() {
               </Box>
             </>
           ) : null}
-        </Toolbar>
+        </Toolbar> */}
       </AppBar>
-      {renderMobileMenu}
+      <MobileHeader />
+      {/* {renderMobileMenu} */}
       {renderMenu}
     </Box>
   );

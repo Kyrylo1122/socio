@@ -25,6 +25,10 @@ import {
 } from "src/lib/react-query/react-query";
 import { toast } from "react-toastify";
 import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
+
+import TagIcon from "@mui/icons-material/Tag";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 const PostList = () => {
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -49,26 +53,42 @@ const PostList = () => {
   );
 };
 const PostCreater = () => (
-  <Box
-    sx={{
-      display: "flex",
-      gap: 3,
-      width: "100%",
-      alignItems: "flex-end",
-    }}
-  >
-    <Avatar
-      sx={{ width: 56, height: 56 }}
-      src={profileAvatar}
-      aria-label="profile avatar"
-    />
+  <Box>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 3,
+        width: "100%",
+        alignItems: "flex-end",
+      }}
+    >
+      <Avatar
+        sx={{ width: 56, height: 56 }}
+        src={profileAvatar}
+        aria-label="profile avatar"
+      />
 
-    <TextField
-      variant="standard"
-      fullWidth
-      sx={{ outline: "none" }}
-      placeholder="What's in your mind Kyrylo?"
-    />
+      <TextField
+        variant="standard"
+        fullWidth
+        sx={{ outline: "none" }}
+        placeholder="What's in your mind Kyrylo?"
+      />
+    </Box>
+    <Box
+      sx={{
+        mt: 2,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 4,
+        color: "primary.accent",
+      }}
+    >
+      <AddPhotoAlternateIcon color="inherit" />
+      <AddLocationAltIcon color="inherit" />
+      <TagIcon color="inherit" />
+    </Box>
   </Box>
 );
 
@@ -86,7 +106,7 @@ const Home = () => {
   const [updateAvatarModal, setUpdateAvatarModal] = useState(false);
   const UserFriends = () => {
     return (
-      <>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography variant="h4">{t("user_friends")}</Typography>
         <Divider />
         <AvatarGroup
@@ -110,7 +130,7 @@ const Home = () => {
             />
           ))}
         </AvatarGroup>
-      </>
+      </Box>
     );
   };
   const deleteAvatarImage = async () => {
@@ -177,13 +197,17 @@ const Home = () => {
         ) : null}
 
         <Box sx={{ textAlign: "center", lineHeight: "1" }}>
-          <Typography variant="h1" sx={{ fontSize: "36px" }}>
-            {user.name}
-          </Typography>
+          <Typography variant="h1">{user.name}</Typography>
           <Typography variant="body1">{user.bio}</Typography>
         </Box>
-        <Box sx={{ display: "flex", width: "100%" }}>
-          <Box sx={{ flex: 2, padding: "15px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column-reverse", lg: "row" },
+            width: "100%",
+          }}
+        >
+          <Box sx={{ flex: 2, padding: 2 }}>
             <Box
               onClick={openModal}
               sx={{
@@ -196,17 +220,24 @@ const Home = () => {
               <PostCreater />
             </Box>
 
-            <Modal open={modalIsOpen} close={closeModal}>
-              <CreatePost />
-            </Modal>
             <PostList />
           </Box>
-          <Box sx={{ flex: 1, padding: "15px" }}>
+          <Box
+            sx={{
+              flex: 1,
+              padding: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <UserInfo userInfo={user.userInfo} />
             <UserFriends />
           </Box>
         </Box>
       </Box>
+      <Modal open={modalIsOpen} close={closeModal}>
+        <CreatePost />
+      </Modal>
     </Box>
   );
 };

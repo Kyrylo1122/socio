@@ -3,14 +3,20 @@ import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useUserContext } from "src/context/AuthContext";
 
-export default function Body() {
-  const user = useUserContext();
+const Body = () => {
+  const { isAuthenticated } = useUserContext();
 
   return (
     <Box sx={{ display: "flex" }}>
-      {user.isAuthenticated ? <Sidebar /> : null}
-
-      <Outlet />
+      {isAuthenticated ? (
+        <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
+          <Sidebar />
+        </Box>
+      ) : null}
+      <Box sx={{ flex: 3 }}>
+        <Outlet />
+      </Box>
     </Box>
   );
-}
+};
+export default Body;

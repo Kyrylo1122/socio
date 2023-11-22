@@ -49,7 +49,7 @@ const Navigation = () => {
   const { t } = useTranslation();
   return (
     <Box>
-      <Paper sx={{ backgroundColor: "background.default" }} elevation={0}>
+      <Paper sx={{ backgroundColor: "inherit" }} elevation={0}>
         <List aria-label="main navigation">
           <ListItemLink to="/" icon={<Home />}>
             {t("navigation_homepage")}

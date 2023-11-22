@@ -8,10 +8,17 @@ interface IAvatarsChooser {
 
 function AvatarsChooser({ setAvatar }: IAvatarsChooser) {
   return (
-    <List sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+    <List
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        gap: { xs: "5px", sm: "10px" },
+        flexWrap: "wrap",
+      }}
+    >
       {avatarsArray.map((avatar) => (
         <ListItem
-          sx={{ width: "auto" }}
+          sx={{ width: "auto", m: 0, p: 0 }}
           key={avatar.id}
           onClick={() => setAvatar(avatar)}
         >
@@ -19,7 +26,7 @@ function AvatarsChooser({ setAvatar }: IAvatarsChooser) {
             key={avatar.id}
             src={avatar.image}
             alt={avatar.name}
-            sx={{ width: 100, height: 100 }}
+            sx={{ width: { xs: 75, md: 100 }, height: { xs: 75, md: 100 } }}
           />
         </ListItem>
       ))}

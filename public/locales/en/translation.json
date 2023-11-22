@@ -13,7 +13,10 @@
   "country": "Country",
   "status": "Status",
   "login": "Login or username",
-  "password": "Password",
+  "password": "Password*",
+  "email": "Email*",
+  "surname": "Surname*",
+  "name": "Name*",
 
   "default_bio": "Welcome everybody on my page",
   "add_city": "Add city",
@@ -26,5 +29,17 @@
   "update_image_body": "You can upload the image in JPG, GIF or PNG format.",
   "update_image_footer": "If you're having trouble loading, try selecting a smaller photo.",
 
-  "no_avatar_image": "You do not have avatar image"
+  "no_avatar_image": "You do not have avatar image",
+  "sign_up": "Sign Up",
+  "sign_up_btn": "Sign Up",
+  "sign_in": "Sign In",
+  "sign_in_btn": "Sign In",
+
+  "error_repeat_signin": "Oops...Something went wrong. Please repeat sign up again",
+  "error_signin_failed": "SignIn failed. Please repeat it again",
+  "error_signup_failed": "SignUp failed. Please repeat it again",
+
+  "field_required": "This field is required",
+  "choose_your_character": "Choose your character",
+  "do_not_have_account": "Don't have an account? Sign Up"
 }

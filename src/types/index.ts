@@ -59,3 +59,9 @@ export interface AvatarType {
   image: string;
   name: string;
 }
+export interface IFormNames {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}

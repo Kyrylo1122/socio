@@ -16,7 +16,6 @@ const UserFriends = () => {
       <Typography
         variant="h2"
         sx={{
-          fontSize: "24px",
           fontWeight: 400,
           color: "text.primary",
           p: "10px 0",
@@ -32,8 +31,8 @@ const UserFriends = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          mt: "10px",
-          gap: "5px",
+          mt: 2,
+          gap: 1,
         }}
       >
         {onlineUsers.map((user) => (
@@ -77,7 +76,9 @@ const Sidebar = () => {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        width: "500px",
+        position: "fixed",
+        backgroundColor: "background.default",
+        // width: "500px",
       }}
     >
       <Navigation />

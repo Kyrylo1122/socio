@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 import { useMemo, useState } from "react";
 import { getDesignTokens } from "src/theme/theme";
 
@@ -8,7 +8,7 @@ const useColorTheme = () => {
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
 
   const modifiedTheme = useMemo(
-    () => createTheme(getDesignTokens(mode)),
+    () => responsiveFontSizes(createTheme(getDesignTokens(mode))),
     [mode]
   );
 

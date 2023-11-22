@@ -14,10 +14,16 @@ import { useTranslation } from "react-i18next";
 import useThemeContext from "src/hooks/useThemeContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { LockOutlined } from "@mui/icons-material";
-import { FormButton, IFormValues, Input } from "src/Components/FormComponents";
-import { signInAccount } from "src/lib/api";
+import { FormButton } from "src/Components/ui/FormButton";
 import { useUserContext } from "src/context/AuthContext";
 import { toast } from "react-toastify";
+import layingImage from "/LayingDoodleYYY.png";
+import Spinner from "src/Components/Spinner";
+import { useSignInAccountMutation } from "src/lib/react-query/react-query";
+import { useEffect } from "react";
+import Logo from "src/Components/Logo";
+import { IFormNames } from "src/types";
+import { Input } from "src/Components/ui/Input";
 
 interface ISignInForm {
   email: string;
@@ -26,7 +32,6 @@ interface ISignInForm {
 
 const SignIn = () => {
   const { t } = useTranslation();
-
   const { mode } = useThemeContext();
   const navigate = useNavigate();
   const { checkAuthUser, isLoading } = useUserContext();
@@ -35,36 +40,60 @@ const SignIn = () => {
     register,
     handleSubmit,
     reset,
+    setFocus,
+
     formState: { errors },
-  } = useForm<IFormValues>();
+  } = useForm<IFormNames>();
+  const { mutateAsync: signInAccount, isPending } = useSignInAccountMutation();
+
+  useEffect(() => {
+    setFocus("email");
+  }, [setFocus]);
 
   const onSubmit: SubmitHandler<ISignInForm> = async (value) => {
-    const session = await signInAccount(value);
-    if (!session)
-      return toast.warn(
-        "Oops...Something went wrong. Please repeat sign up again"
-      );
+    try {
+      const session = await signInAccount(value);
+      if (!session) return toast.warn(t("error_repeat_signin"));
 
-    const isLoggedIn = await checkAuthUser();
-    if (isLoggedIn) {
-      reset();
-      navigate("/");
-    } else return toast.warn("SignUp failed. Please repeat it again");
+      const isLoggedIn = await checkAuthUser();
+      if (isLoggedIn) {
+        reset();
+        navigate("/");
+      } else return toast.warn(t("error_signin_failed"));
+    } catch (error) {
+      console.error(error);
+    }
   };
-  if (isLoading) return <>Loading...</>;
+  if (isLoading || isPending) return <Spinner />;
   return (
     <>
       <Container
         sx={{
           display: "flex",
           alignItems: "stretched",
-          mt: 10,
+          p: { xs: 3 },
+          mt: { sx: 0, md: 10 },
           justifyContent: "center",
+          flexDirection: { xs: "column", md: "row" },
         }}
         component="main"
       >
         <Slide direction="right" in={true} mountOnEnter unmountOnExit>
-          <Box sx={{ flex: 1 }}>
+          <Box
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              display: { xs: "flex", md: "none" },
+              width: { xs: "200px", sm: "480px" },
+            }}
+          >
+            {" "}
+            <Logo />
+            <CardMedia component="img" image={layingImage} />
+          </Box>
+        </Slide>
+        <Slide direction="right" in={true} mountOnEnter unmountOnExit>
+          <Box sx={{ display: { xs: "none", md: "block" }, flex: 1 }}>
             <CardMedia
               component="img"
               image={mode === "light" ? "/pink-doodler.png" : "/FloatD.png"}
@@ -78,7 +107,7 @@ const SignIn = () => {
         >
           <Box
             sx={{
-              marginTop: 8,
+              p: 2,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -89,7 +118,7 @@ const SignIn = () => {
               <LockOutlined />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              {t("sign_in")}
             </Typography>
             <Box
               component="form"
@@ -98,7 +127,7 @@ const SignIn = () => {
               sx={{ mt: 1 }}
             >
               <Input
-                label="Email"
+                label={t("email")}
                 autoComplete="email"
                 name="email"
                 register={register}
@@ -109,23 +138,18 @@ const SignIn = () => {
               </Typography>
 
               <Input
-                label="Password*"
+                label={t("password")}
                 type="password"
                 autoComplete="current-password"
                 name="password"
                 register={register}
               />
-              {errors.password && <p>This field is required</p>}
+              {errors.password && <p>{t("field_required")} </p>}
 
-              <FormButton type="submit">Sign In</FormButton>
+              <FormButton type="submit">{t("sign_in_btn")}</FormButton>
               <Grid container>
-                <Grid item xs>
-                  <NavLink to="/">Forgot password?</NavLink>
-                </Grid>
                 <Grid item>
-                  <NavLink to="/sign-up">
-                    {"Don't have an account? Sign Up"}
-                  </NavLink>
+                  <NavLink to="/sign-up">{t("do_not_have_account")}</NavLink>
                 </Grid>
               </Grid>
             </Box>

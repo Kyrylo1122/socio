@@ -12,8 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import profileAvatar from "/usa.jpg";
 import FileUploader from "./FileUploader";
 import { Controller, useForm } from "react-hook-form";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -21,9 +20,11 @@ import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import * as Yup from "yup";
 import { useCreatePost } from "src/lib/react-query/react-query";
-import TagIcon from "@mui/icons-material/Tag";
 import { useUserContext } from "src/context/AuthContext";
 import { INewPost } from "src/types";
+import TagIcon from "@mui/icons-material/Tag";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
 const schema = Yup.object({
   caption: Yup.string().max(2200),
