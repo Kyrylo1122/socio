@@ -1,33 +1,38 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { IUserNew } from "src/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { IUserNew, IUserResponse } from "src/types";
 import {
   createNewPost,
   createUserAccount,
   deleteFile,
+  deletePost,
+  getPosts,
+  likePost,
   signInAccount,
   signOutAccount,
-  updateFile,
   updateUserInfo,
   uploadFile,
+  uploadComments,
 } from "../api";
+import { QUERY_KEYS } from "./QueryKeys";
 
-const useQueryUser = () => {
-  return useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "https://jsonplaceholder.typicode.com/posts"
-      );
-      return data;
+const useGetPosts = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_POSTS],
+
+    queryFn: getPosts,
+  });
+
+const useCreateUserAccountMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUserNew) => createUserAccount(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CREATE_USER_ACCOUNT],
+      });
     },
   });
 };
-
-const useCreateUserAccountMutation = () =>
-  useMutation({
-    mutationFn: (user: IUserNew) => createUserAccount(user),
-  });
 
 const useSignInAccountMutation = () =>
   useMutation({
@@ -46,17 +51,66 @@ const useDeleteFile = () =>
 
 const useUploadFile = () => useMutation({ mutationFn: uploadFile });
 
-const useCreatePost = () => useMutation({ mutationFn: createNewPost });
+const useCreatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createNewPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deletePost(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+
 const useUpdateUserInfo = () =>
-  useMutation({ mutationFn: (data: any) => updateUserInfo(data) });
+  useMutation({
+    mutationFn: (data: Partial<IUserResponse>) => updateUserInfo(data),
+  });
+
+const useLikePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      postId,
+      arrayOfLikes,
+    }: {
+      postId: string;
+      arrayOfLikes: string[];
+    }) => likePost(postId, arrayOfLikes),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+export const useUploadComments = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userInfo) => uploadComments(userInfo),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
+      });
+    },
+  });
+};
 
 export {
+  useDeletePost,
   useCreatePost,
   useSignOutAccount,
-  useQueryUser,
   useCreateUserAccountMutation,
   useSignInAccountMutation,
   useDeleteFile,
   useUploadFile,
   useUpdateUserInfo,
+  useGetPosts,
+  useLikePost,
 };

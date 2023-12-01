@@ -20,11 +20,12 @@ import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import * as Yup from "yup";
 import { useCreatePost } from "src/lib/react-query/react-query";
-import { useUserContext } from "src/context/AuthContext";
 import { INewPost } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import Spinner from "./Spinner";
+import { useUserContext } from "src/hooks/useUserContext";
 
 const schema = Yup.object({
   caption: Yup.string().max(2200),
@@ -46,7 +47,7 @@ const IconBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const CreatePost = () => {
+const CreatePost = ({ close }: { close: () => void }) => {
   const [fileUrl, setFileUrl] = useState<string>();
   const [editImage, setEditImage] = useState(false);
   const [isOpenLocation, setOpenLocation] = useState(false);
@@ -63,8 +64,14 @@ const CreatePost = () => {
   });
 
   const onSubmit = async (value: DataType) => {
-    const newValue = { ...value, userId: user.id };
-    await createNewPost(newValue);
+    try {
+      const newValue = { ...value, userId: user.id };
+      console.log("newValue: ", newValue);
+      await createNewPost(newValue);
+      close();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const ImageController = () => (
@@ -76,7 +83,7 @@ const CreatePost = () => {
       )}
     />
   );
-  if (isPending) return <>Loading...</>;
+  if (isPending) return <Spinner />;
   return (
     <Box
       sx={{

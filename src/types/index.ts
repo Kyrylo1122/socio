@@ -31,8 +31,10 @@ export interface IUserResponse {
   password: string;
   defaultCharacter: number;
   bio?: string | null;
-  userInfo: IUserInfo[];
   backgroundImage?: URL | null;
+  userInfo?: [];
+
+  //   userInfo?: URL | null;
 }
 
 export interface IUserContext {

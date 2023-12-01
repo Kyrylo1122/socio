@@ -3,18 +3,13 @@ import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { users } from "@Assets/data/Users";
 import AvatarGroup from "@mui/material/AvatarGroup";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Avatar from "@mui/material/Avatar";
-import profileAvatar from "/usa.jpg";
 
-import { Divider, TextField } from "@mui/material";
-import { posts } from "@Assets/data/Posts";
-import PostCard from "src/Components/PostCard";
+import Avatar from "@mui/material/Avatar";
+
+import { Divider } from "@mui/material";
 import CreatePost from "src/Components/CreatePost";
 import { useState } from "react";
 import Modal from "src/Components/Modal";
-import { useUserContext } from "src/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import UserInfo from "src/Components/UserInfo";
 import MouseImageOver from "src/Components/MouseImageOver";
@@ -26,71 +21,52 @@ import {
 import { toast } from "react-toastify";
 import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 
-import TagIcon from "@mui/icons-material/Tag";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-const PostList = () => {
-  return (
-    <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      {posts.map((post) => (
-        <ListItem
-          sx={{
-            boxShadow: "8px 8px 24px 0px rgba(66, 68, 90, 1)",
-            p: 0,
-            borderRadius: 1,
-          }}
-          key={post.id}
-        >
-          <PostCard
-            desc={post.desc}
-            image={post.photo}
-            date={post.date}
-            like={post.like}
-          />
-        </ListItem>
-      ))}
-    </List>
-  );
-};
-const PostCreater = () => (
-  <Box>
-    <Box
-      sx={{
-        display: "flex",
-        gap: 3,
-        width: "100%",
-        alignItems: "flex-end",
-      }}
-    >
-      <Avatar
-        sx={{ width: 56, height: 56 }}
-        src={profileAvatar}
-        aria-label="profile avatar"
-      />
+import { useUserContext } from "src/hooks/useUserContext";
+import PostList from "src/Components/PostList";
+import PostCreator from "src/Components/PostCreator";
 
-      <TextField
-        variant="standard"
-        fullWidth
-        sx={{ outline: "none" }}
-        placeholder="What's in your mind Kyrylo?"
-      />
-    </Box>
-    <Box
-      sx={{
-        mt: 2,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 4,
-        color: "primary.accent",
-      }}
-    >
-      <AddPhotoAlternateIcon color="inherit" />
-      <AddLocationAltIcon color="inherit" />
-      <TagIcon color="inherit" />
-    </Box>
-  </Box>
-);
+// $collectionId
+// :
+// "653ec2f742926176e790"
+// $createdAt
+// :
+// "2023-11-13T19:57:52.271+00:00"
+// $databaseId
+// :
+// "653d5ca4d34be06380fa"
+// $id
+// :
+// "65527fc041809b37c95e"
+// $permissions
+// :
+// (3) ['read("user:6547d8b6e3a98e5cc79c")', 'update("user:6547d8b6e3a98e5cc79c")', 'delete("user:6547d8b6e3a98e5cc79c")']
+// $updatedAt
+// :
+// "2023-11-13T19:57:52.271+00:00"
+// caption
+// :
+// "All good, but not always"
+// creator
+// :
+// {name: 'Pedro', accountId: '6547d8b6e3a98e5cc79c', email: 'ko@ma.com', bio: null, imageId: null, …}
+// imageId
+// :
+// "65527fbfc16340f26b51"
+// imageUrl
+// :
+// "https://cloud.appwrite.io/v1/storage/buckets/653ec1b13a369ef1507f/files/65527fbfc16340f26b51/preview?project=653d5c81e6f55aa196c8"
+// likes
+// :
+// []
+// location
+// :
+// "Ryga"
+// save
+// :
+// []
+// tags
+// :
+// (3) ['all', 'new', 'tags']
 
 const Home = () => {
   const { t } = useTranslation();
@@ -148,6 +124,7 @@ const Home = () => {
       sx={{
         width: "100%",
         color: "text.light",
+        position: "relative",
       }}
     >
       <Box>
@@ -217,7 +194,7 @@ const Home = () => {
                 borderRadius: 1,
               }}
             >
-              <PostCreater />
+              <PostCreator imageUrl={user.imageUrl} />
             </Box>
 
             <PostList />
@@ -236,7 +213,7 @@ const Home = () => {
         </Box>
       </Box>
       <Modal open={modalIsOpen} close={closeModal}>
-        <CreatePost />
+        <CreatePost close={closeModal} />
       </Modal>
     </Box>
   );

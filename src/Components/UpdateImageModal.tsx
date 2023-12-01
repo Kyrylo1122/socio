@@ -10,9 +10,9 @@ import {
   useUpdateUserInfo,
   useUploadFile,
 } from "src/lib/react-query/react-query";
-import { useUserContext } from "src/context/AuthContext";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
+import { useUserContext } from "src/hooks/useUserContext";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",

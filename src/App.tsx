@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import { useUserContext } from "./context/AuthContext";
 import DecorateImage from "./Components/DecorateImage";
 import useThemeContext from "./hooks/useThemeContext";
 import { Header } from "./Components";
 import Spinner from "./Components/Spinner";
 import Body from "./Components/Body";
+import { useUserContext } from "./hooks/useUserContext";
 
 const App = () => {
   const { isAuthenticated, isLoading } = useUserContext();

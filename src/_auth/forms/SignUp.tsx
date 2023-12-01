@@ -16,7 +16,6 @@ import {
   useCreateUserAccountMutation,
   useSignInAccountMutation,
 } from "src/lib/react-query/react-query";
-import { useUserContext } from "src/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AvatarsChooser from "src/Components/ProfileAvatars/AvatarsChooser";
@@ -26,6 +25,7 @@ import { avatars as avatarsArray } from "src/Components/ProfileAvatars/ProfilePi
 import { useTranslation } from "react-i18next";
 import Spinner from "src/Components/Spinner";
 import { Input } from "src/Components/ui/Input";
+import { useUserContext } from "src/hooks/useUserContext";
 
 const SignUp = () => {
   const { theme } = useThemeContext();
@@ -74,7 +74,12 @@ const SignUp = () => {
   return (
     <ThemeProvider theme={{ [THEME_ID]: theme }}>
       <CssBaseline />
-      <Box sx={{ m: "0 auto" }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ m: "0 auto" }}
+      >
         <Container
           sx={{
             display: "flex",
@@ -128,9 +133,6 @@ const SignUp = () => {
               </Box>
 
               <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
                 sx={{
                   marginTop: 2,
                   display: "flex",

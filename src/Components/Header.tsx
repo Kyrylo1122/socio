@@ -23,8 +23,8 @@ import useThemeContext from "src/hooks/useThemeContext";
 import LanguageSelect from "./LanguageSelect";
 import { useSignOutAccount } from "src/lib/react-query/react-query";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "src/context/AuthContext";
 import Logo from "./Logo";
+import { useUserContext } from "src/hooks/useUserContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -217,7 +217,7 @@ export default function Header() {
     </Menu>
   );
   const { mode, toggleColorMode } = useThemeContext();
-  const { user, isAuthenticated } = useUserContext();
+  const { user } = useUserContext();
 
   React.useEffect(() => {
     if (isSuccess) navigate(0);
@@ -280,12 +280,13 @@ export default function Header() {
       <AppBar
         position="static"
         sx={{
-          //   p: 1,
+          display: { xs: "none", sm: "block" },
+          p: 1,
           backgroundColor: "background.paper",
           backgroundImage: "none",
         }}
       >
-        {/* <Toolbar
+        <Toolbar
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -324,55 +325,52 @@ export default function Header() {
               <LanguageSelect />
             </Box>
           </Box>
-          {isAuthenticated ? (
-            <>
-              {" "}
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="inherit"
-                >
-                  <Badge badgeContent={40} color="secondary">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
+          <>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={40} color="secondary">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
 
-                <IconButton
-                  size="large"
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <Avatar
-                    alt={user.name}
-                    src={user.imageUrl}
-                    sx={{
-                      backgroundColor: "primary.accent",
-                      border: "2px solid white",
-                      transform: "scalex(-1)",
-                    }}
-                  />
-                </IconButton>
-              </Box>
-              <Box sx={{ display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </Box>
-            </>
-          ) : null}
-        </Toolbar> */}
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <Avatar
+                  alt={user.name}
+                  src={user.imageUrl}
+                  sx={{
+                    backgroundColor: "primary.accent",
+                    border: "2px solid white",
+                    transform: "scalex(-1)",
+                  }}
+                />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </>
+        </Toolbar>
       </AppBar>
       <MobileHeader />
       {/* {renderMobileMenu} */}

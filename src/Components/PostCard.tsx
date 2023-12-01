@@ -6,24 +6,26 @@ import {
   CardContent,
   Typography,
   CardMedia,
-  CardActions,
   IconButton,
   Collapse,
   IconButtonProps,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 
 import profileAvatar from "/usa.jpg";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import PostStats from "./PostStats";
+import { Models } from "appwrite";
+import { useDeletePost } from "src/lib/react-query/react-query";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
+  const { ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
@@ -34,17 +36,25 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 interface IPostCardProps {
+  id: string;
   image?: string;
   desc?: string;
   date: string;
-  like: number;
+  likes: Models.Document;
 }
-const PostCard = ({ image, desc, date, like }: IPostCardProps) => {
+const PostCard = ({ id, image, desc, date, likes }: IPostCardProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
-
+  const { mutateAsync: deletePost, isPending } = useDeletePost();
   const handleExpandClick = () => {
     setExpanded((state) => !state);
+  };
+  const handleDeletePost = async () => {
+    try {
+      await deletePost(id);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -52,8 +62,16 @@ const PostCard = ({ image, desc, date, like }: IPostCardProps) => {
       sx={{
         width: "100%",
         backgroundImage: "none",
+        position: "relative",
       }}
     >
+      <Button
+        variant="contained"
+        sx={{ top: 10, right: 10, color: "black", position: "absolute" }}
+        onClick={handleDeletePost}
+      >
+        {isPending ? "on deleting" : "DELETE"}
+      </Button>
       <CardHeader
         avatar={
           <Avatar src={profileAvatar} aria-label="profile avatar">
@@ -69,23 +87,12 @@ const PostCard = ({ image, desc, date, like }: IPostCardProps) => {
           {desc}
         </Typography>
       </CardContent>
-      <CardMedia component="img" height="350" image={image} alt="Paella dish" />
-
-      <CardActions
-        sx={{ display: "flex", alignItems: "center" }}
-        disableSpacing
-      >
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon sx={{ color: "primary.accent" }} />
-        </IconButton>
-        <Typography sx={{ p: 0, m: 0 }} paragraph>
-          {like} {t("liked_it")}
-        </Typography>
-
-        <IconButton aria-label="share">
-          <ShareIcon sx={{ color: "text.dark" }} />
-        </IconButton>
-      </CardActions>
+      <CardMedia
+        component="img"
+        sx={{ height: 350, objectFit: "contain" }}
+        image={image}
+        alt="Paella dish"
+      />
 
       <ExpandMore
         expand={expanded}
@@ -98,7 +105,7 @@ const PostCard = ({ image, desc, date, like }: IPostCardProps) => {
           Coments:
         </Typography>
       </ExpandMore>
-
+      <PostStats likes={likes} postId={id} />
       <Collapse
         in={expanded}
         timeout="auto"
