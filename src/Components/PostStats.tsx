@@ -31,7 +31,7 @@ const PostStats = ({ likes, postId }: IPostStats) => {
     try {
       await likePost({ postId, arrayOfLikes });
     } catch (error) {
-      console.error();
+      console.error(error);
     }
   };
   return (
