@@ -23,25 +23,25 @@ export interface IUserInfo {
 }
 export interface IUserResponse {
   accountId?: string;
-  id?: string;
+  $id?: string;
   email: string;
   name: string;
-  imageUrl: URL | null;
+  imageUrl: string | null;
   imageId: string | null;
   password: string;
   defaultCharacter: number;
   bio?: string | null;
   backgroundImage?: URL | null;
-  userInfo?: [];
+  userInfo?: string[];
 
   //   userInfo?: URL | null;
 }
 
 export interface IUserContext {
-  user: IUser;
+  user: IUserResponse;
   isLoading: boolean;
   isAuthenticated: boolean;
-  setUser: (state: IUser) => void;
+  setUser: (state: IUserResponse) => void;
   setIsAuthenticated: (state: boolean) => void;
   setIsLoading: (state: boolean) => void;
   checkAuthUser: () => Promise<boolean | undefined>;
@@ -50,9 +50,23 @@ export interface IUserContext {
 export interface INewPost {
   userId: string;
   caption?: string;
-  imageUrl?: any;
+  imageUrl?: File;
   location?: string;
   tags?: string;
+}
+export interface IPostResponse {
+  $id: string;
+
+  caption?: string;
+
+  imageUrl?: string;
+  tags: string[];
+  location?: string;
+  imageId?: string;
+  creator?: string;
+  postCreator: string;
+  likes: any;
+  $createdAt: string;
 }
 export type ModeType = "light" | "dark";
 

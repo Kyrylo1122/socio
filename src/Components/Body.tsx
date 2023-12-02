@@ -7,7 +7,7 @@ const Body = () => {
   const { isAuthenticated } = useUserContext();
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", mt: 11 }}>
       {isAuthenticated ? (
         <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
           <Sidebar />

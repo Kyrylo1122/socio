@@ -17,16 +17,16 @@ const PostStats = ({ likes, postId }: IPostStats) => {
   const { user } = useUserContext();
   const { mutateAsync: likePost } = useLikePost();
   let arrayOfLikes = likes.map((likedUser: Models.Document) => likedUser.$id);
-  const [isLiked, setIsLiked] = useState(() => arrayOfLikes.includes(user.id));
+  const [isLiked, setIsLiked] = useState(() => arrayOfLikes.includes(user.$id));
   const [countLikes, setCountLikes] = useState(likes.length);
 
   const onLikeClick = async () => {
-    if (arrayOfLikes.includes(user.id)) {
+    if (arrayOfLikes.includes(user.$id)) {
       arrayOfLikes = arrayOfLikes.filter(
-        (usersId: string) => usersId !== user.id
+        (usersId: string) => usersId !== user.$id
       );
     } else {
-      arrayOfLikes.push(user.id);
+      arrayOfLikes.push(user.$id);
     }
     try {
       await likePost({ postId, arrayOfLikes });

@@ -1,5 +1,5 @@
 import { ReactNode, useState, useEffect, useCallback } from "react";
-import { IUser } from "src/types";
+import { IUserResponse } from "src/types";
 
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserAccount } from "src/lib/api";
@@ -14,7 +14,7 @@ interface IAuthContextProvider {
 
 export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const { t } = useTranslation();
-  const [user, setUser] = useState<IUser>(INITIAL_USER);
+  const [user, setUser] = useState<IUserResponse>(INITIAL_USER);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
       const currentAccount = await getCurrentUserAccount();
       if (currentAccount) {
         const {
-          $id: id,
+          $id,
           name,
           email,
           imageUrl,
@@ -34,12 +34,15 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
           defaultCharacter,
           backgroundImage,
           userInfo,
+          password,
         } = currentAccount;
         setUser({
-          id,
+          $id,
           name,
           email,
           imageId,
+          password,
+
           imageUrl: imageUrl ? imageUrl : avatars[defaultCharacter].image,
           bio: bio ? bio : t("default_bio"),
           defaultCharacter: defaultCharacter,

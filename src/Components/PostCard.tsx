@@ -10,6 +10,8 @@ import {
   Collapse,
   IconButtonProps,
   Button,
+  Box,
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
@@ -45,7 +47,10 @@ interface IPostCardProps {
 const PostCard = ({ id, image, desc, date, likes }: IPostCardProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const [comment, setComment] = useState("");
+
   const { mutateAsync: deletePost, isPending } = useDeletePost();
+
   const handleExpandClick = () => {
     setExpanded((state) => !state);
   };
@@ -93,7 +98,20 @@ const PostCard = ({ id, image, desc, date, likes }: IPostCardProps) => {
         image={image}
         alt="Paella dish"
       />
-
+      <Box
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(e.currentTarget.value);
+        }}
+      >
+        <TextField
+          name="comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Button type="submit">Submit comment</Button>
+      </Box>
       <ExpandMore
         expand={expanded}
         onClick={handleExpandClick}

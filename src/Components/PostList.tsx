@@ -1,15 +1,15 @@
 import { List, ListItem, Typography } from "@mui/material";
-import { useGetPosts } from "src/lib/react-query/react-query";
 import PostCard from "./PostCard";
+import { Models } from "appwrite";
 
-const PostList = () => {
-  const { data, isLoading } = useGetPosts();
-
-  if (isLoading) return <>Loading</>;
+interface IPostList {
+  posts: Models.Document[];
+}
+const PostList = ({ posts }: IPostList) => {
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      {data ? (
-        data.documents.map((post) => (
+      {posts.length ? (
+        posts.map((post) => (
           <ListItem
             sx={{
               boxShadow: "8px 8px 24px 0px rgba(66, 68, 90, 1)",

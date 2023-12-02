@@ -13,6 +13,7 @@ import SignIn from "./_auth/forms/SignIn";
 import SignUp from "./_auth/forms/SignUp";
 
 import MainLayout from "./MainLayout";
+import { ContactPage } from "./Components/ContactPage";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
       {
         path: "/contacts",
         element: <Contacts />,
+      },
+      {
+        path: "/:id",
+        element: (
+          <>
+            <ContactPage />
+          </>
+        ),
       },
       {
         path: "/chat",

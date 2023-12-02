@@ -188,15 +188,19 @@ export const deleteFile = async (id: string) => {
     console.error();
   }
 };
-export const getPosts = async () => {
+export const getUserPosts = async (userId: string) => {
   try {
-    return await databases.listDocuments(
+    const user = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postsCollectionId,
-      [Query.orderDesc("$createdAt")]
+      [Query.equal("postCreator", [userId]), Query.orderDesc("$createdAt")]
     );
+
+    if (!user) throw Error;
+
+    return user;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 export const deletePost = async (id: string) => {
@@ -223,7 +227,36 @@ export const likePost = async (postId: string, arrayOfLikes: string[]) => {
     console.error(error);
   }
 };
+export async function getUsers() {
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      [Query.orderDesc("$createdAt")]
+    );
 
+    if (!users) throw Error;
+
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    if (!user) throw Error;
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
 // import { ID, Query } from "appwrite";
 
 // import { appwriteConfig, account, databases, avatars } from "./config";

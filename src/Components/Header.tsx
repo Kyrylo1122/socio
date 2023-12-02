@@ -278,7 +278,7 @@ export default function Header() {
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           display: { xs: "none", sm: "block" },
           p: 1,

@@ -5,24 +5,37 @@ import {
   createUserAccount,
   deleteFile,
   deletePost,
-  getPosts,
+  getUserPosts,
   likePost,
   signInAccount,
   signOutAccount,
   updateUserInfo,
   uploadFile,
   uploadComments,
+  getUsers,
+  getUserById,
 } from "../api";
 import { QUERY_KEYS } from "./QueryKeys";
+export const useGetUsers = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
 
-const useGetPosts = () =>
+    queryFn: getUsers,
+  });
+export const useGetUsersById = (id: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+
+    queryFn: () => getUserById(id),
+  });
+export const useGetUserPosts = (id: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_POSTS],
 
-    queryFn: getPosts,
+    queryFn: () => getUserPosts(id),
   });
 
-const useCreateUserAccountMutation = () => {
+export const useCreateUserAccountMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (user: IUserNew) => createUserAccount(user),
@@ -34,24 +47,24 @@ const useCreateUserAccountMutation = () => {
   });
 };
 
-const useSignInAccountMutation = () =>
+export const useSignInAccountMutation = () =>
   useMutation({
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
   });
-const useSignOutAccount = () =>
+export const useSignOutAccount = () =>
   useMutation({
     mutationFn: signOutAccount,
   });
 
-const useDeleteFile = () =>
+export const useDeleteFile = () =>
   useMutation({
     mutationFn: (id: string) => deleteFile(id),
   });
 
-const useUploadFile = () => useMutation({ mutationFn: uploadFile });
+export const useUploadFile = () => useMutation({ mutationFn: uploadFile });
 
-const useCreatePost = () => {
+export const useCreatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createNewPost,
@@ -60,7 +73,7 @@ const useCreatePost = () => {
     },
   });
 };
-const useDeletePost = () => {
+export const useDeletePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deletePost(id),
@@ -70,12 +83,19 @@ const useDeletePost = () => {
   });
 };
 
-const useUpdateUserInfo = () =>
-  useMutation({
+export const useUpdateUserInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: (data: Partial<IUserResponse>) => updateUserInfo(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
   });
+};
 
-const useLikePost = () => {
+export const useLikePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -100,17 +120,4 @@ export const useUploadComments = () => {
       });
     },
   });
-};
-
-export {
-  useDeletePost,
-  useCreatePost,
-  useSignOutAccount,
-  useCreateUserAccountMutation,
-  useSignInAccountMutation,
-  useDeleteFile,
-  useUploadFile,
-  useUpdateUserInfo,
-  useGetPosts,
-  useLikePost,
 };

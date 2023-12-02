@@ -12,7 +12,7 @@ const App = () => {
 
   if (isLoading) return <Spinner />;
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
       {isAuthenticated ? (
         <Box>
           <Header />
