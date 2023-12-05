@@ -7,7 +7,8 @@ import Body from "./Components/Body";
 import { useUserContext } from "./hooks/useUserContext";
 
 const App = () => {
-  const { isAuthenticated, isLoading } = useUserContext();
+  const { isAuthenticated, user, isLoading } = useUserContext();
+
   const { mode } = useThemeContext();
 
   if (isLoading) return <Spinner />;

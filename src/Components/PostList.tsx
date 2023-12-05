@@ -24,6 +24,7 @@ const PostList = ({ posts }: IPostList) => {
               image={post.imageUrl}
               date={post.$createdAt}
               likes={post.likes}
+              comments={post.comments}
             />
           </ListItem>
         ))

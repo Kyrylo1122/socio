@@ -23,7 +23,7 @@ export interface IUserInfo {
 }
 export interface IUserResponse {
   accountId?: string;
-  $id?: string;
+  $id: string;
   email: string;
   name: string;
   imageUrl: string | null;
@@ -59,7 +59,7 @@ export interface IPostResponse {
 
   caption?: string;
 
-  imageUrl?: string;
+  imageUrl: string | null;
   tags: string[];
   location?: string;
   imageId?: string;
@@ -67,6 +67,7 @@ export interface IPostResponse {
   postCreator: string;
   likes: any;
   $createdAt: string;
+  comments?: any;
 }
 export type ModeType = "light" | "dark";
 
@@ -80,4 +81,5 @@ export interface IFormNames {
   surname: string;
   email: string;
   password: string;
+  comment: string;
 }

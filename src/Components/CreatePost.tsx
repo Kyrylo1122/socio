@@ -65,8 +65,7 @@ const CreatePost = ({ close }: { close: () => void }) => {
 
   const onSubmit = async (value: DataType) => {
     try {
-      const newValue = { ...value, userId: user.id };
-      console.log("newValue: ", newValue);
+      const newValue = { ...value, userId: user.$id };
       await createNewPost(newValue);
       close();
     } catch (error) {

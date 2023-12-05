@@ -84,8 +84,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       console.error(error);
     }
   };
-  console.log("posts: ", posts);
-  console.log("id: ", user);
+
   return (
     <Box
       sx={{

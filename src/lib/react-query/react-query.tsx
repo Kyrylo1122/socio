@@ -14,6 +14,8 @@ import {
   uploadComments,
   getUsers,
   getUserById,
+  createComment,
+  savePost,
 } from "../api";
 import { QUERY_KEYS } from "./QueryKeys";
 export const useGetUsers = () =>
@@ -121,3 +123,24 @@ export const useUploadComments = () => {
     },
   });
 };
+
+export const useCreateComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      postId,
+      arrayOfComments,
+    }: {
+      postId: string;
+      arrayOfComments: string[];
+    }) => createComment(postId, arrayOfComments),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+export const useSavePost = () =>
+  useMutation({
+    mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
+      savePost(userId, postId),
+  });
