@@ -1,7 +1,8 @@
 {
   "navigation_homepage": "Home",
   "navigation_contacts": "Contacts",
-  "navigation_chat": "Chat",
+  "navigation_saves": "Saves",
+  "navigation_likes": "Likes",
 
   "language": "language",
   "online_friends": "Online friends",
