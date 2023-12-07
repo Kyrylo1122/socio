@@ -114,13 +114,13 @@ const PostCard = ({
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}
-          commentsLength={comments.length}
+          commentsLength={1}
           handleExpandClick={handleExpandClick}
           likes={likes}
           postId={id}
         />
       </Box>
-      <Collapse
+      {/* <Collapse
         in={expanded}
         timeout="auto"
         unmountOnExit
@@ -146,7 +146,7 @@ const PostCard = ({
             })}
           </List>
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
   );
 };

@@ -4,7 +4,9 @@ import { Box } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
 
 const Body = () => {
-  const { isAuthenticated } = useUserContext();
+  const { isAuthenticated, user } = useUserContext();
+  console.log("isAuthenticated: ", isAuthenticated);
+  console.log("user: ", user);
 
   return (
     <Box sx={{ display: "flex", mt: 11 }}>

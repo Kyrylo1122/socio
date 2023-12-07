@@ -47,19 +47,26 @@ const SignUp = () => {
   } = useForm<IFormNames>();
   const { t } = useTranslation();
 
-  const onSubmit: SubmitHandler<IFormNames> = async (data) => {
+  const onSubmit: SubmitHandler<IFormNames> = async ({
+    name,
+    surname,
+    password,
+    email,
+  }) => {
     const user = await createUserAccount({
-      ...data,
-      name: `${data.name} ${data.surname}`,
+      name: `${name} ${surname}`,
+      password,
+      email,
       defaultCharacter: avatar.id,
     });
     if (!user) return toast.warn(t("error_signup_failed"));
-
+    toast.info("the user was created");
     const session = await signInAccount({
-      email: user.email,
-      password: user.password,
+      email,
+      password,
     });
     if (!session) return toast.warn(t("error_signup_failed"));
+    toast.info("the session is works");
 
     const isLoggedIn = await checkAuthUser();
     if (isLoggedIn) {

@@ -37,7 +37,7 @@ interface IPostStats {
   postId: string;
   expanded: boolean;
   handleExpandClick: MouseEventHandler<HTMLButtonElement> | undefined;
-  commentsLength: number;
+  commentsLength?: number;
 }
 
 const PostStats = ({
@@ -104,7 +104,9 @@ const PostStats = ({
         >
           {expanded ? <ExpandLessIcon /> : null}
           <ChatBubbleOutlineIcon />
-          <Typography sx={{ display: "inline" }}>{commentsLength}</Typography>
+          <Typography sx={{ display: "inline" }}>
+            commentsLength {"commentsLength"}
+          </Typography>
         </ExpandMore>
       </Box>
       <IconButton aria-label="share">

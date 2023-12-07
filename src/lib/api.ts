@@ -8,8 +8,7 @@ export const createUserAccount = async ({
   password,
   defaultCharacter,
 }: IUserNew) => {
-    try {
-      
+  try {
     const newAccount = await account.create(ID.unique(), email, password, name);
 
     if (!newAccount) throw Error;
@@ -18,21 +17,21 @@ export const createUserAccount = async ({
       accountId: newAccount.$id,
       email: newAccount.email,
       name: newAccount.name,
-      imageUrl: null,
-      imageId: null,
+      //   imageUrl: null,
+      //   imageId: null,
       defaultCharacter: defaultCharacter ?? 0,
       password,
-      userInfo: [],
-      bio: null,
-      backgroundImage: null,
+      //   userInfo: [],
+      //   bio: null,
+      //   backgroundImage: null,
     });
-    const currentAccount = await account.get();
-    console.log("currentAccount: ", currentAccount);
+
     return newUser;
   } catch (error) {
     console.error(error);
   }
 };
+
 export const signInAccount = async ({
   email,
   password,
@@ -42,9 +41,10 @@ export const signInAccount = async ({
 }) => {
   try {
     const session = await account.createEmailSession(email, password);
+
     return session;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 export const signOutAccount = async () => {
@@ -56,7 +56,7 @@ export const signOutAccount = async () => {
   }
 };
 
-export const saveUserToDB = async (user: Omit<IUserResponse, "$id">) => {
+export const saveUserToDB = async (user: any) => {
   try {
     const newUser = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -131,7 +131,7 @@ export async function createNewPost(post: INewPost) {
       appwriteConfig.postsCollectionId,
       ID.unique(),
       {
-        postCreator: post.userId,
+        creator: post.userId,
         caption: post.caption,
         imageUrl: fileUrl,
         imageId: uploadedFile?.id,
@@ -200,7 +200,7 @@ export const getUserPosts = async (userId: string) => {
     return await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postsCollectionId,
-      [Query.equal("postCreator", [userId]), Query.orderDesc("$createdAt")]
+      [Query.equal("creator", [userId]), Query.orderDesc("$createdAt")]
     );
   } catch (error) {
     console.error(error);
@@ -294,16 +294,13 @@ export const savePost = async (userId: string, postId: string) => {
     console.log(error);
   }
 };
-// import { ID, Query } from "appwrite";
-
-// import { appwriteConfig, account, databases, avatars } from "./config";
 
 // ============================================================
 // AUTH
 // ============================================================
 
 // ============================== SIGN UP
-// export async function createUserAccount(user: IUserNew) {
+// export async function createUserAccount(user: any) {
 //   try {
 //     const newAccount = await account.create(
 //       ID.unique(),
@@ -314,14 +311,12 @@ export const savePost = async (userId: string, postId: string) => {
 
 //     if (!newAccount) throw Error;
 
-//     const avatarUrl = avatars.getInitials(user.name);
-
 //     const newUser = await saveUserToDB({
 //       accountId: newAccount.$id,
 //       name: newAccount.name,
 //       email: newAccount.email,
-//       surname: user.surname,
-//       imageUrl: avatarUrl,
+//       defaultCharacter: 1,
+//       password: user.password,
 //     });
 
 //     return newUser;
@@ -336,8 +331,8 @@ export const savePost = async (userId: string, postId: string) => {
 //   accountId: string;
 //   email: string;
 //   name: string;
-//   imageUrl: URL;
-//   surname?: string;
+//   defaultCharacter: number;
+//   password: string;
 // }) {
 //   try {
 //     const newUser = await databases.createDocument(
@@ -365,15 +360,6 @@ export const savePost = async (userId: string, postId: string) => {
 // }
 
 // ============================== GET ACCOUNT
-// export async function getAccount() {
-//   try {
-//     const currentAccount = await account.get();
-
-//     return currentAccount;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 // ============================== GET USER
 // export async function getCurrentUser() {

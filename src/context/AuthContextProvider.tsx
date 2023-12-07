@@ -55,7 +55,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
         return true;
       }
     } catch (error) {
-      console.error("checkAuthUser", error);
+      console.error(error);
       return false;
     } finally {
       setIsLoading(false);

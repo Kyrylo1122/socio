@@ -38,6 +38,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
   const currentUserPage = user.$id === currentUser.$id;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: posts } = useGetUserPosts(user.$id);
+  console.log("posts: ", posts);
   const { mutateAsync: deleteFile, isPending } = useDeleteFile();
   const { mutateAsync: uploadUserInfo, isPending: isLoad } =
     useUpdateUserInfo();

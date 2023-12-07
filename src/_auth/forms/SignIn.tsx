@@ -51,6 +51,7 @@ const SignIn = () => {
   }, [setFocus]);
 
   const onSubmit: SubmitHandler<ISignInForm> = async (value) => {
+    console.log(value);
     try {
       const session = await signInAccount(value);
       if (!session) return toast.warn(t("error_repeat_signin"));
