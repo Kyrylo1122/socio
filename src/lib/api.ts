@@ -294,6 +294,17 @@ export const savePost = async (userId: string, postId: string) => {
     console.log(error);
   }
 };
+export const getSavePost = async (userId: string) => {
+  try {
+    return await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [Query.equal("user", [userId]), Query.orderDesc("$createdAt")]
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // ============================================================
 // AUTH

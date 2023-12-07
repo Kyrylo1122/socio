@@ -16,6 +16,7 @@ import {
   getUserById,
   createComment,
   savePost,
+  getSavePost,
 } from "../api";
 import { QUERY_KEYS } from "./QueryKeys";
 export const useGetUsers = () =>
@@ -143,4 +144,10 @@ export const useSavePost = () =>
   useMutation({
     mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
       savePost(userId, postId),
+  });
+export const useGetSaves = (userId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+
+    queryFn: () => getSavePost(userId),
   });

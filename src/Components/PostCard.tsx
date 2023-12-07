@@ -1,8 +1,6 @@
 import { useState } from "react";
 import {
   Card,
-  CardHeader,
-  Avatar,
   CardContent,
   Typography,
   CardMedia,
@@ -16,8 +14,6 @@ import {
 
 import { useTranslation } from "react-i18next";
 
-import profileAvatar from "/usa.jpg";
-
 import PostStats from "./PostStats";
 import { Models } from "appwrite";
 import {
@@ -26,10 +22,11 @@ import {
 } from "src/lib/react-query/react-query";
 import CommentForm from "./CommentForm";
 import PostComment from "./PostComment";
-import { format } from "date-fns";
-import { posts } from "@Assets/data/Posts";
+import { IUserResponse } from "src/types";
+import PostCardHeader from "./PostCardHeader";
 
 interface IPostCardProps {
+  user: Models.Document;
   id: string;
   image?: string;
   desc?: string;
@@ -38,6 +35,7 @@ interface IPostCardProps {
   comments: string[];
 }
 const PostCard = ({
+  user,
   id,
   image,
   desc,
@@ -89,15 +87,11 @@ const PostCard = ({
       >
         {isPending ? "on deleting" : "DELETE"}
       </Button>
-      <CardHeader
-        avatar={
-          <Avatar src={profileAvatar} aria-label="profile avatar">
-            R
-          </Avatar>
-        }
-        title="Kyrylo Bereznov"
-        subheader={format(new Date(date), "dd MMM HH:mm")}
-        sx={{ "& .MuiCardHeader-subheader": { color: "text.light" } }}
+      <PostCardHeader
+        imageUrl={user.imageId}
+        defaultCharacter={user.defaultCharacter}
+        name={user.name}
+        date={date}
       />
       <CardContent>
         <Typography variant="body2" color="text.light">

@@ -75,5 +75,16 @@ export const getDesignTokens = (mode: PaletteMode) => {
         },
       },
     },
+    components: {
+      MuiAvatar: {
+        styleOverrides: {
+          // Name of the slot
+          root: {
+            // Some CSS
+            backgroundColor: mode === "light" ? "#ff5252" : "#f9aa33",
+          },
+        },
+      },
+    },
   };
 };

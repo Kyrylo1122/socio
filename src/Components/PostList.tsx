@@ -1,11 +1,13 @@
 import { List, ListItem, Typography } from "@mui/material";
 import PostCard from "./PostCard";
 import { Models } from "appwrite";
+// import { IUserResponse } from "src/types";
 
 interface IPostList {
   posts: Models.Document[];
+  user: Models.Document;
 }
-const PostList = ({ posts }: IPostList) => {
+const PostList = ({ posts, user }: IPostList) => {
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {posts.length ? (
@@ -19,6 +21,7 @@ const PostList = ({ posts }: IPostList) => {
             key={post.$id}
           >
             <PostCard
+              user={user}
               id={post.$id}
               desc={post.caption}
               image={post.imageUrl}

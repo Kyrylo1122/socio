@@ -38,7 +38,6 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
   const currentUserPage = user.$id === currentUser.$id;
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: posts } = useGetUserPosts(user.$id);
-  console.log("posts: ", posts);
   const { mutateAsync: deleteFile, isPending } = useDeleteFile();
   const { mutateAsync: uploadUserInfo, isPending: isLoad } =
     useUpdateUserInfo();
@@ -189,7 +188,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               </Box>
             ) : null}
 
-            {posts && <PostList posts={posts.documents} />}
+            {posts && <PostList user={user} posts={posts.documents} />}
           </Box>
           <Box
             sx={{
