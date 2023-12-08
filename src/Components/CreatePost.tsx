@@ -6,6 +6,7 @@ import {
   Collapse,
   Fade,
   TextField,
+  TextareaAutosize,
 } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -19,13 +20,15 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import * as Yup from "yup";
-import { useCreatePost } from "src/lib/react-query/react-query";
 import { INewPost } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import Spinner from "./Spinner";
 import { useUserContext } from "src/hooks/useUserContext";
+import ChipsArray from "./ChipArray";
+import TagsForm from "./TagsForm";
+import { t } from "i18next";
 
 const schema = Yup.object({
   caption: Yup.string().max(2200),
@@ -46,27 +49,65 @@ const IconBox = styled(Box)(({ theme }) => ({
     transform: "scale(1.4)",
   },
 }));
+interface ICreatePost {
+  close: () => void;
+  defaultCaption: string;
+  defaultLocation: string;
+  defaultTags: string;
+  defaultImageUrl: string;
+  isPending: boolean;
+  handleSubmit: (value: INewPost) => void;
+}
+const StyledButton = styled(Button)`
+  ${({ theme }) => `
 
-const CreatePost = ({ close }: { close: () => void }) => {
-  const [fileUrl, setFileUrl] = useState<string>();
+              width: auto,
+              fontSize: 14px,
+              p: 0,
+              display: flex,
+  background-color: ${theme.palette.primary.white};
+  transition: ${theme.transitions.create(["background-color", "transform"], {
+    duration: theme.transitions.duration.shorter,
+  })};
+  &:hover,&:focus {
+    transform: scale(1.1);
+  }
+  `}
+`;
+
+const CreatePost = ({
+  close,
+  defaultCaption,
+  defaultLocation,
+  defaultTags,
+  defaultImageUrl,
+  isPending,
+  handleSubmit,
+}: ICreatePost) => {
+  const [fileUrl, setFileUrl] = useState<string>(defaultImageUrl);
   const [editImage, setEditImage] = useState(false);
-  const [isOpenLocation, setOpenLocation] = useState(false);
-  const [isOpenTags, setOpenTags] = useState(false);
+  const [isOpenLocation, setOpenLocation] = useState(Boolean(defaultLocation));
+  const [isOpenTags, setOpenTags] = useState(Boolean(defaultTags));
   const { user } = useUserContext();
 
-  const { mutateAsync: createNewPost, isPending } = useCreatePost();
+  const [chipData, setChipData] = useState([]);
+
   const cleanImage = () => setFileUrl("");
   const toggleLocation = () => setOpenLocation((state) => !state);
   const toggleTags = () => setOpenTags((state) => !state);
 
-  const { register, handleSubmit, control } = useForm<DataType>({
+  const {
+    register,
+    handleSubmit: handleFormSubmit,
+    control,
+  } = useForm<DataType>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (value: DataType) => {
     try {
       const newValue = { ...value, userId: user.$id };
-      await createNewPost(newValue);
+      await handleSubmit(newValue);
       close();
     } catch (error) {
       console.error(error);
@@ -89,6 +130,7 @@ const CreatePost = ({ close }: { close: () => void }) => {
         backgroundImage: "none",
         p: 3,
         minHeight: 100,
+        overflow: "auto",
       }}
     >
       <Box
@@ -99,7 +141,7 @@ const CreatePost = ({ close }: { close: () => void }) => {
           alignItems: "center",
           gap: 3,
         }}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleFormSubmit(onSubmit)}
       >
         <Box
           sx={{
@@ -115,13 +157,29 @@ const CreatePost = ({ close }: { close: () => void }) => {
             aria-label="profile avatar"
           />
           <Box
-            sx={{ flex: 1, display: "flex", gap: 2, flexDirection: "column" }}
+            sx={{
+              flex: 1,
+              display: "flex",
+              gap: 2,
+              flexDirection: "column",
+            }}
           >
             <TextField
-              variant="standard"
+              multiline
+              minRows={3}
+              variant="filled"
               fullWidth
-              sx={{ outline: "none" }}
+              label={t("caption")}
+              sx={{
+                "& .MuiFormLabel-root": {
+                  color: "text.accent",
+                  "&.Mui-focused": {
+                    color: "text.accent",
+                  },
+                },
+              }}
               placeholder="What's in your mind Kyrylo?"
+              defaultValue={defaultCaption}
               {...register("caption")}
             />
             <Collapse in={isOpenLocation}>
@@ -141,14 +199,17 @@ const CreatePost = ({ close }: { close: () => void }) => {
                       color: "text.accent",
                     },
                   }}
-                  label="Location"
+                  label={t("location")}
                   placeholder="Add your location"
+                  defaultValue={defaultLocation}
                   {...register("location")}
                 />
                 <IconBox
                   sx={{
                     position: "absolute",
-                    right: 0,
+                    bottom: 0,
+                    transform: "translateY(10%)",
+                    left: -30,
                     p: 0,
                     "&:hover": { color: "primary.accent" },
                   }}
@@ -166,23 +227,13 @@ const CreatePost = ({ close }: { close: () => void }) => {
                   alignItems: "center",
                 }}
               >
-                <TextField
-                  variant="standard"
-                  fullWidth
-                  sx={{
-                    outline: "none",
-                    "& .MuiFormLabel-root.Mui-focused": {
-                      color: "text.accent",
-                    },
-                  }}
-                  placeholder="Cat, dogs ..."
-                  label="Tags"
-                  {...register("tags")}
-                />
+                <TagsForm chipData={chipData} setChipData={setChipData} />
                 <IconBox
                   sx={{
                     position: "absolute",
-                    right: 0,
+                    bottom: 0,
+                    transform: "translateY(10%)",
+                    left: -30,
 
                     p: 0,
                     "&:hover": { color: "primary.accent" },
@@ -193,29 +244,25 @@ const CreatePost = ({ close }: { close: () => void }) => {
                 </IconBox>
               </Box>
             </Collapse>
+            <ChipsArray chipData={chipData} setChipData={setChipData} />
           </Box>
         </Box>
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center" }}>
-          <Box component="label" sx={{ cursor: "pointer" }}>
+          <StyledButton component="label" sx={{ color: "primary.contrast" }}>
             <AddPhotoAlternateIcon color="secondary" /> Add photo{" "}
             <ImageController />
-          </Box>
-          <Box
-            component="label"
-            sx={{ cursor: "pointer" }}
+          </StyledButton>
+          <StyledButton
             onClick={toggleLocation}
+            sx={{ color: "primary.contrast" }}
           >
             <AddLocationAltIcon color="secondary" />
             Add location
-          </Box>
-          <Box
-            component="label"
-            sx={{ cursor: "pointer" }}
-            onClick={toggleTags}
-          >
+          </StyledButton>
+          <StyledButton onClick={toggleTags} sx={{ color: "primary.contrast" }}>
             <TagIcon color="secondary" />
             Add tags
-          </Box>
+          </StyledButton>
           <Fade in={!fileUrl} {...{ timeout: 500 }}>
             <Box>
               {" "}
@@ -238,7 +285,7 @@ const CreatePost = ({ close }: { close: () => void }) => {
             </Box>
           </Fade>
         </Box>
-        <Collapse in={Boolean(fileUrl)}>
+        <Collapse in={Boolean(fileUrl)} unmountOnExit>
           <Box
             sx={{
               display: "flex",

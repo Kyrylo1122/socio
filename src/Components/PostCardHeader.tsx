@@ -19,6 +19,7 @@ const PostCardHeader = ({
         <Avatar
           src={createAvatarLink(imageUrl, defaultCharacter)}
           aria-label={name}
+          sx={{ width: 70, height: 70 }}
         />
       }
       title={name}

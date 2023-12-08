@@ -10,6 +10,7 @@ import {
   ListItem,
   List,
   Box,
+  Modal,
 } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
@@ -24,12 +25,16 @@ import CommentForm from "./CommentForm";
 import PostComment from "./PostComment";
 import { IUserResponse } from "src/types";
 import PostCardHeader from "./PostCardHeader";
+import PlaygroundSpeedDial from "./SpeedDial";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CreatePost from "./CreatePost";
 
 interface IPostCardProps {
   user: Models.Document;
   id: string;
   image?: string;
-  desc?: string;
+  caption?: string;
   date: string;
   likes: Models.Document;
   comments: string[];
@@ -38,13 +43,15 @@ const PostCard = ({
   user,
   id,
   image,
-  desc,
+  caption,
   date,
   likes,
   comments,
 }: IPostCardProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const closeModal = () => setModalIsOpen(false);
 
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
@@ -70,6 +77,21 @@ const PostCard = ({
       console.error(error);
     }
   };
+  const onEdit = async () => {
+    console.log("edit");
+  };
+  const actions = [
+    {
+      icon: <DeleteForeverIcon />,
+      name: t("delete"),
+      onClick: handleDeletePost,
+    },
+    {
+      icon: <EditIcon />,
+      name: t("edit"),
+      onClick: onEdit,
+    },
+  ];
 
   return (
     <Card
@@ -80,13 +102,9 @@ const PostCard = ({
         p: 1,
       }}
     >
-      <Button
-        variant="contained"
-        sx={{ top: 10, right: 10, color: "black", position: "absolute" }}
-        onClick={handleDeletePost}
-      >
-        {isPending ? "on deleting" : "DELETE"}
-      </Button>
+      <Box sx={{ position: "absolute", right: 10 }}>
+        <PlaygroundSpeedDial actions={actions} direction="left" />
+      </Box>
       <PostCardHeader
         imageUrl={user.imageId}
         defaultCharacter={user.defaultCharacter}
@@ -95,7 +113,7 @@ const PostCard = ({
       />
       <CardContent>
         <Typography variant="body2" color="text.light">
-          {desc}
+          {caption}
         </Typography>
       </CardContent>
       <CardMedia
@@ -141,6 +159,18 @@ const PostCard = ({
           </List>
         </CardContent>
       </Collapse> */}
+
+      <Modal open={modalIsOpen} close={closeModal}>
+        <CreatePost
+          defaultCaption=""
+          defaultLocation=""
+          defaultTags=""
+          defaultImageUrl=""
+          handleSubmit={() => {}}
+          close={closeModal}
+          isPending={false}
+        />
+      </Modal>
     </Card>
   );
 };

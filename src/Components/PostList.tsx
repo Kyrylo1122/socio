@@ -23,7 +23,7 @@ const PostList = ({ posts, user }: IPostList) => {
             <PostCard
               user={user}
               id={post.$id}
-              desc={post.caption}
+              caption={post.caption}
               image={post.imageUrl}
               date={post.$createdAt}
               likes={post.likes}

@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import MouseImageOver from "src/Components/MouseImageOver";
 import UpdateImageModalContent from "src/Components/UpdateImageModal";
 import {
+  useCreatePost,
   useDeleteFile,
   useGetUserPosts,
   useUpdateUserInfo,
@@ -84,6 +85,8 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       console.error(error);
     }
   };
+  const { mutateAsync: createNewPost, isPending: isCreatingPost } =
+    useCreatePost();
 
   return (
     <Box
@@ -205,7 +208,15 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       </Box>
       {currentUserPage ? (
         <Modal open={modalIsOpen} close={closeModal}>
-          <CreatePost close={closeModal} />
+          <CreatePost
+            defaultCaption=""
+            defaultLocation=""
+            defaultTags=""
+            defaultImageUrl=""
+            handleSubmit={createNewPost}
+            close={closeModal}
+            isPending={isCreatingPost}
+          />
         </Modal>
       ) : null}
     </Box>

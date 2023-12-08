@@ -43,5 +43,12 @@
   "field_required": "This field is required",
   "choose_your_character": "Choose your character",
   "do_not_have_account": "Don't have an account? Sign Up",
-  "do_not_have_saves": "Oops, looks like you do not have saves"
+  "do_not_have_saves": "Oops, looks like you do not have saves",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add_tag": "add tag",
+  "error_repeat_tag": "You have already this tag",
+  "caption": "Caption",
+  "location": "Location",
+  "tag": "Tag"
 }
