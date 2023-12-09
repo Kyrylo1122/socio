@@ -28,6 +28,7 @@ import PostCreator from "src/Components/PostCreator";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
+import { CreatePostFormType } from "src/types";
 
 interface IPageMarkUp {
   user: Models.Document;
@@ -87,6 +88,15 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
   };
   const { mutateAsync: createNewPost, isPending: isCreatingPost } =
     useCreatePost();
+
+  const handleCreatePost = async (value: CreatePostFormType) => {
+    try {
+      const newValue = { ...value, userId: user.$id };
+      await createNewPost(newValue);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Box
@@ -212,9 +222,10 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
           <CreatePost
             defaultCaption=""
             defaultLocation=""
-            defaultTags=""
             defaultImageUrl=""
-            handleSubmit={createNewPost}
+            defaultCreatedAt=""
+            defaultTags={[]}
+            handleSubmit={handleCreatePost}
             close={closeModal}
             isPending={isCreatingPost}
           />

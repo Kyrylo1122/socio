@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IUserNew, IUserResponse } from "src/types";
+import { IPostResponse, IUserNew, IUserResponse } from "src/types";
 import {
   createNewPost,
   createUserAccount,
@@ -17,6 +17,7 @@ import {
   createComment,
   savePost,
   getSavePost,
+  updatePost,
 } from "../api";
 import { QUERY_KEYS } from "./QueryKeys";
 export const useGetUsers = () =>
@@ -124,6 +125,21 @@ export const useUploadComments = () => {
     },
   });
 };
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      postId,
+      attribute,
+    }: {
+      postId: string;
+      attribute: Partial<IPostResponse>;
+    }) => updatePost(postId, attribute),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
 
 export const useCreateComment = () => {
   const queryClient = useQueryClient();
@@ -145,6 +161,7 @@ export const useSavePost = () =>
     mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
       savePost(userId, postId),
   });
+
 export const useGetSaves = (userId: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],

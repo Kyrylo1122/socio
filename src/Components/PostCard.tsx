@@ -8,6 +8,7 @@ import { Models } from "appwrite";
 import {
   useCreateComment,
   useDeletePost,
+  useUpdatePost,
 } from "src/lib/react-query/react-query";
 import CommentForm from "./CommentForm";
 
@@ -17,33 +18,40 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreatePost from "./CreatePost";
 import Modal from "./Modal";
+import ChipsArray from "./ChipArray";
+import { IPostResponse } from "src/types";
 
 interface IPostCardProps {
   user: Models.Document;
   id: string;
   image?: string;
   caption?: string;
-  date: string;
+  createdAt: string;
   likes: Models.Document;
   comments: string[];
+  location: string;
+  tags: string[];
 }
 const PostCard = ({
   user,
   id,
   image,
   caption,
-  date,
+  location,
+  tags,
+  createdAt,
   likes,
   comments,
 }: IPostCardProps) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const closeModal = () => setModalIsOpen(false);
+  const [editPostModal, setEditPostModal] = useState(false);
+  const closeModal = () => setEditPostModal(false);
 
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
+  const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
   const handleExpandClick = () => {
     setExpanded((state) => !state);
@@ -65,8 +73,16 @@ const PostCard = ({
       console.error(error);
     }
   };
-  const onEdit = async () => {
-    console.log("edit");
+  const handleEditPost = async (value: Partial<IPostResponse>) => {
+    console.log("value: ", value);
+    try {
+      await editPost({
+        postId: id,
+        attribute: value,
+      });
+    } catch (error) {
+      console.error();
+    }
   };
   const actions = [
     {
@@ -77,7 +93,7 @@ const PostCard = ({
     {
       icon: <EditIcon />,
       name: t("edit"),
-      onClick: onEdit,
+      onClick: () => setEditPostModal(true),
     },
   ];
 
@@ -97,13 +113,13 @@ const PostCard = ({
         imageUrl={user.imageId}
         defaultCharacter={user.defaultCharacter}
         name={user.name}
-        date={date}
+        date={createdAt}
+        location={location}
       />
-      <CardContent>
-        <Typography variant="body2" color="text.light">
-          {caption}
-        </Typography>
-      </CardContent>
+      <Typography variant="body2" color="text.light">
+        {caption}
+      </Typography>
+      <ChipsArray chipData={tags} />
       <CardMedia
         component="img"
         sx={{ height: 350, objectFit: "contain" }}
@@ -147,14 +163,15 @@ const PostCard = ({
           </List>
         </CardContent>
       </Collapse> */}
-
-      <Modal open={modalIsOpen} close={closeModal}>
+      <Modal open={editPostModal} close={closeModal}>
         <CreatePost
-          defaultCaption=""
-          defaultLocation=""
-          defaultTags=""
-          defaultImageUrl=""
-          handleSubmit={() => {}}
+          imageReadOnly={true}
+          defaultCaption={caption || ""}
+          defaultLocation={location || ""}
+          defaultTags={tags || []}
+          defaultCreatedAt={createdAt}
+          defaultImageUrl={image || ""}
+          handleSubmit={handleEditPost}
           close={closeModal}
           isPending={false}
         />

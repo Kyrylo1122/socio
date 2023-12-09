@@ -52,8 +52,10 @@ export interface INewPost {
   caption?: string;
   imageUrl?: File;
   location?: string;
-  tags?: string;
+  tags?: string[];
 }
+export type CreatePostFormType = Omit<INewPost, "userId">;
+
 export interface IPostResponse {
   $id: string;
 

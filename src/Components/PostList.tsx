@@ -24,8 +24,10 @@ const PostList = ({ posts, user }: IPostList) => {
               user={user}
               id={post.$id}
               caption={post.caption}
+              location={post.location}
+              tags={post.tags}
               image={post.imageUrl}
-              date={post.$createdAt}
+              createdAt={post.$createdAt}
               likes={post.likes}
               comments={post.comments}
             />

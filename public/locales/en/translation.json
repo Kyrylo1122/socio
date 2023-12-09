@@ -56,7 +56,7 @@
   "add_location": "Add location",
   "add_tags": "Add tags",
   "change_photo": "Change photo",
-  "remove_location": "Remove location",
-  "remove_tags": "Remove tags",
+  "remove_location": "Remove location field",
+  "remove_tags": "Remove tag field",
   "what_in_mind": "What's in your mind {{val}}?"
 }

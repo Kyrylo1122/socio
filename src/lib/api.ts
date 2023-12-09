@@ -88,10 +88,7 @@ export const updateUserInfo = async (data: Partial<IUserResponse>) => {
 
 export const getCurrentUserAccount = async () => {
   try {
-    console.log("Before currentAccount: ");
-
     const currentAccount = await account.get();
-    console.log("currentAccount: ", currentAccount);
 
     if (!currentAccount) throw Error;
 
@@ -123,8 +120,6 @@ export async function createNewPost(post: INewPost) {
       }
     }
 
-    const tags = post.tags?.replace(/ /g, "").split(",") || [];
-
     // Create post
     await databases.createDocument(
       appwriteConfig.databaseId,
@@ -136,7 +131,7 @@ export async function createNewPost(post: INewPost) {
         imageUrl: fileUrl,
         imageId: uploadedFile?.id,
         location: post.location,
-        tags: tags,
+        tags: post.tags,
       }
     );
   } catch (error) {
@@ -221,12 +216,13 @@ export const updatePost = async (
   postId: string,
   attribute: Partial<IPostResponse>
 ) => {
+  console.log("attribute: ", attribute);
   try {
     return await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postsCollectionId,
       postId,
-      attribute
+      { ...attribute }
     );
   } catch (error) {
     console.error(error);
