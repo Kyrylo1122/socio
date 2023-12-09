@@ -4,13 +4,15 @@ import {
   Button,
   CardMedia,
   Collapse,
+  Divider,
   Fade,
   TextField,
-  TextareaAutosize,
+  Typography,
+  List,
+  ListItem,
 } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import profileAvatar from "/usa.jpg";
 import FileUploader from "./FileUploader";
 import { Controller, useForm } from "react-hook-form";
 
@@ -29,6 +31,9 @@ import { useUserContext } from "src/hooks/useUserContext";
 import ChipsArray from "./ChipArray";
 import TagsForm from "./TagsForm";
 import { t } from "i18next";
+import { createAvatarLink } from "src/utils/createAvatarLink";
+import useThemeContext from "src/hooks/useThemeContext";
+import { useTranslation } from "react-i18next";
 
 const schema = Yup.object({
   caption: Yup.string().max(2200),
@@ -84,13 +89,16 @@ const CreatePost = ({
   isPending,
   handleSubmit,
 }: ICreatePost) => {
+  const { t } = useTranslation();
+
   const [fileUrl, setFileUrl] = useState<string>(defaultImageUrl);
   const [editImage, setEditImage] = useState(false);
   const [isOpenLocation, setOpenLocation] = useState(Boolean(defaultLocation));
   const [isOpenTags, setOpenTags] = useState(Boolean(defaultTags));
   const { user } = useUserContext();
+  const { mode } = useThemeContext();
 
-  const [chipData, setChipData] = useState([]);
+  const [chipData, setChipData] = useState<string[]>([]);
 
   const cleanImage = () => setFileUrl("");
   const toggleLocation = () => setOpenLocation((state) => !state);
@@ -113,7 +121,6 @@ const CreatePost = ({
       console.error(error);
     }
   };
-
   const ImageController = () => (
     <Controller
       name="imageUrl"
@@ -127,61 +134,100 @@ const CreatePost = ({
   return (
     <Box
       sx={{
-        backgroundImage: "none",
+        position: "relative",
         p: 3,
+
         minHeight: 100,
+        maxHeight: "80vh",
         overflow: "auto",
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
     >
+      <Box mb={2}>
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          {t("create_post")}
+        </Typography>
+        <StyledButton
+          sx={{
+            height: 40,
+
+            minWidth: 40,
+            position: "absolute",
+            p: 0,
+            top: 10,
+            right: 10,
+            borderRadius: "50%",
+            bgcolor: mode === "light" ? "primary.dark" : "primary.main",
+            color: "primary.white",
+            "&:hover,&:focus": {
+              transform: "scale(1.1)",
+              bgcolor: "primary.dark",
+            },
+          }}
+          onClick={close}
+        >
+          <ClearIcon sx={{ width: 30, height: 30 }} />
+        </StyledButton>
+      </Box>
+      <Divider sx={{ mb: 2 }} />
+
       <Box
         component="form"
         sx={{
+          //   outline: "1px solid brown",
+
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 3,
+          gap: 1,
+          width: "100%",
         }}
         onSubmit={handleFormSubmit(onSubmit)}
       >
         <Box
           sx={{
             display: "flex",
-            gap: 3,
             width: "100%",
+            gap: 3,
             alignItems: "flex-start",
           }}
         >
           <Avatar
-            sx={{ width: 56, height: 56 }}
-            src={profileAvatar}
-            aria-label="profile avatar"
+            src={createAvatarLink(user.imageUrl, user.defaultCharacter)}
+            alt={user.name}
+            sx={{ width: 70, height: 70 }}
           />
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h4">{user.name}</Typography>
+            <Typography variant="body2">Post to anyone</Typography>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            // outline: "1px solid green",
+            mt: 2,
+            display: "flex",
+            gap: 3,
+            width: "100%",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
           <Box
             sx={{
               flex: 1,
               display: "flex",
               gap: 2,
               flexDirection: "column",
+              width: "100%",
+              //   outline: "1px solid blue",
             }}
           >
-            <TextField
-              multiline
-              minRows={3}
-              variant="filled"
-              fullWidth
-              label={t("caption")}
-              sx={{
-                "& .MuiFormLabel-root": {
-                  color: "text.accent",
-                  "&.Mui-focused": {
-                    color: "text.accent",
-                  },
-                },
-              }}
-              placeholder="What's in your mind Kyrylo?"
-              defaultValue={defaultCaption}
-              {...register("caption")}
-            />
             <Collapse in={isOpenLocation}>
               <Box
                 sx={{
@@ -204,21 +250,77 @@ const CreatePost = ({
                   defaultValue={defaultLocation}
                   {...register("location")}
                 />
-                <IconBox
-                  sx={{
-                    position: "absolute",
-                    bottom: 0,
-                    transform: "translateY(10%)",
-                    left: -30,
-                    p: 0,
-                    "&:hover": { color: "primary.accent" },
-                  }}
-                  onClick={() => setOpenLocation(false)}
-                >
-                  <ClearIcon sx={{ width: 30, height: 30 }} />
-                </IconBox>
               </Box>
             </Collapse>
+            <Collapse in={Boolean(fileUrl)} unmountOnExit>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  width: "100%",
+                  position: "relative",
+                  //   outline: "1px solid blue",
+                }}
+              >
+                <Box>
+                  <CardMedia
+                    onMouseOver={() => setEditImage(true)}
+                    component="img"
+                    height="250"
+                    width="500"
+                    image={fileUrl}
+                    alt="Post photo"
+                    sx={{ objectFit: "contain" }}
+                  />
+                </Box>
+                {editImage ? (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+
+                      color: "primary.accent",
+                      textAlign: "center",
+
+                      cursor: "pointer",
+                    }}
+                  >
+                    <IconBox component="label">
+                      <EditIcon sx={{ width: 30, height: 30 }} />
+
+                      <ImageController />
+                    </IconBox>
+                    <IconBox component={"span"} onClick={cleanImage}>
+                      <ClearIcon sx={{ width: 30, height: 30 }} />
+                    </IconBox>
+                  </Box>
+                ) : null}
+              </Box>
+            </Collapse>
+            <TextField
+              multiline
+              minRows={3}
+              variant="filled"
+              fullWidth
+              label={t("caption")}
+              sx={{
+                "& .MuiFormLabel-root": {
+                  color: "text.accent",
+                  "&.Mui-focused": {
+                    color: "text.accent",
+                  },
+                },
+              }}
+              placeholder={t("what_in_mind", { val: user.name })}
+              defaultValue={defaultCaption}
+              {...register("caption")}
+            />
+
             <Collapse in={isOpenTags}>
               <Box
                 sx={{
@@ -228,28 +330,24 @@ const CreatePost = ({
                 }}
               >
                 <TagsForm chipData={chipData} setChipData={setChipData} />
-                <IconBox
-                  sx={{
-                    position: "absolute",
-                    bottom: 0,
-                    transform: "translateY(10%)",
-                    left: -30,
-
-                    p: 0,
-                    "&:hover": { color: "primary.accent" },
-                  }}
-                  onClick={() => setOpenTags(false)}
-                >
-                  <ClearIcon sx={{ width: 30, height: 30 }} />
-                </IconBox>
               </Box>
             </Collapse>
+
             <ChipsArray chipData={chipData} setChipData={setChipData} />
           </Box>
         </Box>
-        <Box sx={{ display: "flex", gap: 3, justifyContent: "center" }}>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            justifyContent: "center",
+            // outline: "1px solid brown",
+          }}
+        >
           <StyledButton component="label" sx={{ color: "primary.contrast" }}>
-            <AddPhotoAlternateIcon color="secondary" /> Add photo{" "}
+            <AddPhotoAlternateIcon color="secondary" />{" "}
+            {t(fileUrl ? "change_photo" : "add_photo")}
             <ImageController />
           </StyledButton>
           <StyledButton
@@ -257,11 +355,11 @@ const CreatePost = ({
             sx={{ color: "primary.contrast" }}
           >
             <AddLocationAltIcon color="secondary" />
-            Add location
+            {t(isOpenLocation ? "remove_location" : "add_location")}
           </StyledButton>
           <StyledButton onClick={toggleTags} sx={{ color: "primary.contrast" }}>
             <TagIcon color="secondary" />
-            Add tags
+            {t(isOpenTags ? "remove_tags" : "add_tags")}
           </StyledButton>
           <Fade in={!fileUrl} {...{ timeout: 500 }}>
             <Box>
@@ -285,55 +383,6 @@ const CreatePost = ({
             </Box>
           </Fade>
         </Box>
-        <Collapse in={Boolean(fileUrl)} unmountOnExit>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              width: "100%",
-              position: "relative",
-            }}
-          >
-            <Box>
-              <CardMedia
-                onMouseOver={() => setEditImage(true)}
-                component="img"
-                height="350"
-                width="500"
-                image={fileUrl}
-                alt="Post photo"
-                sx={{ objectFit: "contain" }}
-              />
-            </Box>
-            {editImage ? (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-
-                  color: "primary.accent",
-                  textAlign: "center",
-
-                  cursor: "pointer",
-                }}
-              >
-                <IconBox component="label">
-                  <EditIcon sx={{ width: 30, height: 30 }} />
-
-                  <ImageController />
-                </IconBox>
-                <IconBox component={"span"} onClick={cleanImage}>
-                  <ClearIcon sx={{ width: 30, height: 30 }} />
-                </IconBox>
-              </Box>
-            ) : null}
-          </Box>
-        </Collapse>
 
         <Fade in={Boolean(fileUrl)} unmountOnExit>
           <Box sx={{ width: "100%" }}>

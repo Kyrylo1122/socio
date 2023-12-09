@@ -183,6 +183,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
                 }}
               >
                 <PostCreator
+                  name={user.name}
                   imageUrl={createAvatarLink(
                     user.imageUrl,
                     user.defaultCharacter

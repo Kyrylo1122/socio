@@ -4,7 +4,7 @@ import { formatDate } from "src/utils/formatDate";
 interface IPostCardHeader {
   imageUrl: string | null;
   name: string;
-  date: string;
+  date?: string;
   defaultCharacter: number;
 }
 const PostCardHeader = ({
@@ -23,7 +23,7 @@ const PostCardHeader = ({
         />
       }
       title={name}
-      subheader={formatDate(date)}
+      subheader={date ? formatDate(date) : null}
       sx={{ "& .MuiCardHeader-subheader": { color: "text.light" } }}
     />
   );

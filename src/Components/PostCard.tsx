@@ -1,17 +1,5 @@
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardMedia,
-  Collapse,
-  Button,
-  Divider,
-  ListItem,
-  List,
-  Box,
-  Modal,
-} from "@mui/material";
+import { Card, CardContent, Typography, CardMedia, Box } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
@@ -22,13 +10,13 @@ import {
   useDeletePost,
 } from "src/lib/react-query/react-query";
 import CommentForm from "./CommentForm";
-import PostComment from "./PostComment";
-import { IUserResponse } from "src/types";
+
 import PostCardHeader from "./PostCardHeader";
 import PlaygroundSpeedDial from "./SpeedDial";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreatePost from "./CreatePost";
+import Modal from "./Modal";
 
 interface IPostCardProps {
   user: Models.Document;
