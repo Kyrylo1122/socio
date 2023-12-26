@@ -19,7 +19,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import * as Yup from "yup";
-import { CreatePostFormType, INewPost } from "src/types";
+import { CreatePostFormType, INewPost, IPostResponse } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -59,7 +59,7 @@ interface ICreatePost {
   defaultImageUrl: string;
   isPending: boolean;
   defaultCreatedAt: string;
-  handleSubmit: (value: CreatePostFormType) => void;
+  handleSubmit: (value: Partial<IPostResponse>) => void;
 }
 const StyledButton = styled(Button)`
   ${({ theme }) => `

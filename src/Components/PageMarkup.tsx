@@ -19,7 +19,7 @@ import {
   useDeleteFile,
   useGetUserPosts,
   useUpdateUserInfo,
-} from "src/lib/react-query/react-query";
+} from "src/lib/react-query";
 import { toast } from "react-toastify";
 import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 

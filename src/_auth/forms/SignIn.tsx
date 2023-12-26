@@ -12,18 +12,17 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import useThemeContext from "src/hooks/useThemeContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { LockOutlined } from "@mui/icons-material";
 import { FormButton } from "src/Components/ui/FormButton";
 import { toast } from "react-toastify";
 import layingImage from "/LayingDoodleYYY.png";
 import Spinner from "src/Components/Spinner";
-import { useSignInAccountMutation } from "src/lib/react-query/react-query";
 import { useEffect } from "react";
 import Logo from "src/Components/Logo";
 import { IFormNames } from "src/types";
 import { Input } from "src/Components/ui/Input";
-import { useUserContext } from "src/hooks/useUserContext";
+import { useSignInAccount } from "src/lib/react-query";
 
 interface ISignInForm {
   email: string;
@@ -33,8 +32,6 @@ interface ISignInForm {
 const SignIn = () => {
   const { t } = useTranslation();
   const { mode } = useThemeContext();
-  const navigate = useNavigate();
-  const { checkAuthUser, isLoading } = useUserContext();
 
   const {
     register,
@@ -44,28 +41,22 @@ const SignIn = () => {
 
     formState: { errors },
   } = useForm<IFormNames>();
-  const { mutateAsync: signInAccount, isPending } = useSignInAccountMutation();
+  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
 
   useEffect(() => {
     setFocus("email");
   }, [setFocus]);
 
   const onSubmit: SubmitHandler<ISignInForm> = async (value) => {
-    console.log(value);
     try {
-      const session = await signInAccount(value);
-      if (!session) return toast.warn(t("error_repeat_signin"));
-
-      const isLoggedIn = await checkAuthUser();
-      if (isLoggedIn) {
-        reset();
-        navigate("/");
-      } else return toast.warn(t("error_signin_failed"));
+      await signInAccount(value);
+      reset();
     } catch (error) {
+      toast.warn(t("error_signin_failed"));
       console.error(error);
     }
   };
-  if (isLoading || isPending) return <Spinner />;
+  if (isPending) return <Spinner />;
   return (
     <>
       <Container

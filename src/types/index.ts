@@ -1,3 +1,5 @@
+export type CollectionNameType = "users";
+
 export interface IUserNew {
   name: string;
   email: string;
@@ -6,15 +8,15 @@ export interface IUserNew {
 }
 
 export interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  imageUrl: string;
+  backgroundImage: null;
   bio: string;
-  backgroundImage?: string | null;
-  defaultCharacter: AvatarType;
-  userInfo: IUserInfo[];
-  imageId?: string | null;
+  city: string;
+  country: string;
+  defaultCharacter: number;
+  email: string;
+  name: string;
+  photoUrl: null;
+  uid: string;
 }
 
 export interface IUserInfo {

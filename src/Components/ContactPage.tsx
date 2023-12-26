@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import PageMarkUp from "./PageMarkup";
-import { useGetUsersById } from "src/lib/react-query/react-query";
+import { useGetUsersById } from "src/lib/react-query";
 import { Typography } from "@mui/material";
 
 export const ContactPage = () => {

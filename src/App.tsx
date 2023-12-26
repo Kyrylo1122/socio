@@ -7,14 +7,13 @@ import Body from "./Components/Body";
 import { useUserContext } from "./hooks/useUserContext";
 
 const App = () => {
-  const { isAuthenticated, user, isLoading } = useUserContext();
-
+  const { user, isLoading } = useUserContext();
   const { mode } = useThemeContext();
 
   if (isLoading) return <Spinner />;
   return (
     <Box sx={{ position: "relative" }}>
-      {isAuthenticated ? (
+      {user ? (
         <Box>
           <Header />
         </Box>

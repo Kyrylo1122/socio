@@ -1,25 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { IPostResponse, IUserNew, IUserResponse } from "src/types";
+
+import { QUERY_KEYS } from "./QueryKeys";
+import { createUserAccount, signInAccount } from "src/firebase/api-firebase";
 import {
+  createComment,
   createNewPost,
-  createUserAccount,
-  deleteFile,
   deletePost,
-  getUserPosts,
+  getSavePost,
+  getUsers,
   likePost,
-  signInAccount,
+  savePost,
   signOutAccount,
+  updatePost,
   updateUserInfo,
   uploadFile,
-  uploadComments,
-  getUsers,
-  getUserById,
-  createComment,
-  savePost,
-  getSavePost,
-  updatePost,
 } from "../api";
-import { QUERY_KEYS } from "./QueryKeys";
 export const useGetUsers = () =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
@@ -39,23 +35,6 @@ export const useGetUserPosts = (id: string) =>
     queryFn: () => getUserPosts(id),
   });
 
-export const useCreateUserAccountMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (user: IUserNew) => createUserAccount(user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CREATE_USER_ACCOUNT],
-      });
-    },
-  });
-};
-
-export const useSignInAccountMutation = () =>
-  useMutation({
-    mutationFn: (user: { email: string; password: string }) =>
-      signInAccount(user),
-  });
 export const useSignOutAccount = () =>
   useMutation({
     mutationFn: signOutAccount,
@@ -114,17 +93,7 @@ export const useLikePost = () => {
     },
   });
 };
-export const useUploadComments = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (userInfo) => uploadComments(userInfo),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
-      });
-    },
-  });
-};
+
 export const useUpdatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -144,13 +113,8 @@ export const useUpdatePost = () => {
 export const useCreateComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      postId,
-      arrayOfComments,
-    }: {
-      postId: string;
-      arrayOfComments: string[];
-    }) => createComment(postId, arrayOfComments),
+    mutationFn: (comment: { postId: string; userId: string; body: string }) =>
+      createComment(comment),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
     },
@@ -167,4 +131,22 @@ export const useGetSaves = (userId: string) =>
     queryKey: [QUERY_KEYS.GET_USERS],
 
     queryFn: () => getSavePost(userId),
+  });
+// ===================================================
+export const useCreateUserAccount = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUserNew) => createUserAccount(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CREATE_USER_ACCOUNT],
+      });
+    },
+  });
+};
+
+export const useSignInAccount = () =>
+  useMutation({
+    mutationFn: (user: { email: string; password: string }) =>
+      signInAccount(user),
   });

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   Avatar,
   Container,
@@ -12,32 +14,21 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import useThemeContext from "src/hooks/useThemeContext";
 import { FormButton } from "src/Components/ui/FormButton";
-import {
-  useCreateUserAccountMutation,
-  useSignInAccountMutation,
-} from "src/lib/react-query/react-query";
-import { useNavigate } from "react-router-dom";
+import { useCreateUserAccount } from "src/lib/react-query";
 import { toast } from "react-toastify";
 import AvatarsChooser from "src/Components/ProfileAvatars/AvatarsChooser";
-import { useEffect, useState } from "react";
 import { AvatarType, IFormNames } from "src/types";
 import { avatars as avatarsArray } from "src/Components/ProfileAvatars/ProfilePictures";
 import { useTranslation } from "react-i18next";
 import Spinner from "src/Components/Spinner";
 import { Input } from "src/Components/ui/Input";
-import { useUserContext } from "src/hooks/useUserContext";
 
 const SignUp = () => {
   const { theme } = useThemeContext();
-  const navigate = useNavigate();
   const [avatar, setAvatar] = useState<AvatarType>(avatarsArray[0]);
 
-  const { mutateAsync: createUserAccount, isPending } =
-    useCreateUserAccountMutation();
-  const { mutateAsync: signInAccount, isPending: isSignInLoading } =
-    useSignInAccountMutation();
+  const { mutateAsync: createUserAccount, isPending } = useCreateUserAccount();
 
-  const { checkAuthUser, isLoading } = useUserContext();
   const {
     register,
     handleSubmit,
@@ -53,31 +44,23 @@ const SignUp = () => {
     password,
     email,
   }) => {
-    const user = await createUserAccount({
-      name: `${name} ${surname}`,
-      password,
-      email,
-      defaultCharacter: avatar.id,
-    });
-    if (!user) return toast.warn(t("error_signup_failed"));
-    toast.info("the user was created");
-    const session = await signInAccount({
-      email,
-      password,
-    });
-    if (!session) return toast.warn(t("error_signup_failed"));
-    toast.info("the session is works");
-
-    const isLoggedIn = await checkAuthUser();
-    if (isLoggedIn) {
+    try {
+      await createUserAccount({
+        name: `${name} ${surname}`,
+        password,
+        email,
+        defaultCharacter: avatar.id,
+      });
       reset();
-      navigate("/");
-    } else return toast.warn(t("error_signup_failed"));
+    } catch (error) {
+      toast.warn(t("error_signup_failed"));
+      console.error(error);
+    }
   };
   useEffect(() => {
     setFocus("name");
   }, [setFocus]);
-  if (isPending || isLoading || isSignInLoading) return <Spinner />;
+  if (isPending) return <Spinner />;
   return (
     <ThemeProvider theme={{ [THEME_ID]: theme }}>
       <CssBaseline />

@@ -9,7 +9,7 @@ import {
   useDeleteFile,
   useUpdateUserInfo,
   useUploadFile,
-} from "src/lib/react-query/react-query";
+} from "src/lib/react-query";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { useUserContext } from "src/hooks/useUserContext";

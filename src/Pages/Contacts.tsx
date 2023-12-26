@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import Spinner from "src/Components/Spinner";
-import { useGetUsers } from "src/lib/react-query/react-query";
+import { useGetUsers } from "src/lib/react-query";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 interface IContactsMarkup {
   imageUrl: string | null;
@@ -32,9 +32,9 @@ const ContactsMarkup = ({
 );
 
 function Contacts() {
-  const { data, isPending } = useGetUsers();
-  if (isPending) return <Spinner />;
-  if (!data) return;
+  //   const { data, isPending } = useGetUsers();
+  //   if (isPending) return <Spinner />;
+  //   if (!data) return;
   return (
     <Box>
       <Typography variant="h2">My friends ({data.total})</Typography>

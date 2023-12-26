@@ -4,13 +4,11 @@ import { Box } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
 
 const Body = () => {
-  const { isAuthenticated, user } = useUserContext();
-  console.log("isAuthenticated: ", isAuthenticated);
-  console.log("user: ", user);
+  const { user } = useUserContext();
 
   return (
     <Box sx={{ display: "flex", mt: 11 }}>
-      {isAuthenticated ? (
+      {user ? (
         <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
           <Sidebar />
         </Box>

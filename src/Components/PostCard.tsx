@@ -9,7 +9,7 @@ import {
   useCreateComment,
   useDeletePost,
   useUpdatePost,
-} from "src/lib/react-query/react-query";
+} from "src/lib/react-query";
 import CommentForm from "./CommentForm";
 
 import PostCardHeader from "./PostCardHeader";
@@ -20,6 +20,9 @@ import CreatePost from "./CreatePost";
 import Modal from "./Modal";
 import ChipsArray from "./ChipArray";
 import { IPostResponse } from "src/types";
+import { useUserContext } from "src/hooks/useUserContext";
+import PostSkeleton from "./Skeleton/PostSkeleton";
+import SharePost from "./SharePost";
 
 interface IPostCardProps {
   user: Models.Document;
@@ -44,6 +47,7 @@ const PostCard = ({
   comments,
 }: IPostCardProps) => {
   const { t } = useTranslation();
+  const { user: currentUser } = useUserContext();
   const [expanded, setExpanded] = useState(false);
   const [editPostModal, setEditPostModal] = useState(false);
   const closeModal = () => setEditPostModal(false);
@@ -63,18 +67,19 @@ const PostCard = ({
       console.error(error);
     }
   };
-  const handleCreateComment = async (comment: string) => {
+  const handleCreateComment = async (value: { body: string }) => {
+    const newValue = {
+      postId: id,
+      userId: user.$id,
+      body: value.body,
+    };
     try {
-      await createComment({
-        postId: id,
-        arrayOfComments: [...comments, comment],
-      });
+      await createComment(newValue);
     } catch (error) {
       console.error(error);
     }
   };
   const handleEditPost = async (value: Partial<IPostResponse>) => {
-    console.log("value: ", value);
     try {
       await editPost({
         postId: id,
@@ -96,7 +101,7 @@ const PostCard = ({
       onClick: () => setEditPostModal(true),
     },
   ];
-
+  if ((isPendingEdit, isPending)) return <PostSkeleton />;
   return (
     <Card
       sx={{
@@ -106,9 +111,12 @@ const PostCard = ({
         p: 1,
       }}
     >
-      <Box sx={{ position: "absolute", right: 10 }}>
-        <PlaygroundSpeedDial actions={actions} direction="left" />
-      </Box>
+      {currentUser.$id === user.$id ? (
+        <Box sx={{ position: "absolute", right: 10 }}>
+          <PlaygroundSpeedDial actions={actions} direction="left" />
+        </Box>
+      ) : null}
+
       <PostCardHeader
         imageUrl={user.imageId}
         defaultCharacter={user.defaultCharacter}
@@ -127,6 +135,7 @@ const PostCard = ({
         alt="Paella dish"
       />
       <CommentForm handleClick={handleCreateComment} />
+      <SharePost />
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}

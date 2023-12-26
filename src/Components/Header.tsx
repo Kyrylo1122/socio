@@ -21,10 +21,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import useThemeContext from "src/hooks/useThemeContext";
 import LanguageSelect from "./LanguageSelect";
-import { useSignOutAccount } from "src/lib/react-query/react-query";
+import { useSignOutAccount } from "src/lib/react-query";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { useUserContext } from "src/hooks/useUserContext";
+import { signOutAccount } from "src/firebase/api-firebase";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -123,8 +124,8 @@ export default function Header() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const { mutate: signOut, isSuccess } = useSignOutAccount();
-  const navigate = useNavigate();
+
+  const { user, checkUserAuth } = useUserContext();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -134,10 +135,11 @@ export default function Header() {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = async () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    signOut();
+    await signOutAccount();
+    checkUserAuth();
   };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -217,11 +219,10 @@ export default function Header() {
     </Menu>
   );
   const { mode, toggleColorMode } = useThemeContext();
-  const { user } = useUserContext();
 
-  React.useEffect(() => {
-    if (isSuccess) navigate(0);
-  }, [isSuccess, navigate]);
+  //   React.useEffect(() => {
+  //     if (isSuccess) navigate(0);
+  //   }, [isSuccess, navigate]);
   const MobileHeader = () => (
     <Box
       sx={{

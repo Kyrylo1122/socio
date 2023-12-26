@@ -1,6 +1,6 @@
 import { List, ListItem, Typography } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
-import { useGetSaves } from "src/lib/react-query/react-query";
+import { useGetSaves } from "src/lib/react-query";
 import { useTranslation } from "react-i18next";
 import PostCard from "src/Components/PostCard";
 

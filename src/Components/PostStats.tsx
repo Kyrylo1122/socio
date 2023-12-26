@@ -8,7 +8,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { useTranslation } from "react-i18next";
-import { useLikePost, useSavePost } from "src/lib/react-query/react-query";
+import { useLikePost, useSavePost } from "src/lib/react-query";
 import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
 import { MouseEventHandler, useState } from "react";

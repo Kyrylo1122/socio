@@ -154,21 +154,6 @@ export const uploadFile = async (file: File) => {
     console.error(error);
   }
 };
-export const uploadComments = async (userInfo: any) => {
-  try {
-    const uploadedFile = await storage.createFile(
-      appwriteConfig.storageUserInfoId,
-      ID.unique(),
-      userInfo
-    );
-
-    if (!uploadedFile) throw Error;
-    const infoUrl = await getFilePreview(uploadedFile.$id);
-    return { infoUrl, id: uploadedFile.$id };
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const getFilePreview = async (id: string) => {
   try {
@@ -216,7 +201,6 @@ export const updatePost = async (
   postId: string,
   attribute: Partial<IPostResponse>
 ) => {
-  console.log("attribute: ", attribute);
   try {
     return await databases.updateDocument(
       appwriteConfig.databaseId,
@@ -236,13 +220,24 @@ export const likePost = async (postId: string, arrayOfLikes: string[]) => {
   }
 };
 export const createComment = async (
+  userId: string,
   postId: string,
-  arrayOfComments: string[]
+  body: string
 ) => {
   try {
-    return await updatePost(postId, { comments: arrayOfComments });
+    console.log("Here: ", userId, postId, body);
+    return await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentsCollectionId,
+      ID.unique(),
+      {
+        user: userId,
+        post: postId,
+        body,
+      }
+    );
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 export async function getUsers() {
