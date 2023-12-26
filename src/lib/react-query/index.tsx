@@ -1,8 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IPostResponse, IUserNew, IUserResponse } from "src/types";
+import { IPostResponse, IUser, IUserNew, IUserResponse } from "src/types";
 
 import { QUERY_KEYS } from "./QueryKeys";
-import { createUserAccount, signInAccount } from "src/firebase/api-firebase";
+import {
+  createUserAccount,
+  signInAccount,
+  updateDatabase,
+  uploadFile,
+} from "src/firebase/api-firebase";
 import {
   createComment,
   createNewPost,
@@ -14,7 +19,6 @@ import {
   signOutAccount,
   updatePost,
   updateUserInfo,
-  uploadFile,
 } from "../api";
 export const useGetUsers = () =>
   useQuery({
@@ -45,8 +49,6 @@ export const useDeleteFile = () =>
     mutationFn: (id: string) => deleteFile(id),
   });
 
-export const useUploadFile = () => useMutation({ mutationFn: uploadFile });
-
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -62,18 +64,6 @@ export const useDeletePost = () => {
     mutationFn: (id: string) => deletePost(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-    },
-  });
-};
-
-export const useUpdateUserInfo = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (data: Partial<IUserResponse>) => updateUserInfo(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-      });
     },
   });
 };
@@ -132,7 +122,25 @@ export const useGetSaves = (userId: string) =>
 
     queryFn: () => getSavePost(userId),
   });
+//
 // ===================================================
+export const useSignInAccount = () =>
+  useMutation({
+    mutationFn: (user: { email: string; password: string }) =>
+      signInAccount(user),
+  });
+export const useUpdateUserInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ uid, data }: { uid: string; data: Partial<IUser> }) =>
+      updateDatabase({ id: uid, collectionName: "users", data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
 export const useCreateUserAccount = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -145,8 +153,15 @@ export const useCreateUserAccount = () => {
   });
 };
 
-export const useSignInAccount = () =>
+export const useUploadFile = () =>
   useMutation({
-    mutationFn: (user: { email: string; password: string }) =>
-      signInAccount(user),
+    mutationFn: ({
+      id,
+      name,
+      file,
+    }: {
+      id: string;
+      name: string;
+      file: File;
+    }) => uploadFile(id, name, file),
   });

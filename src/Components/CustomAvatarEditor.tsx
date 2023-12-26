@@ -42,7 +42,6 @@ const AvatarEditor = forwardRef<RefType, IProp>(({ file }, ref) => {
         borderRadius={125}
         scale={scale}
         rotate={rotate}
-        showGrid={true}
       />
       <SpeedDial
         ariaLabel="SpeedDial controlled open example"

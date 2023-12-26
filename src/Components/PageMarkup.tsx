@@ -29,6 +29,7 @@ import { createAvatarLink } from "src/utils/createAvatarLink";
 import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
 import { CreatePostFormType } from "src/types";
+import Spinner from "./Spinner";
 
 interface IPageMarkUp {
   user: Models.Document;
@@ -37,9 +38,10 @@ interface IPageMarkUp {
 const PageMarkUp = ({ user }: IPageMarkUp) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
-  const currentUserPage = user.$id === currentUser.$id;
+  const currentUserPage = user?.uid === currentUser?.uid;
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { data: posts } = useGetUserPosts(user.$id);
+  //   const { data: posts } = useGetUserPosts(user.$id);
   const { mutateAsync: deleteFile, isPending } = useDeleteFile();
   const { mutateAsync: uploadUserInfo, isPending: isLoad } =
     useUpdateUserInfo();
@@ -97,7 +99,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       console.error(error);
     }
   };
-
+  if (!user) return <Spinner />;
   return (
     <Box
       sx={{
@@ -125,7 +127,6 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       >
         {currentUserPage ? (
           <>
-            {" "}
             <MouseImageOver
               onDelete={deleteAvatarImage}
               onEdit={() => setUpdateAvatarModal(true)}
@@ -140,7 +141,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
                     backgroundColor: "primary.accent",
                     border: "2px solid white",
                   }}
-                  src={createAvatarLink(user.imageUrl, user.defaultCharacter)}
+                  src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
                   alt={user.name}
                 />
               )}
@@ -202,9 +203,9 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               </Box>
             ) : null}
 
-            {posts && <PostList user={user} posts={posts.documents} />}
+            {/* {posts && <PostList user={user} posts={posts.documents} />} */}
           </Box>
-          <Box
+          {/* <Box
             sx={{
               flex: 1,
               padding: 2,
@@ -212,12 +213,12 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               flexDirection: "column",
             }}
           >
-            {/* <UserInfo userInfo={user.userInfo} /> */}
+            <UserInfo userInfo={user.userInfo} />
             <UserFriends />
-          </Box>
+          </Box> */}
         </Box>
       </Box>
-      {currentUserPage ? (
+      {/* {currentUserPage ? (
         <Modal open={modalIsOpen} close={closeModal}>
           <CreatePost
             defaultCaption=""
@@ -230,7 +231,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
             isPending={isCreatingPost}
           />
         </Modal>
-      ) : null}
+      ) : null} */}
     </Box>
   );
 };

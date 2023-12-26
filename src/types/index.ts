@@ -15,7 +15,7 @@ export interface IUser {
   defaultCharacter: number;
   email: string;
   name: string;
-  photoUrl: null;
+  photoUrl: null | string;
   uid: string;
 }
 

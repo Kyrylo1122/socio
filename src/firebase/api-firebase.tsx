@@ -43,7 +43,7 @@ export const updateDatabase = async ({
   data: Partial<IUser>;
 }) => {
   try {
-    await setDoc(doc(db, collectionName, id), data);
+    await setDoc(doc(db, collectionName, id), data, { merge: true });
   } catch (e) {
     console.error("Error adding document: ", e);
   }
@@ -110,7 +110,7 @@ export const signOutAccount = async () => {
   }
 };
 
-export const uploadFile = async (name: string, file: File) => {
+export const uploadFile = async (id: string, name: string, file: File) => {
   const storageRef = ref(storage, name);
 
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -138,11 +138,17 @@ export const uploadFile = async (name: string, file: File) => {
     (error) => {
       console.error(error);
     },
-    () => {
+    async () => {
       // Handle successful uploads on complete
       // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log("File available at", downloadURL);
+      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+      return await updateDatabase({
+        id,
+        collectionName: "users",
+        data: {
+          photoUrl: downloadURL,
+        },
       });
     }
   );

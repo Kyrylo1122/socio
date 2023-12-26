@@ -13,6 +13,7 @@ import {
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { useUserContext } from "src/hooks/useUserContext";
+import { updateDatabase } from "src/firebase/api-firebase";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -37,13 +38,13 @@ const UpdateImageModalContent = ({
   close,
 }: IProp) => {
   const { t } = useTranslation();
+  const { user } = useUserContext();
   const [fileUrl, setFileUrl] = useState(defaultImage);
+  const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { mutateAsync: uploadFile } = useUploadFile();
   const { mutateAsync: deleteFile } = useDeleteFile();
   const { mutateAsync: uploadUserInfo } = useUpdateUserInfo();
-
-  const { checkAuthUser, setIsLoading } = useUserContext();
 
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
@@ -56,21 +57,13 @@ const UpdateImageModalContent = ({
 
       if (!editor.current) throw Error;
 
-      const image = dataURLtoFile(
+      const file = dataURLtoFile(
         editor.current.getImage().toDataURL(),
         "imageUrl"
       );
-      if (imageId) {
-        await deleteFile(imageId);
-      }
-      const uploadedFile = await uploadFile(image);
 
-      if (!uploadedFile) throw Error;
-      await uploadUserInfo({
-        imageUrl: uploadedFile.imageUrl,
-        imageId: uploadedFile.id,
-      });
-      await checkAuthUser();
+      await uploadFile({ id: user.uid, name: user.name, file });
+
       close();
     } catch (error) {
       console.error(error);
@@ -79,78 +72,74 @@ const UpdateImageModalContent = ({
       close();
     }
   };
-
+  if (isLoading) return <p>Loading...</p>;
   return (
     <Modal sx={{ width: "300px" }} open={open} close={close}>
-      <>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
-            <Typography variant="body1">{t("update_image_header")}</Typography>
-            <Box>
-              <StyledBtn onClick={() => close()}>
-                <CloseOutlinedIcon />
-              </StyledBtn>
-            </Box>
-          </Box>
-          <Divider />
-          <Box
-            sx={{
-              p: 3,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            {file && <AvatarEditor file={file} ref={editor} />}
-            {file ? (
-              <StyledBox
-                sx={{
-                  "&:hover": {
-                    transform: "scale(1.1)",
-                  },
-                }}
-                component="label"
-                mt={1}
-              >
-                {t("update_image")} <Uploader />
-              </StyledBox>
-            ) : (
-              <StyledBox
-                component="label"
-                sx={{
-                  p: 3,
-                  borderRadius: 1,
-                  border: "1px dashed",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                {t("update_image_body")}
-                <Box mt={1}>
-                  <InsertPhotoIcon />
-                </Box>
-                <Uploader />
-              </StyledBox>
-            )}
-          </Box>
-          <Divider />
-          <Box sx={{ p: 3, textAlign: "center" }}>
-            {fileUrl ? (
-              <StyledBtn onClick={handleSubmit}>Share</StyledBtn>
-            ) : (
-              <Typography variant="body1">
-                {t("update_image_footer")}
-              </Typography>
-            )}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
+          <Typography variant="body1">{t("update_image_header")}</Typography>
+          <Box>
+            <StyledBtn onClick={() => close()}>
+              <CloseOutlinedIcon />
+            </StyledBtn>
           </Box>
         </Box>
-      </>
+        <Divider />
+        <Box
+          sx={{
+            p: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {file && <AvatarEditor file={file} ref={editor} />}
+          {file ? (
+            <StyledBox
+              sx={{
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+              component="label"
+              mt={1}
+            >
+              {t("update_image")} <Uploader />
+            </StyledBox>
+          ) : (
+            <StyledBox
+              component="label"
+              sx={{
+                p: 3,
+                borderRadius: 1,
+                border: "1px dashed",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {t("update_image_body")}
+              <Box mt={1}>
+                <InsertPhotoIcon />
+              </Box>
+              <Uploader />
+            </StyledBox>
+          )}
+        </Box>
+        <Divider />
+        <Box sx={{ p: 3, textAlign: "center" }}>
+          {fileUrl ? (
+            <StyledBtn onClick={handleSubmit}>Share</StyledBtn>
+          ) : (
+            <Typography variant="body1">{t("update_image_footer")}</Typography>
+          )}
+        </Box>
+      </Box>
     </Modal>
   );
 };
