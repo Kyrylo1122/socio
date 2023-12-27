@@ -4,9 +4,11 @@ import { IPostResponse, IUser, IUserNew, IUserResponse } from "src/types";
 import { QUERY_KEYS } from "./QueryKeys";
 import {
   createUserAccount,
+  deleteAvatarImage,
+  getUserById,
   signInAccount,
   updateDatabase,
-  uploadFile,
+  uploadAvatarImage,
 } from "src/firebase/api-firebase";
 import {
   createComment,
@@ -26,12 +28,7 @@ export const useGetUsers = () =>
 
     queryFn: getUsers,
   });
-export const useGetUsersById = (id: string) =>
-  useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_BY_ID],
 
-    queryFn: () => getUserById(id),
-  });
 export const useGetUserPosts = (id: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_POSTS],
@@ -152,9 +149,16 @@ export const useCreateUserAccount = () => {
     },
   });
 };
+export const useGetUsersById = (id: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER, id],
 
-export const useUploadFile = () =>
-  useMutation({
+    queryFn: () => getUserById(id),
+  });
+
+export const useUploadAvatarImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({
       id,
       name,
@@ -163,5 +167,22 @@ export const useUploadFile = () =>
       id: string;
       name: string;
       file: File;
-    }) => uploadFile(id, name, file),
+    }) => uploadAvatarImage(id, name, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
   });
+};
+export const useDeleteAvatarImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id }: { id: string }) => deleteAvatarImage(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};

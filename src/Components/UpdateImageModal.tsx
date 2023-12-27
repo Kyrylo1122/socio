@@ -5,15 +5,9 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FileUploader from "./FileUploader";
 import { useRef, useState } from "react";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import {
-  useDeleteFile,
-  useUpdateUserInfo,
-  useUploadFile,
-} from "src/lib/react-query";
+import { useUploadAvatarImage } from "src/lib/react-query";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
-import { useUserContext } from "src/hooks/useUserContext";
-import { updateDatabase } from "src/firebase/api-firebase";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -28,23 +22,28 @@ const StyledBtn = styled(Button)(({ theme }) => ({
 }));
 
 type IOmitModal = Omit<IBasicModal, "children">;
-type ImageType = { defaultImage: string; imageId: string | null | undefined };
+type ImageType = {
+  defaultImage: string;
+  imageId: string | null | undefined;
+  id: string;
+
+  name: string;
+};
 type IProp = IOmitModal & ImageType;
 
 const UpdateImageModalContent = ({
+  id,
+  name,
   defaultImage,
-  imageId,
   open,
   close,
 }: IProp) => {
   const { t } = useTranslation();
-  const { user } = useUserContext();
+
   const [fileUrl, setFileUrl] = useState(defaultImage);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const { mutateAsync: uploadFile } = useUploadFile();
-  const { mutateAsync: deleteFile } = useDeleteFile();
-  const { mutateAsync: uploadUserInfo } = useUpdateUserInfo();
+  const { mutateAsync: uploadAvatarImg } = useUploadAvatarImage();
 
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
@@ -62,7 +61,7 @@ const UpdateImageModalContent = ({
         "imageUrl"
       );
 
-      await uploadFile({ id: user.uid, name: user.name, file });
+      await uploadAvatarImg({ id, name, file });
 
       close();
     } catch (error) {

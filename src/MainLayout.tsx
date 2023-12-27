@@ -12,14 +12,14 @@ const MainLayout = () => {
   return (
     <>
       <ToastContainer />
-      <AuthContextProvider>
-        <ThemeProvider theme={{ [THEME_ID]: theme }}>
-          <CssBaseline />
-          <QueryProvider>
+      <QueryProvider>
+        <AuthContextProvider>
+          <ThemeProvider theme={{ [THEME_ID]: theme }}>
+            <CssBaseline />
             <App />
-          </QueryProvider>
-        </ThemeProvider>
-      </AuthContextProvider>
+          </ThemeProvider>
+        </AuthContextProvider>
+      </QueryProvider>
     </>
   );
 };

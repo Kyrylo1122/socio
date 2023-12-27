@@ -21,11 +21,12 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import useThemeContext from "src/hooks/useThemeContext";
 import LanguageSelect from "./LanguageSelect";
-import { useSignOutAccount } from "src/lib/react-query";
+import { useGetUsersById, useSignOutAccount } from "src/lib/react-query";
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { useUserContext } from "src/hooks/useUserContext";
 import { signOutAccount } from "src/firebase/api-firebase";
+import { createAvatarLink } from "src/utils/createAvatarLink";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -126,7 +127,8 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const { user, checkUserAuth } = useUserContext();
-
+  const { data: currentUser } = useGetUsersById(user?.uid);
+  if (!currentUser) return;
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -263,8 +265,11 @@ export default function Header() {
           color="inherit"
         >
           <Avatar
-            alt={user.name}
-            src={user.imageUrl}
+            alt={currentUser.name}
+            src={createAvatarLink(
+              currentUser.photoUrl,
+              currentUser.defaultCharacter
+            )}
             sx={{
               backgroundColor: "primary.accent",
               border: "2px solid white",
@@ -275,7 +280,6 @@ export default function Header() {
       </Box>
     </Box>
   );
-
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <AppBar
@@ -348,8 +352,11 @@ export default function Header() {
                 color="inherit"
               >
                 <Avatar
-                  alt={user.name}
-                  src={user.imageUrl}
+                  alt={currentUser.name}
+                  src={createAvatarLink(
+                    currentUser.photoUrl,
+                    currentUser.defaultCharacter
+                  )}
                   sx={{
                     backgroundColor: "primary.accent",
                     border: "2px solid white",

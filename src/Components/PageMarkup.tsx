@@ -16,6 +16,7 @@ import MouseImageOver from "src/Components/MouseImageOver";
 import UpdateImageModalContent from "src/Components/UpdateImageModal";
 import {
   useCreatePost,
+  useDeleteAvatarImage,
   useDeleteFile,
   useGetUserPosts,
   useUpdateUserInfo,
@@ -28,11 +29,11 @@ import PostCreator from "src/Components/PostCreator";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
-import { CreatePostFormType } from "src/types";
+import { CreatePostFormType, IUser } from "src/types";
 import Spinner from "./Spinner";
 
 interface IPageMarkUp {
-  user: Models.Document;
+  user: IUser;
 }
 
 const PageMarkUp = ({ user }: IPageMarkUp) => {
@@ -42,14 +43,32 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //   const { data: posts } = useGetUserPosts(user.$id);
-  const { mutateAsync: deleteFile, isPending } = useDeleteFile();
-  const { mutateAsync: uploadUserInfo, isPending: isLoad } =
-    useUpdateUserInfo();
+  const { mutateAsync: deleteAvatarImg, isPending } = useDeleteAvatarImage();
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
   const [updateAvatarModal, setUpdateAvatarModal] = useState(false);
+
+  const deleteAvatarImage = async () => {
+    if (!user.photoUrl) return toast.info(t("no_avatar_image"));
+    try {
+      await deleteAvatarImg({ id: user.uid });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const { mutateAsync: createNewPost, isPending: isCreatingPost } =
+    useCreatePost();
+
+  const handleCreatePost = async (value: CreatePostFormType) => {
+    try {
+      const newValue = { ...value, userId: user.$id };
+      await createNewPost(newValue);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const UserFriends = () => {
     return (
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -78,26 +97,6 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
         </AvatarGroup>
       </Box>
     );
-  };
-  const deleteAvatarImage = async () => {
-    if (!user.imageId) return toast.info(t("no_avatar_image"));
-    try {
-      await deleteFile(user.imageId);
-      await uploadUserInfo({ imageId: null, imageUrl: null });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const { mutateAsync: createNewPost, isPending: isCreatingPost } =
-    useCreatePost();
-
-  const handleCreatePost = async (value: CreatePostFormType) => {
-    try {
-      const newValue = { ...value, userId: user.$id };
-      await createNewPost(newValue);
-    } catch (error) {
-      console.error(error);
-    }
   };
   if (!user) return <Spinner />;
   return (
@@ -131,7 +130,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               onDelete={deleteAvatarImage}
               onEdit={() => setUpdateAvatarModal(true)}
             >
-              {isLoad || isPending ? (
+              {isPending ? (
                 <AvatarSkeleton />
               ) : (
                 <Avatar
@@ -148,9 +147,11 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
             </MouseImageOver>
             {updateAvatarModal ? (
               <UpdateImageModalContent
-                imageId={user.imageId}
+                id={user.uid}
+                name={user.name}
+                imageId={user.photoUrl}
                 defaultImage={createAvatarLink(
-                  user.imageUrl,
+                  user.photoUrl,
                   user.defaultCharacter
                 )}
                 open={updateAvatarModal}
@@ -166,7 +167,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               backgroundColor: "primary.accent",
               border: "2px solid white",
             }}
-            src={createAvatarLink(user.imageUrl, user.defaultCharacter)}
+            src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
             alt={user.name}
           />
         )}
@@ -196,7 +197,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
                 <PostCreator
                   name={user.name}
                   imageUrl={createAvatarLink(
-                    user.imageUrl,
+                    user.photoUrl,
                     user.defaultCharacter
                   )}
                 />

@@ -7,7 +7,6 @@ import {
 import { auth, db, storage } from "./config";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { toast } from "react-toastify";
 
 export const getAllUsers = async () => {
   try {
@@ -20,15 +19,15 @@ export const getAllUsers = async () => {
     console.error(error);
   }
 };
-export const getUserById = async (id: string) => {
+export const getUserById = async (id: string | null | undefined) => {
   try {
+    if (!id) throw Error;
     const docRef = doc(db, "users", id);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) throw Error;
     return docSnap.data() as IUser;
   } catch (error) {
-    toast.info("No such user!");
     console.error(error);
   }
 };
@@ -110,7 +109,11 @@ export const signOutAccount = async () => {
   }
 };
 
-export const uploadFile = async (id: string, name: string, file: File) => {
+export const uploadAvatarImage = async (
+  id: string,
+  name: string,
+  file: File
+) => {
   const storageRef = ref(storage, name);
 
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -152,4 +155,17 @@ export const uploadFile = async (id: string, name: string, file: File) => {
       });
     }
   );
+};
+export const deleteAvatarImage = async (id: string) => {
+  try {
+    return await updateDatabase({
+      id,
+      collectionName: "users",
+      data: {
+        photoUrl: null,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
