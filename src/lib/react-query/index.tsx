@@ -20,7 +20,6 @@ import {
   savePost,
   signOutAccount,
   updatePost,
-  updateUserInfo,
 } from "../api";
 export const useGetUsers = () =>
   useQuery({
@@ -133,7 +132,7 @@ export const useUpdateUserInfo = () => {
       updateDatabase({ id: uid, collectionName: "users", data }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
       });
     },
   });
@@ -169,8 +168,7 @@ export const useUploadAvatarImage = () => {
       name: string;
       file: File;
     }) => uploadAvatarImage(id, name, file),
-    onSuccess: (data) => {
-      console.log("useUploadAvatarImage: ", data);
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
       });

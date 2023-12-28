@@ -75,6 +75,7 @@ export const createUserAccount = async ({
         country: "",
         city: "",
         photoUrl: null,
+        status: null,
       },
     });
   } catch (error) {

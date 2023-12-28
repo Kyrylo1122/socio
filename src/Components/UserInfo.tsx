@@ -18,6 +18,7 @@ import Diversity1Icon from "@mui/icons-material/Diversity1";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import FormBackground from "/MeditatingDoodle.png";
 import { updateUserInfo } from "src/lib/api";
+import { useUpdateUserInfo } from "src/lib/react-query";
 
 const Btn = styled(Button)(({ theme }) => ({
   transition: theme.transitions.create("transform"),
@@ -33,33 +34,45 @@ const Btn = styled(Button)(({ theme }) => ({
 // ];
 
 interface IValue {
+  id: string;
   city?: string;
   country?: string;
-  status?: string;
+  status?: string | null;
 }
-const UserInfoForm = () => {
+type UserInfoFormType = IValue & { close: () => void };
+const UserInfoForm = ({
+  id,
+  close,
+  city,
+  country,
+  status,
+}: UserInfoFormType) => {
   const { t } = useTranslation();
 
-  const [isOpenCity, setIsOpenCity] = useState(false);
-  const [relationsStatus, setRelationsStatus] = useState(false);
+  const [isOpenCity, setIsOpenCity] = useState(Boolean(city));
+  const [relationsStatus, setRelationsStatus] = useState(Boolean(status));
 
   const toggleCity = () => setIsOpenCity((state) => !state);
   const toggleRelationsStatus = () => setRelationsStatus((status) => !status);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      city,
+      country,
+      status,
+    },
+  });
+  const { mutateAsync: updateUserInfo, isPending } = useUpdateUserInfo();
 
-  const onSubmit = async (values: IValue) => {
-    const arrayFromValues = Object.entries(values).map((item) => ({
-      key: item[0],
-      value: item[1],
-    }));
-    const data = { userInfo: arrayFromValues };
+  const onSubmit = async (data: IValue) => {
     try {
-      await updateUserInfo(data);
+      await updateUserInfo({ uid: id, data });
+      close();
     } catch (error) {
       console.error(error);
     }
   };
+  if (isPending) return <>Loading...</>;
   return (
     <Box
       sx={{
@@ -198,7 +211,7 @@ const UserInfoForm = () => {
   );
 };
 
-const UserInfo = ({ userInfo }: { userInfo: IUserInfo[] }) => {
+const UserInfo = ({ id, city, country, status }: IValue) => {
   const { t } = useTranslation();
 
   const [infoModal, setInfoModal] = useState(false);
@@ -210,17 +223,28 @@ const UserInfo = ({ userInfo }: { userInfo: IUserInfo[] }) => {
       <Typography variant="h4">{t("user_info")}</Typography>
       <Divider />
       <List>
-        {userInfo.length ? (
-          userInfo.map(({ key, value }) => (
-            <ListItem key={key} sx={{ pt: 0, pb: 0 }}>
-              {t(key)} : {value}
-            </ListItem>
-          ))
-        ) : (
-          <Typography onClick={openModal}>Add some info</Typography>
-        )}
+        <ListItem sx={{ pt: 0, pb: 0 }}>
+          {t("city")} : {city}
+        </ListItem>
+        <ListItem sx={{ pt: 0, pb: 0 }}>
+          {t("country")} : {country}
+        </ListItem>
+        <ListItem sx={{ pt: 0, pb: 0 }}>
+          {t("status")} : {status}
+        </ListItem>
+
+        <Button variant="contained" onClick={openModal}>
+          Add some info
+        </Button>
+
         <Modal open={infoModal} close={closeModal}>
-          <UserInfoForm />
+          <UserInfoForm
+            id={id}
+            close={closeModal}
+            city={city}
+            country={country}
+            status={status}
+          />
         </Modal>
       </List>
     </Box>

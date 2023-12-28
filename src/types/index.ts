@@ -17,6 +17,7 @@ export interface IUser {
   name: string;
   photoUrl: null | string;
   uid: string;
+  status: null | string;
 }
 
 export interface IUserInfo {

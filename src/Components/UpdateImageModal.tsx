@@ -8,6 +8,9 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { useUploadAvatarImage } from "src/lib/react-query";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
+import { useUserContext } from "src/hooks/useUserContext";
+import { users } from "@Assets/data/Users";
+import { IUser } from "src/types";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
@@ -44,6 +47,7 @@ const UpdateImageModalContent = ({
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { mutateAsync: uploadAvatarImg } = useUploadAvatarImage();
+  const { setUser } = useUserContext();
 
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
@@ -62,6 +66,7 @@ const UpdateImageModalContent = ({
       );
 
       await uploadAvatarImg({ id, name, file });
+      setUser((user: IUser) => ({ ...user, photoUrl: fileUrl }));
 
       close();
     } catch (error) {

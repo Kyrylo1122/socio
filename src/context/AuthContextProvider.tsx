@@ -48,6 +48,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 
   const value = {
     user,
+    setUser,
     isLoading,
   };
 

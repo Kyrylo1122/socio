@@ -11,7 +11,7 @@ import CreatePost from "src/Components/CreatePost";
 import { useState } from "react";
 import Modal from "src/Components/Modal";
 import { useTranslation } from "react-i18next";
-// import UserInfo from "src/Components/UserInfo";
+import UserInfo from "src/Components/UserInfo";
 import MouseImageOver from "src/Components/MouseImageOver";
 import UpdateImageModalContent from "src/Components/UpdateImageModal";
 import {
@@ -27,7 +27,6 @@ import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 import PostList from "src/Components/PostList";
 import PostCreator from "src/Components/PostCreator";
 import { createAvatarLink } from "src/utils/createAvatarLink";
-import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
 import { CreatePostFormType, IUser } from "src/types";
 import Spinner from "./Spinner";
@@ -206,7 +205,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
 
             {/* {posts && <PostList user={user} posts={posts.documents} />} */}
           </Box>
-          {/* <Box
+          <Box
             sx={{
               flex: 1,
               padding: 2,
@@ -214,9 +213,14 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               flexDirection: "column",
             }}
           >
-            <UserInfo userInfo={user.userInfo} />
+            <UserInfo
+              id={user.uid}
+              city={user.city}
+              country={user.country}
+              status={user.status}
+            />
             <UserFriends />
-          </Box> */}
+          </Box>
         </Box>
       </Box>
       {/* {currentUserPage ? (
