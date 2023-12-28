@@ -149,11 +149,12 @@ export const useCreateUserAccount = () => {
     },
   });
 };
-export const useGetUsersById = (id: string) =>
+export const useGetUsersById = (id: string | null | undefined) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER, id],
 
     queryFn: () => getUserById(id),
+    enabled: Boolean(id),
   });
 
 export const useUploadAvatarImage = () => {
@@ -168,7 +169,8 @@ export const useUploadAvatarImage = () => {
       name: string;
       file: File;
     }) => uploadAvatarImage(id, name, file),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("useUploadAvatarImage: ", data);
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
       });

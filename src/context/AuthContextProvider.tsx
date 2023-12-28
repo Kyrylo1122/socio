@@ -5,24 +5,37 @@ import { AuthContext } from "./AuthContext";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "src/firebase/config";
+import { useGetUsersById } from "src/lib/react-query";
+import { IUser } from "src/types";
 
 interface IAuthContextProvider {
   children: ReactNode;
 }
 
 export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [authUserId, setAuthUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
+
+  const { data: currentUser, isPending: isLoading } =
+    useGetUsersById(authUserId);
+
+  useEffect(() => {
+    console.log("changed currentUser");
+
+    if (!currentUser) return;
+    setUser(currentUser);
+  }, [currentUser]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
+        setAuthUserId(currentUser.uid);
 
         navigate("/");
       } else {
-        setUser(null);
+        setAuthUserId(null);
 
         navigate("/sign-in");
       }

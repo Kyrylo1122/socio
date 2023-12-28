@@ -12,7 +12,6 @@ import {
   Switch,
   Avatar,
 } from "@mui/material";
-import LanguageIcon from "@mui/icons-material/Language";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -21,8 +20,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import useThemeContext from "src/hooks/useThemeContext";
 import LanguageSelect from "./LanguageSelect";
-import { useGetUsersById, useSignOutAccount } from "src/lib/react-query";
-import { useNavigate } from "react-router-dom";
+
 import Logo from "./Logo";
 import { useUserContext } from "src/hooks/useUserContext";
 import { signOutAccount } from "src/firebase/api-firebase";
@@ -126,9 +124,8 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const { user, checkUserAuth } = useUserContext();
-  const { data: currentUser } = useGetUsersById(user?.uid);
-  if (!currentUser) return;
+  const { user } = useUserContext();
+
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -141,11 +138,21 @@ export default function Header() {
     setAnchorEl(null);
     handleMobileMenuClose();
     await signOutAccount();
-    checkUserAuth();
   };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const HeaderAvatar = () => (
+    <Avatar
+      alt={user.name}
+      src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
+      sx={{
+        backgroundColor: "primary.accent",
+        border: "2px solid white",
+        transform: user.photoUrl ? "" : "scalex(-1)",
+      }}
+    />
+  );
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -222,9 +229,6 @@ export default function Header() {
   );
   const { mode, toggleColorMode } = useThemeContext();
 
-  //   React.useEffect(() => {
-  //     if (isSuccess) navigate(0);
-  //   }, [isSuccess, navigate]);
   const MobileHeader = () => (
     <Box
       sx={{
@@ -242,7 +246,6 @@ export default function Header() {
       <Logo />
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <SearchIcon sx={{ width: "32px", height: "32px" }} />
-        {/* <LanguageIcon sx={{ width: "32px", height: "32px" }} /> */}
         <LanguageSelect />
         <MaterialUISwitch
           onChange={() => toggleColorMode()}
@@ -259,23 +262,12 @@ export default function Header() {
           size="large"
           edge="end"
           aria-label="account of current user"
-          // aria-controls={menuId}
+          aria-controls={menuId}
           aria-haspopup="true"
-          // onClick={handleProfileMenuOpen}
+          onClick={handleProfileMenuOpen}
           color="inherit"
         >
-          <Avatar
-            alt={currentUser.name}
-            src={createAvatarLink(
-              currentUser.photoUrl,
-              currentUser.defaultCharacter
-            )}
-            sx={{
-              backgroundColor: "primary.accent",
-              border: "2px solid white",
-              transform: "scalex(-1)",
-            }}
-          />
+          <HeaderAvatar />
         </IconButton>
       </Box>
     </Box>
@@ -351,18 +343,7 @@ export default function Header() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <Avatar
-                  alt={currentUser.name}
-                  src={createAvatarLink(
-                    currentUser.photoUrl,
-                    currentUser.defaultCharacter
-                  )}
-                  sx={{
-                    backgroundColor: "primary.accent",
-                    border: "2px solid white",
-                    transform: "scalex(-1)",
-                  }}
-                />
+                <HeaderAvatar />
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -381,7 +362,7 @@ export default function Header() {
         </Toolbar>
       </AppBar>
       <MobileHeader />
-      {/* {renderMobileMenu} */}
+      {renderMobileMenu}
       {renderMenu}
     </Box>
   );
