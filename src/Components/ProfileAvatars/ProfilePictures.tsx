@@ -16,5 +16,5 @@ export const avatars = [
   { id: 4, image: maleImage1, name: "maleImage1" },
   { id: 5, image: maleImage2, name: "maleImage2" },
   { id: 6, image: maleImage3, name: "maleImage3" },
-  { id: 8, image: maleImage4, name: "maleImage4" },
+  { id: 7, image: maleImage4, name: "maleImage4" },
 ];

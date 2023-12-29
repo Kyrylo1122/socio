@@ -1,55 +1,52 @@
-import {
-  Avatar,
-  Box,
-  Divider,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, List, ListItem, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import AvatarImage from "src/Components/AvatarImage";
 import Spinner from "src/Components/Spinner";
+import { useUserContext } from "src/hooks/useUserContext";
 import { useGetUsers } from "src/lib/react-query";
-import { createAvatarLink } from "src/utils/createAvatarLink";
-interface IContactsMarkup {
-  imageUrl: string | null;
-  defaultCharacter: number;
-  name: string;
-  id: string;
-}
+import { AvatarImageProps } from "src/types";
+
 const ContactsMarkup = ({
-  imageUrl,
+  photoUrl,
   defaultCharacter,
   name,
-}: IContactsMarkup) => (
+}: AvatarImageProps) => (
   <ListItem sx={{ display: "flex" }}>
-    <Avatar
+    <AvatarImage
+      name={name}
+      photoUrl={photoUrl}
+      defaultCharacter={defaultCharacter}
       sx={{ width: 70, height: 70 }}
-      src={createAvatarLink(imageUrl, defaultCharacter)}
-      alt={name}
     />
     <Typography>{name}</Typography>
   </ListItem>
 );
 
 function Contacts() {
-  //   const { data, isPending } = useGetUsers();
-  //   if (isPending) return <Spinner />;
-  //   if (!data) return;
+  const { data, isPending } = useGetUsers();
+  const { user } = useUserContext();
+  if (isPending) return <Spinner />;
+  if (!data) return;
+  const friends = data.filter((friend) => friend.uid !== user.uid);
+  console.log("friends: ", friends);
+  //   return <>COntacts</>;
   return (
     <Box>
-      <Typography variant="h2">My friends ({data.total})</Typography>
+      <Typography variant="h2">My friends ({friends.length})</Typography>
       <List sx={{ display: "flex", flexDirection: "column" }}>
-        {data.documents.map(({ $id: id, imageUrl, defaultCharacter, name }) => (
-          <Link to={`/${id}`} key={id}>
-            <ContactsMarkup
-              imageUrl={imageUrl}
-              defaultCharacter={defaultCharacter}
-              name={name}
-              id={id}
-            />
-            <Divider />
-          </Link>
-        ))}
+        {friends.map(({ uid, photoUrl, defaultCharacter, name }) => {
+          console.log({ photoUrl, defaultCharacter });
+          return (
+            <Link to={`/${uid}`} key={uid}>
+              <ContactsMarkup
+                photoUrl={photoUrl}
+                defaultCharacter={defaultCharacter}
+                name={name}
+              />
+              <Divider />
+            </Link>
+          );
+        })}
       </List>
     </Box>
   );

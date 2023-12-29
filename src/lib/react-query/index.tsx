@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IPostResponse, IUser, IUserNew, IUserResponse } from "src/types";
+import { IPostResponse, IUser, IUserNew } from "src/types";
 
 import { QUERY_KEYS } from "./QueryKeys";
 import {
   createUserAccount,
   deleteAvatarImage,
+  getAllUsers,
   getUserById,
   signInAccount,
+  signOutAccount,
   updateDatabase,
   uploadAvatarImage,
 } from "src/firebase/api-firebase";
@@ -15,29 +17,16 @@ import {
   createNewPost,
   deletePost,
   getSavePost,
-  getUsers,
   likePost,
   savePost,
-  signOutAccount,
   updatePost,
 } from "../api";
-export const useGetUsers = () =>
-  useQuery({
-    queryKey: [QUERY_KEYS.GET_USERS],
-
-    queryFn: getUsers,
-  });
 
 export const useGetUserPosts = (id: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_POSTS],
 
     queryFn: () => getUserPosts(id),
-  });
-
-export const useSignOutAccount = () =>
-  useMutation({
-    mutationFn: signOutAccount,
   });
 
 export const useDeleteFile = () =>
@@ -120,6 +109,12 @@ export const useGetSaves = (userId: string) =>
   });
 //
 // ===================================================
+export const useGetUsers = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+
+    queryFn: getAllUsers,
+  });
 export const useSignInAccount = () =>
   useMutation({
     mutationFn: (user: { email: string; password: string }) =>
@@ -186,3 +181,7 @@ export const useDeleteAvatarImage = () => {
     },
   });
 };
+export const useSignOutAccount = () =>
+  useMutation({
+    mutationFn: signOutAccount,
+  });

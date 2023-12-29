@@ -30,6 +30,7 @@ import { createAvatarLink } from "src/utils/createAvatarLink";
 import { useUserContext } from "src/hooks/useUserContext";
 import { CreatePostFormType, IUser } from "src/types";
 import Spinner from "./Spinner";
+import AvatarImage from "./AvatarImage";
 
 interface IPageMarkUp {
   user: IUser;
@@ -97,6 +98,17 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       </Box>
     );
   };
+  const Avatar = () => (
+    <AvatarImage
+      photoUrl={user.photoUrl}
+      defaultCharacter={user.defaultCharacter}
+      name={user.name}
+      sx={{
+        width: 150,
+        height: 150,
+      }}
+    />
+  );
   if (!user) return <Spinner />;
   return (
     <Box
@@ -129,46 +141,24 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               onDelete={deleteAvatarImage}
               onEdit={() => setUpdateAvatarModal(true)}
             >
-              {isPending ? (
-                <AvatarSkeleton />
-              ) : (
-                <Avatar
-                  sx={{
-                    width: 150,
-                    height: 150,
-                    backgroundColor: "primary.accent",
-                    border: "2px solid white",
-                  }}
-                  src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
-                  alt={user.name}
-                />
-              )}
+              {isPending ? <AvatarSkeleton /> : <Avatar />}
             </MouseImageOver>
             {updateAvatarModal ? (
               <UpdateImageModalContent
                 id={user.uid}
                 name={user.name}
                 imageId={user.photoUrl}
-                defaultImage={createAvatarLink(
-                  user.photoUrl,
-                  user.defaultCharacter
-                )}
+                defaultImage={createAvatarLink({
+                  photoUrl: user.photoUrl,
+                  defaultCharacter: user.defaultCharacter,
+                })}
                 open={updateAvatarModal}
                 close={() => setUpdateAvatarModal(false)}
               />
             ) : null}
           </>
         ) : (
-          <Avatar
-            sx={{
-              width: 150,
-              height: 150,
-              backgroundColor: "primary.accent",
-              border: "2px solid white",
-            }}
-            src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
-            alt={user.name}
-          />
+          <Avatar />
         )}
 
         <Box sx={{ textAlign: "center", lineHeight: "1" }}>
@@ -195,10 +185,10 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               >
                 <PostCreator
                   name={user.name}
-                  imageUrl={createAvatarLink(
-                    user.photoUrl,
-                    user.defaultCharacter
-                  )}
+                  imageUrl={createAvatarLink({
+                    photoUrl: user.photoUrl,
+                    defaultCharacter: user.defaultCharacter,
+                  })}
                 />
               </Box>
             ) : null}

@@ -1,13 +1,6 @@
 import { Avatar } from "@mui/material";
 import { createAvatarLink } from "src/utils/createAvatarLink";
-import { SxProps, Theme } from "@mui/material/styles";
-
-interface AvatarImage {
-  photoUrl: string | null;
-  defaultCharacter: number;
-  name: string;
-  sx?: SxProps<Theme>;
-}
+import { AvatarImageProps } from "src/types";
 
 const style = {
   backgroundColor: "primary.accent",
@@ -18,11 +11,11 @@ export default function AvatarImage({
   defaultCharacter,
   name,
   sx,
-}: AvatarImage) {
+}: AvatarImageProps) {
   return (
     <Avatar
       alt={name}
-      src={createAvatarLink(photoUrl, defaultCharacter)}
+      src={createAvatarLink({ photoUrl, defaultCharacter })}
       sx={[style, ...(Array.isArray(sx) ? sx : [sx])]}
     />
   );

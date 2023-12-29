@@ -2,15 +2,13 @@ import { Box } from "@mui/material";
 import DecorateImage from "./Components/DecorateImage";
 import useThemeContext from "./hooks/useThemeContext";
 import { Header } from "./Components";
-import Spinner from "./Components/Spinner";
 import Body from "./Components/Body";
 import { useUserContext } from "./hooks/useUserContext";
 
 const App = () => {
-  const { user, isLoading } = useUserContext();
+  const { user } = useUserContext();
   const { mode } = useThemeContext();
 
-  if (isLoading) return <Spinner />;
   return (
     <Box sx={{ position: "relative" }}>
       {user ? (

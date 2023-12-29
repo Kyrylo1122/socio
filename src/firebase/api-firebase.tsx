@@ -11,10 +11,11 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export const getAllUsers = async () => {
   try {
     const docSnap = await getDocs(collection(db, "users"));
-    docSnap.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      //   console.log(doc.id, " => ", doc.data());
+    const users = docSnap.docs.map((doc) => {
+      return doc.data();
     });
+
+    return users;
   } catch (error) {
     console.error(error);
   }
@@ -62,7 +63,7 @@ export const createUserAccount = async ({
     const { user } = userCredential;
 
     if (!user) throw Error;
-    const createdUser = await updateDatabase({
+    await updateDatabase({
       id: user.uid,
       collectionName: "users",
       data: {
@@ -78,10 +79,9 @@ export const createUserAccount = async ({
         status: null,
       },
     });
-    console.log(createdUser);
     await updateDatabase({
       id: user.uid,
-      collectionName: "userChat",
+      collectionName: "userChats",
       data: {},
     });
   } catch (error) {

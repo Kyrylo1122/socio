@@ -10,7 +10,6 @@ import {
   MenuItem,
   Menu,
   Switch,
-  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -23,9 +22,9 @@ import LanguageSelect from "./LanguageSelect";
 
 import Logo from "./Logo";
 import { useUserContext } from "src/hooks/useUserContext";
-import { signOutAccount } from "src/firebase/api-firebase";
-import { createAvatarLink } from "src/utils/createAvatarLink";
 import AvatarImage from "./AvatarImage";
+import { useNavigate } from "react-router-dom";
+import { useSignOutAccount } from "src/lib/react-query";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -126,6 +125,8 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const { user } = useUserContext();
+  const navigate = useNavigate();
+  const { mutateAsync: signOut } = useSignOutAccount();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -138,7 +139,8 @@ export default function Header() {
   const handleMenuClose = async () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    await signOutAccount();
+    await signOut();
+    navigate(0);
   };
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
