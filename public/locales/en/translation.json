@@ -59,5 +59,7 @@
   "change_photo": "Change photo",
   "remove_location": "Remove location field",
   "remove_tags": "Remove tag field",
-  "what_in_mind": "What's in your mind {{val}}?"
+  "what_in_mind": "What's in your mind {{val}}?",
+  "video_call": "The video call is disabled",
+  "phone_call": "The phone call is disabled"
 }

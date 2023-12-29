@@ -25,6 +25,7 @@ import Logo from "./Logo";
 import { useUserContext } from "src/hooks/useUserContext";
 import { signOutAccount } from "src/firebase/api-firebase";
 import { createAvatarLink } from "src/utils/createAvatarLink";
+import AvatarImage from "./AvatarImage";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -143,12 +144,11 @@ export default function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
   const HeaderAvatar = () => (
-    <Avatar
-      alt={user.name}
-      src={createAvatarLink(user.photoUrl, user.defaultCharacter)}
+    <AvatarImage
+      name={user.name}
+      photoUrl={user.photoUrl}
+      defaultCharacter={user.defaultCharacter}
       sx={{
-        backgroundColor: "primary.accent",
-        border: "2px solid white",
         transform: user.photoUrl ? "" : "scalex(-1)",
       }}
     />
