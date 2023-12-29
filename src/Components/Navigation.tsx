@@ -11,6 +11,7 @@ import {
   Favorite,
   PeopleAlt,
   Home,
+  Chat,
 } from "@mui/icons-material";
 
 import {
@@ -65,6 +66,9 @@ const Navigation = () => {
           </ListItemLink>
           <ListItemLink to="/contacts" icon={<PeopleAlt />}>
             {t("navigation_contacts")}
+          </ListItemLink>
+          <ListItemLink to="/chats" icon={<Chat />}>
+            {t("navigation_chats")}
           </ListItemLink>
           <ListItemLink to="/saves" icon={<SaveIcon />}>
             {t("navigation_saves")}

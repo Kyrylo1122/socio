@@ -1,4 +1,4 @@
-export type CollectionNameType = "users";
+export type CollectionNameType = "users" | "userChat";
 
 export interface IUserNew {
   name: string;

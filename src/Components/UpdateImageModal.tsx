@@ -9,7 +9,6 @@ import { useUploadAvatarImage } from "src/lib/react-query";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { useUserContext } from "src/hooks/useUserContext";
-import { users } from "@Assets/data/Users";
 import { IUser } from "src/types";
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -52,7 +51,7 @@ const UpdateImageModalContent = ({
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
   );
-  const editor = useRef(null);
+  const editor = useRef<HTMLCanvasElement>(null);
 
   const handleSubmit = async () => {
     try {

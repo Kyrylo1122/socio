@@ -62,7 +62,7 @@ export const createUserAccount = async ({
     const { user } = userCredential;
 
     if (!user) throw Error;
-    return await updateDatabase({
+    const createdUser = await updateDatabase({
       id: user.uid,
       collectionName: "users",
       data: {
@@ -77,6 +77,12 @@ export const createUserAccount = async ({
         photoUrl: null,
         status: null,
       },
+    });
+    console.log(createdUser);
+    await updateDatabase({
+      id: user.uid,
+      collectionName: "userChat",
+      data: {},
     });
   } catch (error) {
     console.error(error);

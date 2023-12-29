@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import {
   SpeedDial,
   SpeedDialAction,
@@ -21,9 +21,7 @@ interface IProp {
   file: File;
 }
 
-type RefType = React.Ref<HTMLCanvasElement> | null;
-
-const AvatarEditor = forwardRef<RefType, IProp>(({ file }, ref) => {
+const AvatarEditor = forwardRef<any, IProp>(({ file }, ref) => {
   const [openTools, setOpenTools] = useState(false);
   const [openRotate, setOpenRotate] = useState(false);
   const [openScale, setOpenScale] = useState(true);

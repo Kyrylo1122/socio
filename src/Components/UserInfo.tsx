@@ -11,13 +11,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IUserInfo } from "src/types";
 import Modal from "src/Components/Modal";
 import { useForm } from "react-hook-form";
 import Diversity1Icon from "@mui/icons-material/Diversity1";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import FormBackground from "/MeditatingDoodle.png";
-import { updateUserInfo } from "src/lib/api";
 import { useUpdateUserInfo } from "src/lib/react-query";
 
 const Btn = styled(Button)(({ theme }) => ({
@@ -27,11 +25,6 @@ const Btn = styled(Button)(({ theme }) => ({
     transform: "scale(1.05)",
   },
 }));
-// const userInfoContent = [
-//   { key: "city", value: "Kharkiv" },
-//   { key: "country", value: "Ukraine" },
-//   { key: "status", value: "Have girlfriend" },
-// ];
 
 interface IValue {
   id: string;
@@ -64,7 +57,7 @@ const UserInfoForm = ({
   });
   const { mutateAsync: updateUserInfo, isPending } = useUpdateUserInfo();
 
-  const onSubmit = async (data: IValue) => {
+  const onSubmit = async (data: Partial<IValue>) => {
     try {
       await updateUserInfo({ uid: id, data });
       close();
