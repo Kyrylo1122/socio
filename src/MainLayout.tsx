@@ -5,6 +5,7 @@ import { AuthContextProvider } from "./context/AuthContextProvider";
 import { ToastContainer } from "react-toastify";
 import App from "./App";
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContextProvider } from "./context/ChatContext/ChatContext";
 
 const MainLayout = () => {
   const { theme } = useThemeContext();
@@ -14,10 +15,12 @@ const MainLayout = () => {
       <ToastContainer />
       <QueryProvider>
         <AuthContextProvider>
-          <ThemeProvider theme={{ [THEME_ID]: theme }}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
+          <ChatContextProvider>
+            <ThemeProvider theme={{ [THEME_ID]: theme }}>
+              <CssBaseline />
+              <App />
+            </ThemeProvider>
+          </ChatContextProvider>
         </AuthContextProvider>
       </QueryProvider>
     </>

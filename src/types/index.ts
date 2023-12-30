@@ -49,13 +49,9 @@ export interface IUserResponse {
 }
 
 export interface IUserContext {
-  user: IUserResponse;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  setUser: (state: IUserResponse) => void;
-  setIsAuthenticated: (state: boolean) => void;
-  setIsLoading: (state: boolean) => void;
-  checkAuthUser: () => Promise<boolean | undefined>;
+  user: IUser;
+  friends: IUser[];
+  isLoading?: boolean;
 }
 
 export interface INewPost {

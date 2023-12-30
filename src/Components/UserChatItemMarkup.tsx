@@ -20,6 +20,7 @@ const UserChatItemMarkup = ({
         justifyContent: "space-between",
         backgroundColor: "background.paper",
         padding: 1,
+        width: "100%",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -28,18 +29,26 @@ const UserChatItemMarkup = ({
           photoUrl={photoUrl}
           defaultCharacter={defaultCharacter}
           sx={{
-            width: 75,
-            height: 75,
+            width: 50,
+            height: 50,
           }}
         />
         <Typography>{name}</Typography>
       </Box>
 
-      <Box sx={{ display: "flex", gap: 2, pr: 2 }}>
-        <Button variant="contained" onClick={() => toast.info(t("video_call"))}>
+      <Box sx={{ display: "flex", gap: 1, pr: 1 }}>
+        <Button
+          sx={{ p: 0, minWidth: 0 }}
+          variant="text"
+          onClick={() => toast.warn(t("video_call"))}
+        >
           <VideocamOff sx={{ color: "primary.accent" }} />
         </Button>
-        <Button variant="contained" onClick={() => toast.info(t("phone_call"))}>
+        <Button
+          sx={{ p: 0, minWidth: 0 }}
+          variant="text"
+          onClick={() => toast.warn(t("phone_call"))}
+        >
           <PhoneDisabled sx={{ color: "primary.accent" }} />
         </Button>
       </Box>

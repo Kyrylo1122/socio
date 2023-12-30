@@ -109,11 +109,12 @@ export const useGetSaves = (userId: string) =>
   });
 //
 // ===================================================
-export const useGetUsers = () =>
+export const useGetUsers = (id: string | null | undefined) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
 
-    queryFn: getAllUsers,
+    queryFn: () => getAllUsers(id),
+    enabled: Boolean(id),
   });
 export const useSignInAccount = () =>
   useMutation({

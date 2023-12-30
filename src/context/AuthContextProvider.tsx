@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthContext";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "src/firebase/config";
-import { useGetUsersById } from "src/lib/react-query";
+import { useGetUsers, useGetUsersById } from "src/lib/react-query";
 import { IUser } from "src/types";
 
 interface IAuthContextProvider {
@@ -18,10 +18,8 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 
   const { data: currentUser, isPending: isLoading } =
     useGetUsersById(authUserId);
-
+  const { data: friends } = useGetUsers(authUserId);
   useEffect(() => {
-    console.log("changed currentUser");
-
     if (!currentUser) return;
     setUser(currentUser);
   }, [currentUser]);
@@ -48,7 +46,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 
   const value = {
     user,
-    setUser,
+    friends,
     isLoading,
   };
 

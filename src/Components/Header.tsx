@@ -124,9 +124,10 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const { user } = useUserContext();
+  const userContext = useUserContext();
   const navigate = useNavigate();
   const { mutateAsync: signOut } = useSignOutAccount();
+  const { mode, toggleColorMode } = useThemeContext();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -145,6 +146,8 @@ export default function Header() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  if (!userContext) return;
+  const { user } = userContext;
   const HeaderAvatar = () => (
     <AvatarImage
       name={user.name}
@@ -229,7 +232,6 @@ export default function Header() {
       </MenuItem>
     </Menu>
   );
-  const { mode, toggleColorMode } = useThemeContext();
 
   const MobileHeader = () => (
     <Box

@@ -5,12 +5,24 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db, storage } from "./config";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (id: string | null | undefined) => {
   try {
-    const docSnap = await getDocs(collection(db, "users"));
+    if (!id) throw Error;
+
+    const q = query(collection(db, "users"), where("uid", "!=", id));
+
+    const docSnap = await getDocs(q);
     const users = docSnap.docs.map((doc) => {
       return doc.data();
     });
