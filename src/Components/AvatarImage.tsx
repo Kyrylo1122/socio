@@ -11,9 +11,11 @@ export default function AvatarImage({
   defaultCharacter,
   name,
   sx,
+  ...rest
 }: AvatarImageProps) {
   return (
     <Avatar
+      {...rest}
       alt={name}
       src={createAvatarLink({ photoUrl, defaultCharacter })}
       sx={[style, ...(Array.isArray(sx) ? sx : [sx])]}

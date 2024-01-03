@@ -24,7 +24,7 @@ const Chat = () => {
   const userContext = useUserContext();
   const { user } = userContext;
   const { data: msg, isPending } = useGetUserMessages(user.uid);
-  const [messages, setMessages] = useState([]);
+  console.log("msg: ", msg);
 
   const { dispatch } = useChatContext();
 
@@ -61,27 +61,23 @@ const Chat = () => {
             date: serverTimestamp(),
           },
         });
-        const response = await setDoc(doc(db, "chats", combinedId), {
+        await setDoc(doc(db, "chats", combinedId), {
           messages: [],
         });
-        console.log("response.data: ", response.data);
       }
-      console.log("res.data: ", res.data());
     } catch (error) {
       console.error(error);
     }
   };
-  //   console.log("messages: ", messages);
-  if (msg) {
-    console.log("msg: ", msg);
-  }
+
   if (!userContext) return <Spinner />;
+  if (!msg) return;
   const { friends } = userContext;
   return (
     <Box sx={{ display: "flex", w: "100%" }}>
       <Box sx={{ flex: 1, outline: "1px solid brown" }}>
         <List>
-          {friends.map((friend) => (
+          {/* {friends.map((friend) => (
             <ListItem key={friend.uid} onClick={() => handleSelect(friend)}>
               <UserChatItemMarkup
                 name={friend.name}
@@ -89,7 +85,25 @@ const Chat = () => {
                 defaultCharacter={friend.defaultCharacter}
               />
             </ListItem>
-          ))}
+          ))} */}
+          {Object.entries(msg)
+            ?.sort((a, b) => b[1].date - a[1].date)
+            .map((chat) => {
+              console.log("chat: ", chat);
+              return (
+                <ListItem
+                  key={chat[0]}
+                  //   onClick={() => handleSelect(friend)}
+                >
+                  <UserChatItemMarkup
+                    name={chat[1].userInfo.displayName}
+                    photoUrl={chat[1].userInfo.photoUrl}
+                    lastMessage={chat[1].lastMessage.text.value}
+                    defaultCharacter={2}
+                  />
+                </ListItem>
+              );
+            })}
         </List>
       </Box>
       <Box sx={{ flex: 2, outline: "1px solid blue" }}>

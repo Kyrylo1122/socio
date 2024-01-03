@@ -1,19 +1,22 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Card, CardHeader, Typography } from "@mui/material";
 import AvatarImage from "./AvatarImage";
 import { AvatarImageProps } from "src/types";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { VideocamOff, PhoneDisabled } from "@mui/icons-material";
 
+type UserChatItemMarkupProp = AvatarImageProps & { lastMessage: string };
+
 const UserChatItemMarkup = ({
   name,
   photoUrl,
   defaultCharacter,
-}: AvatarImageProps) => {
+  lastMessage,
+}: UserChatItemMarkupProp) => {
   const { t } = useTranslation();
 
   return (
-    <Box
+    <Card
       sx={{
         display: "flex",
         alignItems: "center",
@@ -23,19 +26,22 @@ const UserChatItemMarkup = ({
         width: "100%",
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <AvatarImage
-          name={name}
-          photoUrl={photoUrl}
-          defaultCharacter={defaultCharacter}
-          sx={{
-            width: 50,
-            height: 50,
-          }}
-        />
-        <Typography>{name}</Typography>
-      </Box>
-
+      <CardHeader
+        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        avatar={
+          <AvatarImage
+            name={name}
+            photoUrl={photoUrl}
+            defaultCharacter={defaultCharacter}
+            sx={{
+              width: 50,
+              height: 50,
+            }}
+          />
+        }
+        title={name}
+        subheader={lastMessage}
+      />
       <Box sx={{ display: "flex", gap: 1, pr: 1 }}>
         <Button
           sx={{ p: 0, minWidth: 0 }}
@@ -52,7 +58,7 @@ const UserChatItemMarkup = ({
           <PhoneDisabled sx={{ color: "primary.accent" }} />
         </Button>
       </Box>
-    </Box>
+    </Card>
   );
 };
 
