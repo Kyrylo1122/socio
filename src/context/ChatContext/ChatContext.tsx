@@ -3,8 +3,8 @@ import createCombinedId from "src/utils/createCombinedId";
 import { useUserContext } from "src/hooks/useUserContext";
 import { IUser } from "src/types";
 
-interface IChatContext {
-  data: any;
+export interface IChatContext {
+  data: { chatId: string };
   dispatch: Dispatch<{ type: string; payload: IUser }>;
 }
 export const ChatContext = createContext<IChatContext | null>(null);

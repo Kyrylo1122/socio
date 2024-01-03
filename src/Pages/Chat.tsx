@@ -3,70 +3,78 @@ import { useUserContext } from "src/hooks/useUserContext";
 
 import UserChatItemMarkup from "src/Components/UserChatItemMarkup";
 import createCombinedId from "src/utils/createCombinedId";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "src/firebase/config";
 import ChatUI from "src/Components/ChatUI";
 import Spinner from "src/Components/Spinner";
 import { useChatContext } from "src/hooks/useChatContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IUser } from "src/types";
+import { useGetUserMessages } from "src/lib/react-query";
 
 const Chat = () => {
   //   const { user, friends } = useUserContext();
   const userContext = useUserContext();
-  const navigate = useNavigate();
+  const { user } = userContext;
+  const { data: msg, isPending } = useGetUserMessages(user.uid);
+  const [messages, setMessages] = useState([]);
 
-  const chatContext = useChatContext();
-  useEffect(() => {
-    if (!userContext?.friends) navigate("/");
-  }, [navigate, userContext]);
+  const { dispatch } = useChatContext();
 
   const handleSelect = async (user: IUser) => {
-    if (!chatContext || !userContext) return;
+    if (!userContext) return;
     const { user: currentUser } = userContext;
-    const { dispatch } = chatContext;
     const combinedId = createCombinedId(currentUser.uid, user.uid);
     dispatch({ type: "CHANGE_USER", payload: user });
 
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-
       if (!res.exists()) {
         //create a chat in chats collection
-        await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         //create user chats
-        await setDoc(
-          doc(db, "userChats", currentUser.uid),
-          {
-            [combinedId + ".userInfo"]: {
+        await setDoc(doc(db, "userChats", currentUser.uid), {
+          [combinedId]: {
+            userInfo: {
               uid: user.uid,
               displayName: user.name,
               photoURL: user.photoUrl,
             },
-            [combinedId + ".date"]: serverTimestamp(),
+            date: serverTimestamp(),
           },
-          { merge: true }
-        );
+        });
 
-        await setDoc(
-          doc(db, "userChats", user.uid),
-          {
-            [combinedId + ".userInfo"]: {
+        await setDoc(doc(db, "userChats", user.uid), {
+          [combinedId]: {
+            userInfo: {
               uid: currentUser.uid,
               displayName: currentUser.name,
               photoURL: currentUser.photoUrl,
             },
-            [combinedId + ".date"]: serverTimestamp(),
+            date: serverTimestamp(),
           },
-          { merge: true }
-        );
+        });
+        const response = await setDoc(doc(db, "chats", combinedId), {
+          messages: [],
+        });
+        console.log("response.data: ", response.data);
       }
+      console.log("res.data: ", res.data());
     } catch (error) {
       console.error(error);
     }
   };
+  //   console.log("messages: ", messages);
+  if (msg) {
+    console.log("msg: ", msg);
+  }
   if (!userContext) return <Spinner />;
   const { friends } = userContext;
   return (

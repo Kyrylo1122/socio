@@ -61,5 +61,8 @@
   "remove_tags": "Remove tag field",
   "what_in_mind": "What's in your mind {{val}}?",
   "video_call": "The video call is disabled",
-  "phone_call": "The phone call is disabled"
+  "phone_call": "The phone call is disabled",
+  "empty_field_error": "The field cannot be empty",
+  "write_comment": "Write your comment",
+  "write_message": "Write your write_message"
 }

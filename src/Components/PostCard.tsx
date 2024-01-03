@@ -10,7 +10,7 @@ import {
   useDeletePost,
   useUpdatePost,
 } from "src/lib/react-query";
-import CommentForm from "./CommentForm";
+import CommentForm from "./SimpleInputForm";
 
 import PostCardHeader from "./PostCardHeader";
 import PlaygroundSpeedDial from "./SpeedDial";

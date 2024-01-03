@@ -44,6 +44,26 @@ export const getUserById = async (id: string | null | undefined) => {
     console.error(error);
   }
 };
+export const getUserMessagesById = async (id: string | null | undefined) => {
+  try {
+    if (!id) throw Error;
+    const docRef = doc(db, "userChats", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw Error;
+    return docSnap.data();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateChats = async (chatId: string, data) => {
+  try {
+    await updateDatabase({ id: chatId, collectionName: "userChats", data });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const updateDatabase = async ({
   id,

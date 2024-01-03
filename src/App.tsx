@@ -17,7 +17,7 @@ const App = () => {
         </Box>
       ) : null}
       <Body />
-      <DecorateImage mode={mode} />
+      {/* <DecorateImage mode={mode} /> */}
     </Box>
   );
 };

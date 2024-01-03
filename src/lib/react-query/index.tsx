@@ -7,8 +7,10 @@ import {
   deleteAvatarImage,
   getAllUsers,
   getUserById,
+  getUserMessagesById,
   signInAccount,
   signOutAccount,
+  updateChats,
   updateDatabase,
   uploadAvatarImage,
 } from "src/firebase/api-firebase";
@@ -121,6 +123,11 @@ export const useSignInAccount = () =>
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
   });
+export const useUpdateChats = () =>
+  useMutation({
+    mutationFn: ({ chatId, data }: { chatId: string; data }) =>
+      updateChats(chatId, data),
+  });
 export const useUpdateUserInfo = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -151,7 +158,13 @@ export const useGetUsersById = (id: string | null | undefined) =>
     queryFn: () => getUserById(id),
     enabled: Boolean(id),
   });
+export const useGetUserMessages = (id: string | null | undefined) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_CURRENT_MESSAGES, id],
 
+    queryFn: () => getUserMessagesById(id),
+    enabled: Boolean(id),
+  });
 export const useUploadAvatarImage = () => {
   const queryClient = useQueryClient();
   return useMutation({

@@ -1,14 +1,17 @@
 import { Box, Button, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 type Inputs = {
-  body: string;
+  value: string;
 };
 interface ICommentForm {
   handleClick: (value: Inputs) => void;
+  isComment: boolean;
 }
-const CommentForm = ({ handleClick }: ICommentForm) => {
+const SimpleInputForm = ({ handleClick, isComment }: ICommentForm) => {
   const { register, handleSubmit, reset } = useForm<Inputs>();
+  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     handleClick(data);
@@ -20,8 +23,8 @@ const CommentForm = ({ handleClick }: ICommentForm) => {
         autoComplete="off"
         fullWidth
         defaultValue=""
-        placeholder="write your comment"
-        {...register("body")}
+        placeholder={t(isComment ? "write_comment" : "write_message")}
+        {...register("value")}
       />
       <Button type="submit" variant="contained">
         Submit
@@ -30,4 +33,4 @@ const CommentForm = ({ handleClick }: ICommentForm) => {
   );
 };
 
-export default CommentForm;
+export default SimpleInputForm;

@@ -3,40 +3,69 @@ import { Box, TextField, Button, Typography, Grid, Paper } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AvatarImage from "./AvatarImage";
 import { useChatContext } from "src/hooks/useChatContext";
-import { doc, onSnapshot } from "firebase/firestore";
+import {
+  Timestamp,
+  arrayUnion,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "src/firebase/config";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { useUserContext } from "src/hooks/useUserContext";
+import { v4 as uuid } from "uuid";
+import SimpleInputForm from "./SimpleInputForm";
 
 const ChatUI = () => {
-  const [input, setInput] = useState("");
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi there!", sender: "bot" },
     { id: 2, text: "Hello!", sender: "user" },
     { id: 3, text: "How can I assist you today?", sender: "bot" },
   ]);
-  const chatContext = useChatContext();
+  const { data } = useChatContext();
+  const userContext = useUserContext();
 
-  const handleSend = () => {
-    if (input.trim() !== "") {
-      console.log(input);
-      setInput("");
+  const handleSend = async (text: { value: string }) => {
+    if (text.value.trim() === "") {
+      toast.info(t("empty_field_error"));
     }
+    if (!userContext) throw Error;
+    const { user: currentUser } = userContext;
+    await updateDoc(doc(db, "chats", data.chatId), {
+      messages: arrayUnion({
+        id: uuid(),
+        text,
+        senderId: currentUser.uid,
+        date: Timestamp.now(),
+      }),
+    });
+
+    await updateDoc(doc(db, "userChats", currentUser.uid), {
+      [data.chatId + ".lastMessage"]: {
+        text,
+      },
+      [data.chatId + ".date"]: serverTimestamp(),
+    });
+
+    await updateDoc(doc(db, "userChats", data.user.uid), {
+      [data.chatId + ".lastMessage"]: {
+        text,
+      },
+      [data.chatId + ".date"]: serverTimestamp(),
+    });
   };
   useEffect(() => {
-    const unSub = onSnapshot(
-      doc(db, "chats", chatContext?.data.chatId),
-      (doc) => {
-        doc.exists() && setMessages(doc.data().messages);
-      }
-    );
+    const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+      doc.exists() && setMessages(doc.data().messages);
+    });
 
     return () => {
       unSub();
     };
-  }, [chatContext?.data.chatId]);
-
-  const handleInputChange = (event) => {
-    setInput(event.target.value);
-  };
+  }, [data.chatId]);
 
   return (
     <Box
@@ -53,12 +82,13 @@ const ChatUI = () => {
         ))}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
-        <Grid container spacing={2}>
+        <SimpleInputForm handleClick={handleSend} isComment={false} />
+        {/* <Grid container spacing={2}>
           <Grid item xs={10}>
             <TextField
               fullWidth
               placeholder="Type a message"
-              value={input}
+              value={text}
               onChange={handleInputChange}
             />
           </Grid>
@@ -74,14 +104,15 @@ const ChatUI = () => {
               Send
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Box>
     </Box>
   );
 };
 
 const Message = ({ message }) => {
-  const isBot = message.sender === "bot";
+  const userContext = useUserContext();
+  const isBot = message.senderId !== userContext?.user.uid;
 
   return (
     <Box
@@ -98,7 +129,8 @@ const Message = ({ message }) => {
           backgroundColor: isBot ? "primary.light" : "secondary.light",
         }}
       >
-        <Typography variant="body1">{message.text}</Typography>
+        <Typography variant="body1">{message.text.value}</Typography>
+        {/* <Typography variant="body2">{message.date}</Typography> */}
       </Paper>
     </Box>
   );
