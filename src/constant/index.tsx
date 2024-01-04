@@ -12,6 +12,6 @@ export const USER_INITIAL = {
 };
 
 export const CHAT_INITIAL_STATE = {
-  data: { chatId: "" },
+  data: { chatId: "", user: USER_INITIAL },
   dispatch: () => null,
 };

@@ -16,7 +16,7 @@ export interface AvatarImageProps {
 }
 
 export interface IUser {
-  backgroundImage: null;
+  backgroundImage: null | undefined;
   bio: string;
   city: string;
   country: string;

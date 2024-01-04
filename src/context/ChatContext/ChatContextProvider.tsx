@@ -4,14 +4,18 @@ import createCombinedId from "src/utils/createCombinedId";
 import { useUserContext } from "src/hooks/useUserContext";
 import { IUser } from "src/types";
 import { ChatContext } from "./ChatContext";
+import { USER_INITIAL } from "src/constant";
 export const ChatContextProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUserContext();
   const INITIAL_STATE = {
     chatId: "null",
-    user: {},
+    user: USER_INITIAL,
   };
 
-  const chatReducer = (state, action: { type: string; payload: IUser }) => {
+  const chatReducer = (
+    state: { chatId: string; user: IUser },
+    action: { type: string; payload: IUser }
+  ) => {
     switch (action.type) {
       case "CHANGE_USER":
         return {

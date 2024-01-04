@@ -27,7 +27,7 @@ const ChatUI = () => {
   ]);
   const { data } = useChatContext();
   const { user: currentUser } = useUserContext();
-
+  console.log("data useChatContext:", data);
   const handleSend = async (text: { value: string }) => {
     if (text.value.trim() === "") {
       toast.info(t("empty_field_error"));
