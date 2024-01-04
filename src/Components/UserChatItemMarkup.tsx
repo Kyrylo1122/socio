@@ -22,7 +22,6 @@ const UserChatItemMarkup = ({
         alignItems: "center",
         justifyContent: "space-between",
         backgroundColor: "background.paper",
-        padding: 1,
         width: "100%",
       }}
     >

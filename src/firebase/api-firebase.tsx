@@ -1,4 +1,4 @@
-import { CollectionNameType, IUser, IUserNew } from "src/types";
+import { CollectionNameType, IUser, IUserChats, IUserNew } from "src/types";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -57,9 +57,19 @@ export const getUserMessagesById = async (id: string | null | undefined) => {
   }
 };
 
-export const updateChats = async (chatId: string, data) => {
+export const updateUserChats = async (id: string, data: IUserChats) => {
   try {
-    await updateDatabase({ id: chatId, collectionName: "userChats", data });
+    await updateDatabase({ id, collectionName: "userChats", data });
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const updateChats = async (
+  id: string,
+  data: { messages: IUserChats[] }
+) => {
+  try {
+    await updateDatabase({ id, collectionName: "chats", data });
   } catch (error) {
     console.error(error);
   }
@@ -72,7 +82,7 @@ export const updateDatabase = async ({
 }: {
   id: string;
   collectionName: CollectionNameType;
-  data: Partial<IUser>;
+  data: Partial<IUser> | IUserChats | { messages: IUserChats[] };
 }) => {
   try {
     await setDoc(doc(db, collectionName, id), data, { merge: true });

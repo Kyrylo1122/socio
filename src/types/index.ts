@@ -1,12 +1,23 @@
 import { SxProps, Theme } from "@mui/material";
 
-export type CollectionNameType = "users" | "userChats";
+export type CollectionNameType = "users" | "userChats" | "chats";
 
 export interface IUserNew {
   name: string;
   email: string;
   password: string;
   defaultCharacter: number;
+}
+export interface IChatUserInfo {
+  displayName: string;
+  defaultCharacter: number;
+  photoURL: null | string;
+  uid: string;
+}
+export interface IUserChats {
+  lastMessage?: { text: { value: string } };
+  userInfo?: IChatUserInfo;
+  date?: Date;
 }
 export interface AvatarImageProps {
   photoUrl: string | null;

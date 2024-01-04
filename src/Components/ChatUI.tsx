@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, TextField, Button, Typography, Grid, Paper } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import AvatarImage from "./AvatarImage";
+import { Box, Typography, Paper } from "@mui/material";
 import { useChatContext } from "src/hooks/useChatContext";
 import {
   Timestamp,
@@ -21,13 +19,21 @@ import SimpleInputForm from "./SimpleInputForm";
 const ChatUI = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi there!", sender: "bot" },
-    { id: 2, text: "Hello!", sender: "user" },
-    { id: 3, text: "How can I assist you today?", sender: "bot" },
+    {
+      date: { seconds: 1, nanoseconds: 2 },
+      id: "string",
+      senderId: "string",
+      text: { value: "value string" },
+    },
+    {
+      date: { seconds: 2, nanoseconds: 23 },
+      id: "string2",
+      senderId: "string",
+      text: { value: "Hi there!" },
+    },
   ]);
   const { data } = useChatContext();
   const { user: currentUser } = useUserContext();
-  console.log("data useChatContext:", data);
   const handleSend = async (text: { value: string }) => {
     if (text.value.trim() === "") {
       toast.info(t("empty_field_error"));
@@ -81,34 +87,19 @@ const ChatUI = () => {
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
         <SimpleInputForm handleClick={handleSend} isComment={false} />
-        {/* <Grid container spacing={2}>
-          <Grid item xs={10}>
-            <TextField
-              fullWidth
-              placeholder="Type a message"
-              value={text}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="primary"
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={handleSend}
-            >
-              Send
-            </Button>
-          </Grid>
-        </Grid> */}
       </Box>
     </Box>
   );
 };
 
-const Message = ({ message }) => {
+interface IMessage {
+  date: { seconds: number; nanoseconds: number };
+  id: string;
+  senderId: string;
+  text: { value: string };
+}
+
+const Message = ({ message }: { message: IMessage }) => {
   const { user } = useUserContext();
   const isBot = message.senderId !== user.uid;
 
@@ -128,7 +119,7 @@ const Message = ({ message }) => {
         }}
       >
         <Typography variant="body1">{message.text.value}</Typography>
-        {/* <Typography variant="body2">{message.date}</Typography> */}
+        <Typography variant="body2">{message?.date?.nanoseconds}</Typography>
       </Paper>
     </Box>
   );

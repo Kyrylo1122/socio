@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IPostResponse, IUser, IUserNew } from "src/types";
+import { IPostResponse, IUser, IUserChats, IUserNew } from "src/types";
 
 import { QUERY_KEYS } from "./QueryKeys";
 import {
@@ -12,6 +12,7 @@ import {
   signOutAccount,
   updateChats,
   updateDatabase,
+  updateUserChats,
   uploadAvatarImage,
 } from "src/firebase/api-firebase";
 import {
@@ -123,10 +124,20 @@ export const useSignInAccount = () =>
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
   });
+export const useUpdateUserChats = () =>
+  useMutation({
+    mutationFn: ({ id, data }: { id: string; data: IUserChats }) =>
+      updateUserChats(id, data),
+  });
 export const useUpdateChats = () =>
   useMutation({
-    mutationFn: ({ chatId, data }: { chatId: string; data }) =>
-      updateChats(chatId, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { messages: IUserChats[] };
+    }) => updateChats(id, data),
   });
 export const useUpdateUserInfo = () => {
   const queryClient = useQueryClient();

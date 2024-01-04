@@ -64,5 +64,6 @@
   "phone_call": "The phone call is disabled",
   "empty_field_error": "The field cannot be empty",
   "write_comment": "Write your comment",
-  "write_message": "Write your write_message"
+  "write_message": "Write your write_message",
+  "submit": "Submit"
 }

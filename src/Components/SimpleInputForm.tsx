@@ -1,6 +1,7 @@
 import { Box, Button, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import SendIcon from "@mui/icons-material/Send";
 
 type Inputs = {
   value: string;
@@ -27,7 +28,8 @@ const SimpleInputForm = ({ handleClick, isComment }: ICommentForm) => {
         {...register("value")}
       />
       <Button type="submit" variant="contained">
-        Submit
+        {t("submit")}
+        <SendIcon />
       </Button>
     </Box>
   );

@@ -28,7 +28,6 @@ function Contacts() {
   if (isPending) return <Spinner />;
   if (!data) return;
   const friends = data.filter((friend) => friend.uid !== user.uid);
-  console.log("friends: ", friends);
   //   return <>COntacts</>;
   return (
     <Box>
