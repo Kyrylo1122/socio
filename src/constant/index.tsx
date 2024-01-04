@@ -1,14 +1,8 @@
 export const USER_INITIAL = {
-  backgroundImage: null,
-  bio: "",
-  city: "",
-  country: "",
   defaultCharacter: 0,
-  email: "",
-  name: "",
+  displayName: "",
   photoUrl: null,
   uid: "",
-  status: null,
 };
 
 export const CHAT_INITIAL_STATE = {

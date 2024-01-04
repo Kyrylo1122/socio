@@ -24,7 +24,9 @@ const SimpleInputForm = ({ handleClick, isComment }: ICommentForm) => {
         autoComplete="off"
         fullWidth
         defaultValue=""
-        placeholder={t(isComment ? "write_comment" : "write_message")}
+        placeholder={t(
+          isComment ? "write_comment_placeholder" : "write_message_placeholder"
+        )}
         {...register("value")}
       />
       <Button type="submit" variant="contained">

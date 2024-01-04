@@ -15,9 +15,11 @@ import { useTranslation } from "react-i18next";
 import { useUserContext } from "src/hooks/useUserContext";
 import { v4 as uuid } from "uuid";
 import SimpleInputForm from "./SimpleInputForm";
+import AvatarImage from "./AvatarImage";
 
 const ChatUI = () => {
   const { t } = useTranslation();
+
   const [messages, setMessages] = useState([
     {
       date: { seconds: 1, nanoseconds: 2 },
@@ -79,7 +81,13 @@ const ChatUI = () => {
         flexDirection: "column",
       }}
     >
-      <Box sx={{ width: "100%", backgroundColor: "brown", p: 3 }}>AVATAR</Box>
+      <Box sx={{ width: "100%", backgroundColor: "brown", p: 3 }}>
+        <AvatarImage
+          photoUrl={data.user.photoUrl}
+          name={data.user.displayName}
+          defaultCharacter={4}
+        />
+      </Box>
       <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
         {messages.map((message) => (
           <Message key={message.id} message={message} />

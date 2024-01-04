@@ -11,7 +11,7 @@ export interface IUserNew {
 export interface IChatUserInfo {
   displayName: string;
   defaultCharacter: number;
-  photoURL: null | string;
+  photoUrl: null | string;
   uid: string;
 }
 export interface IUserChats {

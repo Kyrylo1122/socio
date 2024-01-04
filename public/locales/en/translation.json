@@ -63,7 +63,9 @@
   "video_call": "The video call is disabled",
   "phone_call": "The phone call is disabled",
   "empty_field_error": "The field cannot be empty",
-  "write_comment": "Write your comment",
-  "write_message": "Write your write_message",
-  "submit": "Submit"
+  "write_comment_placeholder": "Write your comment",
+  "write_message_placeholder": "Write your write message",
+  "submit": "Submit",
+  "socio_users": "Socio users",
+  "write_message": "Send an message"
 }
