@@ -3,35 +3,26 @@ import { useUserContext } from "src/hooks/useUserContext";
 
 import UserChatItemMarkup from "src/Components/UserChatItemMarkup";
 import createCombinedId from "src/utils/createCombinedId";
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "src/firebase/config";
 import ChatUI from "src/Components/ChatUI";
-import Spinner from "src/Components/Spinner";
 import { useChatContext } from "src/hooks/useChatContext";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { IUser } from "src/types";
 import { useGetUserMessages } from "src/lib/react-query";
 
 const Chat = () => {
-  //   const { user, friends } = useUserContext();
-  const userContext = useUserContext();
-  const { user } = userContext;
-  const { data: msg, isPending } = useGetUserMessages(user.uid);
+  const { user: currentUser } = useUserContext();
+  const { data } = useChatContext();
+
+  const { data: msg } = useGetUserMessages(currentUser.uid);
   console.log("msg: ", msg);
 
   const { dispatch } = useChatContext();
 
   const handleSelect = async (user: IUser) => {
-    if (!userContext) return;
-    const { user: currentUser } = userContext;
     const combinedId = createCombinedId(currentUser.uid, user.uid);
+    if (data.chatId === combinedId) return console.log("Same chat");
     dispatch({ type: "CHANGE_USER", payload: user });
 
     try {
@@ -70,9 +61,7 @@ const Chat = () => {
     }
   };
 
-  if (!userContext) return <Spinner />;
   if (!msg) return;
-  const { friends } = userContext;
   return (
     <Box sx={{ display: "flex", w: "100%" }}>
       <Box sx={{ flex: 1, outline: "1px solid brown" }}>
@@ -88,22 +77,19 @@ const Chat = () => {
           ))} */}
           {Object.entries(msg)
             ?.sort((a, b) => b[1].date - a[1].date)
-            .map((chat) => {
-              console.log("chat: ", chat);
-              return (
-                <ListItem
-                  key={chat[0]}
-                  //   onClick={() => handleSelect(friend)}
-                >
-                  <UserChatItemMarkup
-                    name={chat[1].userInfo.displayName}
-                    photoUrl={chat[1].userInfo.photoUrl}
-                    lastMessage={chat[1].lastMessage.text.value}
-                    defaultCharacter={2}
-                  />
-                </ListItem>
-              );
-            })}
+            .map((chat) => (
+              <ListItem
+                key={chat[0]}
+                onClick={() => handleSelect(chat[1].userInfo)}
+              >
+                <UserChatItemMarkup
+                  name={chat[1].userInfo.displayName}
+                  photoUrl={chat[1].userInfo.photoUrl}
+                  lastMessage={chat[1].lastMessage.text.value}
+                  defaultCharacter={2}
+                />
+              </ListItem>
+            ))}
         </List>
       </Box>
       <Box sx={{ flex: 2, outline: "1px solid blue" }}>

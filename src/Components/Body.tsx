@@ -2,12 +2,9 @@ import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
-import Spinner from "./Spinner";
 
 const Body = () => {
-  const userContext = useUserContext();
-  if (!userContext) return <Spinner />;
-  const { user } = userContext;
+  const { user } = useUserContext();
 
   return (
     <Box sx={{ display: "flex", pt: 11 }}>

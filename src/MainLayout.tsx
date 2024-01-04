@@ -5,7 +5,7 @@ import { AuthContextProvider } from "./context/AuthContextProvider";
 import { ToastContainer } from "react-toastify";
 import App from "./App";
 import "react-toastify/dist/ReactToastify.css";
-import { ChatContextProvider } from "./context/ChatContext/ChatContext";
+import { ChatContextProvider } from "./context/ChatContext/ChatContextProvider";
 
 const MainLayout = () => {
   const { theme } = useThemeContext();

@@ -124,7 +124,7 @@ export default function Header() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const userContext = useUserContext();
+  const { user } = useUserContext();
   const navigate = useNavigate();
   const { mutateAsync: signOut } = useSignOutAccount();
   const { mode, toggleColorMode } = useThemeContext();
@@ -146,8 +146,7 @@ export default function Header() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-  if (!userContext) return;
-  const { user } = userContext;
+
   const HeaderAvatar = () => (
     <AvatarImage
       name={user.name}

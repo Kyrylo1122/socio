@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardHeader, Typography } from "@mui/material";
+import { Box, Button, Card, CardHeader } from "@mui/material";
 import AvatarImage from "./AvatarImage";
 import { AvatarImageProps } from "src/types";
 import { toast } from "react-toastify";

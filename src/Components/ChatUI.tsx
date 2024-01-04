@@ -26,14 +26,12 @@ const ChatUI = () => {
     { id: 3, text: "How can I assist you today?", sender: "bot" },
   ]);
   const { data } = useChatContext();
-  const userContext = useUserContext();
+  const { user: currentUser } = useUserContext();
 
   const handleSend = async (text: { value: string }) => {
     if (text.value.trim() === "") {
       toast.info(t("empty_field_error"));
     }
-    if (!userContext) throw Error;
-    const { user: currentUser } = userContext;
     await updateDoc(doc(db, "chats", data.chatId), {
       messages: arrayUnion({
         id: uuid(),
@@ -111,8 +109,8 @@ const ChatUI = () => {
 };
 
 const Message = ({ message }) => {
-  const userContext = useUserContext();
-  const isBot = message.senderId !== userContext?.user.uid;
+  const { user } = useUserContext();
+  const isBot = message.senderId !== user.uid;
 
   return (
     <Box
