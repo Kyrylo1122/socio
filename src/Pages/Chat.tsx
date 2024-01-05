@@ -18,6 +18,7 @@ import useSelectUserChat from "src/hooks/useSelectUserChat";
 
 const Chat = () => {
   const { user: currentUser } = useUserContext();
+
   //   const { mutateAsync: updateUserChats } = useUpdateUserChats();
   //   const { mutateAsync: updateChats } = useUpdateChats();
 

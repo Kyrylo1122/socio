@@ -25,6 +25,7 @@ import { useUserContext } from "src/hooks/useUserContext";
 import AvatarImage from "./AvatarImage";
 import { useNavigate } from "react-router-dom";
 import { useSignOutAccount } from "src/lib/react-query";
+import useLocaleStorageData from "src/hooks/useLocaleStorageData";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -136,10 +137,13 @@ export default function Header() {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
+  const { setCurrentUser: setUserLocalStorage } = useLocaleStorageData();
 
   const handleMenuClose = async () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+    setUserLocalStorage(null);
+
     await signOut();
     navigate(0);
   };

@@ -8,7 +8,7 @@ const Saves = () => {
   const { t } = useTranslation();
 
   const { user } = useUserContext();
-  const { data, isPending } = useGetSaves(user.$id);
+  const { data, isPending } = useGetSaves(user.uid);
 
   if (isPending) return <>Loading...</>;
   if (!data?.documents || data?.documents.length === 0)
