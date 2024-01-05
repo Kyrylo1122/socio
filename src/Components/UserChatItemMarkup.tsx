@@ -4,16 +4,24 @@ import { AvatarImageProps } from "src/types";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { VideocamOff, PhoneDisabled } from "@mui/icons-material";
+import { formatDate } from "src/utils/formatDate";
 
-type UserChatItemMarkupProp = AvatarImageProps & { lastMessage: string };
+type UserChatItemMarkupProp = AvatarImageProps & {
+  lastMessage?: string;
+  lastMessageDate: number;
+};
 
 const UserChatItemMarkup = ({
   name,
   photoUrl,
   defaultCharacter,
   lastMessage,
+  lastMessageDate,
 }: UserChatItemMarkupProp) => {
   const { t } = useTranslation();
+  const lastMessageSubTitle = lastMessage
+    ? `${lastMessage} ${formatDate(lastMessageDate)}`
+    : "No messages";
 
   return (
     <Card
@@ -39,7 +47,7 @@ const UserChatItemMarkup = ({
           />
         }
         title={name}
-        subheader={lastMessage}
+        subheader={lastMessageSubTitle}
       />
       <Box sx={{ display: "flex", gap: 1, pr: 1 }}>
         <Button

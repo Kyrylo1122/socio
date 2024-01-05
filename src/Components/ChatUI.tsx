@@ -16,6 +16,7 @@ import { useUserContext } from "src/hooks/useUserContext";
 import { v4 as uuid } from "uuid";
 import SimpleInputForm from "./SimpleInputForm";
 import AvatarImage from "./AvatarImage";
+import { formatDate } from "src/utils/formatDate";
 
 const ChatUI = () => {
   const { t } = useTranslation();
@@ -81,12 +82,24 @@ const ChatUI = () => {
         flexDirection: "column",
       }}
     >
-      <Box sx={{ width: "100%", backgroundColor: "brown", p: 3 }}>
+      <Box
+        sx={{
+          gap: 2,
+          p: 3,
+          display: "flex",
+
+          width: "100%",
+          alignItems: "center",
+          bgcolor: "background.paper",
+        }}
+      >
         <AvatarImage
+          sx={{ width: 75, height: 75 }}
           photoUrl={data.user.photoUrl}
           name={data.user.displayName}
-          defaultCharacter={4}
+          defaultCharacter={data.user.defaultCharacter}
         />
+        <Typography variant="h2">{data.user.displayName}</Typography>
       </Box>
       <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
         {messages.map((message) => (
@@ -110,7 +123,6 @@ interface IMessage {
 const Message = ({ message }: { message: IMessage }) => {
   const { user } = useUserContext();
   const isBot = message.senderId !== user.uid;
-
   return (
     <Box
       sx={{
@@ -127,7 +139,9 @@ const Message = ({ message }: { message: IMessage }) => {
         }}
       >
         <Typography variant="body1">{message.text.value}</Typography>
-        <Typography variant="body2">{message?.date?.nanoseconds}</Typography>
+        <Typography variant="body2">
+          {formatDate(message?.date?.seconds * 1000)}
+        </Typography>
       </Paper>
     </Box>
   );

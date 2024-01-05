@@ -21,42 +21,41 @@ const useSelectUserChat = () => {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
         //create a chat in chats collection
-        console.log("Does not exist");
         //create user chats
-        // await updateUserChats({
-        //   id: currentUser.uid,
-        //   data: {
-        //     [combinedId]: {
-        //       userInfo: {
-        //         uid: user.uid,
-        //         displayName: user.displayName,
-        //         photoURL: user.photoUrl,
-        //       },
-        //       date: serverTimestamp(),
-        //     },
-        //   },
-        // });
-        // await updateUserChats({
-        //   id: user.uid,
-        //   data: {
-        //     [combinedId]: {
-        //       userInfo: {
-        //         uid: currentUser.uid,
-        //         displayName: currentUser.name,
-        //         photoURL: currentUser.photoUrl,
-        //       },
-        //       date: serverTimestamp(),
-        //     },
-        //   },
-        // });
-        // await updateChats({
-        //   id: combinedId,
-        //   data: {
-        //     messages: [],
-        //   },
-        // });
-      } else {
-        console.log("res.data(): ", res.data());
+        await updateUserChats({
+          id: currentUser.uid,
+          data: {
+            [combinedId]: {
+              userInfo: {
+                uid: user.uid,
+                displayName: user.displayName,
+                photoUrl: user.photoUrl,
+                defaultCharacter: user.defaultCharacter,
+              },
+              date: serverTimestamp(),
+            },
+          },
+        });
+        await updateUserChats({
+          id: user.uid,
+          data: {
+            [combinedId]: {
+              userInfo: {
+                uid: currentUser.uid,
+                displayName: currentUser.name,
+                photoUrl: currentUser.photoUrl,
+                defaultCharacter: currentUser.defaultCharacter,
+              },
+              date: serverTimestamp(),
+            },
+          },
+        });
+        await updateChats({
+          id: combinedId,
+          data: {
+            messages: [],
+          },
+        });
       }
     } catch (error) {
       console.error(error);
