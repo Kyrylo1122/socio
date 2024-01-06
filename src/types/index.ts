@@ -19,6 +19,15 @@ export interface IUserChats {
   userInfo?: IChatUserInfo;
   date?: Date;
 }
+interface IText {
+  value: string;
+}
+export interface IMessage {
+  id: string;
+  text: IText;
+  senderId?: string;
+  date?: Date;
+}
 export interface AvatarImageProps {
   photoUrl: string | null;
   defaultCharacter: number;

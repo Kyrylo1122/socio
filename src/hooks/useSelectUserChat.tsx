@@ -9,6 +9,7 @@ import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
 const useSelectUserChat = () => {
   const { mutateAsync: updateUserChats } = useUpdateUserChats();
   const { mutateAsync: updateChats } = useUpdateChats();
+
   const { dispatch, data } = useChatContext();
   const { user: currentUser } = useUserContext();
 

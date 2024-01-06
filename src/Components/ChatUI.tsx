@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, Typography, Paper } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Box, Typography, Paper, Button, List } from "@mui/material";
 import { useChatContext } from "src/hooks/useChatContext";
 import {
   Timestamp,
@@ -7,8 +7,8 @@ import {
   doc,
   onSnapshot,
   serverTimestamp,
-  updateDoc,
 } from "firebase/firestore";
+
 import { db } from "src/firebase/config";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -18,52 +18,18 @@ import SimpleInputForm from "./SimpleInputForm";
 import AvatarImage from "./AvatarImage";
 import { formatDate } from "src/utils/formatDate";
 
+import NoChatMessages from "./NoChatMessages";
+import { Delete } from "@mui/icons-material";
+import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
+
 const ChatUI = () => {
   const { t } = useTranslation();
 
-  const [messages, setMessages] = useState([
-    {
-      date: { seconds: 1, nanoseconds: 2 },
-      id: "string",
-      senderId: "string",
-      text: { value: "value string" },
-    },
-    {
-      date: { seconds: 2, nanoseconds: 23 },
-      id: "string2",
-      senderId: "string",
-      text: { value: "Hi there!" },
-    },
-  ]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const { data } = useChatContext();
   const { user: currentUser } = useUserContext();
-  const handleSend = async (text: { value: string }) => {
-    if (text.value.trim() === "") {
-      toast.info(t("empty_field_error"));
-    }
-    await updateDoc(doc(db, "chats", data.chatId), {
-      messages: arrayUnion({
-        id: uuid(),
-        text,
-        senderId: currentUser.uid,
-        date: Timestamp.now(),
-      }),
-    });
-
-    await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
-
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
-  };
+  const { mutateAsync: updateUserChats } = useUpdateUserChats();
+  const { mutateAsync: updateChats } = useUpdateChats();
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
       doc.exists() && setMessages(doc.data().messages);
@@ -73,6 +39,45 @@ const ChatUI = () => {
       unSub();
     };
   }, [data.chatId]);
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.lastElementChild?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+  const handleSend = async (text: { value: string }) => {
+    if (text.value.trim() === "") {
+      toast.info(t("empty_field_error"));
+    }
+    updateChats({
+      id: data.chatId,
+      data: {
+        messages: arrayUnion({
+          id: uuid(),
+          text,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+        }),
+      },
+    });
+    updateUserChats({
+      id: currentUser.uid,
+      data: {
+        [data.chatId]: {
+          lastMessage: { text },
+          date: serverTimestamp(),
+        },
+      },
+    });
+    updateUserChats({
+      id: data.user.uid,
+      data: {
+        [data.chatId]: {
+          lastMessage: { text },
+          date: serverTimestamp(),
+        },
+      },
+    });
+  };
 
   return (
     <Box
@@ -101,10 +106,14 @@ const ChatUI = () => {
         />
         <Typography variant="h2">{data.user.displayName}</Typography>
       </Box>
-      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
-        {messages.map((message) => (
-          <Message key={message.id} message={message} />
-        ))}
+      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={ref}>
+        {messages.length ? (
+          messages.map((message) => (
+            <Message key={message.id} message={message} />
+          ))
+        ) : (
+          <NoChatMessages />
+        )}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
         <SimpleInputForm handleClick={handleSend} isComment={false} />
@@ -123,6 +132,7 @@ interface IMessage {
 const Message = ({ message }: { message: IMessage }) => {
   const { user } = useUserContext();
   const isBot = message.senderId !== user.uid;
+  const [isVisibleDelete] = useState(true);
   return (
     <Box
       sx={{
@@ -142,6 +152,13 @@ const Message = ({ message }: { message: IMessage }) => {
         <Typography variant="body2">
           {formatDate(message?.date?.seconds * 1000)}
         </Typography>
+        {isVisibleDelete ? (
+          <Box>
+            <Button variant="contained" onClick={() => console.log("click")}>
+              <Delete />
+            </Button>
+          </Box>
+        ) : null}
       </Paper>
     </Box>
   );

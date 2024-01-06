@@ -9,9 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import AvatarImage from "src/Components/AvatarImage";
-import Spinner from "src/Components/Spinner";
 import { useUserContext } from "src/hooks/useUserContext";
-import { useGetUsers } from "src/lib/react-query";
 import { AvatarImageProps } from "src/types";
 import { MailOutline } from "@mui/icons-material";
 import useSelectUserChat from "src/hooks/useSelectUserChat";
@@ -68,10 +66,8 @@ const ContactsMarkup = ({
 
 function Contacts() {
   const { t } = useTranslation();
-  const { user } = useUserContext();
-  const { data: friends, isPending } = useGetUsers(user.uid);
+  const { friends } = useUserContext();
 
-  if (isPending) return <Spinner />;
   if (!friends) return;
   return (
     <Box>

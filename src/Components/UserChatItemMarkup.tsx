@@ -31,6 +31,8 @@ const UserChatItemMarkup = ({
         justifyContent: "space-between",
         backgroundColor: "background.paper",
         width: "100%",
+        cursor: "pointer",
+        "&:hover,&:focus": { transform: "scale(1.05)" },
       }}
     >
       <CardHeader

@@ -22,7 +22,7 @@ const Chat = () => {
           {Object.entries(msg)
             ?.sort((a, b) => b[1].date - a[1].date)
             .map((chat) => {
-              console.log("chat: ", chat);
+              //   console.log("chat: ", chat);
               return (
                 <ListItem
                   key={chat[0]}

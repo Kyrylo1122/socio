@@ -1,4 +1,10 @@
-import { CollectionNameType, IUser, IUserChats, IUserNew } from "src/types";
+import {
+  CollectionNameType,
+  IMessage,
+  IUser,
+  IUserChats,
+  IUserNew,
+} from "src/types";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -6,6 +12,7 @@ import {
 } from "firebase/auth";
 import { auth, db, storage } from "./config";
 import {
+  FieldValue,
   collection,
   doc,
   getDoc,
@@ -66,7 +73,7 @@ export const updateUserChats = async (id: string, data: IUserChats) => {
 };
 export const updateChats = async (
   id: string,
-  data: { messages: IUserChats[] }
+  data: { messages: FieldValue }
 ) => {
   try {
     await updateDatabase({ id, collectionName: "chats", data });
@@ -82,7 +89,7 @@ export const updateDatabase = async ({
 }: {
   id: string;
   collectionName: CollectionNameType;
-  data: Partial<IUser> | IUserChats | { messages: IUserChats[] };
+  data: Partial<IUser> | IUserChats | { messages: FieldValue };
 }) => {
   try {
     await setDoc(doc(db, collectionName, id), data, { merge: true });

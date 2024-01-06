@@ -9,6 +9,8 @@ export enum QUERY_KEYS {
   GET_POST_COMMENTS = "getUserComments",
   GET_UPDATE_INFO = "getUpdateInfo",
 
+  GET_MESSAGES = "getMessages",
+
   // POST KEYS
   GET_POSTS = "getPosts",
   GET_INFINITE_POSTS = "getInfinitePosts",

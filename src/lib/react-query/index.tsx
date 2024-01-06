@@ -1,5 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IPostResponse, IUser, IUserChats, IUserNew } from "src/types";
+import {
+  IMessage,
+  IPostResponse,
+  IUser,
+  IUserChats,
+  IUserNew,
+} from "src/types";
 
 import { QUERY_KEYS } from "./QueryKeys";
 import {
@@ -24,6 +30,7 @@ import {
   savePost,
   updatePost,
 } from "../api";
+import { FieldValue } from "firebase/firestore";
 
 export const useGetUserPosts = (id: string) =>
   useQuery({
@@ -124,21 +131,38 @@ export const useSignInAccount = () =>
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
   });
-export const useUpdateUserChats = () =>
-  useMutation({
+export const useUpdateUserChats = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: ({ id, data }: { id: string; data: IUserChats }) =>
       updateUserChats(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_MESSAGES],
+      });
+    },
   });
-export const useUpdateChats = () =>
-  useMutation({
+};
+
+export const useUpdateChats = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({
       id,
       data,
     }: {
       id: string;
-      data: { messages: IUserChats[] };
+      data: { messages: FieldValue };
     }) => updateChats(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_MESSAGES],
+      });
+    },
   });
+};
+
 export const useUpdateUserInfo = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -171,7 +195,7 @@ export const useGetUsersById = (id: string | null | undefined) =>
   });
 export const useGetUserMessages = (id: string | null | undefined) =>
   useQuery({
-    queryKey: [QUERY_KEYS.GET_CURRENT_MESSAGES, id],
+    queryKey: [QUERY_KEYS.GET_MESSAGES, id],
 
     queryFn: () => getUserMessagesById(id),
     enabled: Boolean(id),
