@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Typography, Paper, Button, List } from "@mui/material";
+import { Box, Typography, Paper, Button } from "@mui/material";
 import { useChatContext } from "src/hooks/useChatContext";
 import {
   Timestamp,

@@ -153,7 +153,7 @@ export const useUpdateChats = () => {
       data,
     }: {
       id: string;
-      data: { messages: FieldValue };
+      data: { messages: FieldValue | [] };
     }) => updateChats(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
