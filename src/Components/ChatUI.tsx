@@ -80,44 +80,50 @@ const ChatUI = () => {
   };
 
   return (
-    <Box
-      sx={{
-        height: " calc(100vh - 88px)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Box
-        sx={{
-          gap: 2,
-          p: 3,
-          display: "flex",
+    <Box>
+      {data.chatId !== "null" ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: " calc(100vh - 88px)",
+          }}
+        >
+          <Box
+            sx={{
+              gap: 2,
+              p: 3,
+              display: "flex",
 
-          width: "100%",
-          alignItems: "center",
-          bgcolor: "background.paper",
-        }}
-      >
-        <AvatarImage
-          sx={{ width: 75, height: 75 }}
-          photoUrl={data.user.photoUrl}
-          name={data.user.displayName}
-          defaultCharacter={data.user.defaultCharacter}
-        />
-        <Typography variant="h2">{data.user.displayName}</Typography>
-      </Box>
-      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={ref}>
-        {messages.length ? (
-          messages.map((message) => (
-            <Message key={message.id} message={message} />
-          ))
-        ) : (
-          <NoChatMessages />
-        )}
-      </Box>
-      <Box sx={{ p: 2, backgroundColor: "background.default" }}>
-        <SimpleInputForm handleClick={handleSend} isComment={false} />
-      </Box>
+              width: "100%",
+              alignItems: "center",
+              bgcolor: "background.paper",
+            }}
+          >
+            <AvatarImage
+              sx={{ width: 75, height: 75 }}
+              photoUrl={data.user.photoUrl}
+              name={data.user.displayName}
+              defaultCharacter={data.user.defaultCharacter}
+            />
+            <Typography variant="h2">{data.user.displayName}</Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={ref}>
+            {messages.length ? (
+              messages.map((message) => (
+                <Message key={message.id} message={message} />
+              ))
+            ) : (
+              <NoChatMessages />
+            )}
+          </Box>
+          <Box sx={{ p: 2, backgroundColor: "background.default" }}>
+            <SimpleInputForm handleClick={handleSend} isComment={false} />
+          </Box>
+        </Box>
+      ) : (
+        <NoChatMessages />
+      )}
     </Box>
   );
 };

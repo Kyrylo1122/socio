@@ -7,13 +7,20 @@ const Body = () => {
   const { user } = useUserContext();
 
   return (
-    <Box sx={{ display: "flex", pt: 11 }}>
+    <Box
+      component="body"
+      sx={{
+        display: "flex",
+        overflow: "auto",
+        pt: 11,
+      }}
+    >
       {user ? (
         <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
           <Sidebar />
         </Box>
       ) : null}
-      <Box sx={{ flex: 3 }}>
+      <Box sx={{ flex: 3, bgcolor: "background.default" }}>
         <Outlet />
       </Box>
     </Box>

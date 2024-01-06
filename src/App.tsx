@@ -10,7 +10,11 @@ const App = () => {
   const { mode } = useThemeContext();
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box
+      sx={{
+        position: "relative",
+      }}
+    >
       {user ? (
         <Box>
           <Header />

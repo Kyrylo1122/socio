@@ -16,8 +16,19 @@ const Chat = () => {
 
   if (!msg) return;
   return (
-    <Box sx={{ display: "flex", w: "100%" }}>
-      <Box sx={{ flex: 1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        w: "100%",
+        position: "relative",
+      }}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          overflow: "hidden",
+        }}
+      >
         <List>
           {Object.entries(msg)
             ?.sort((a, b) => b[1].date - a[1].date)
@@ -40,7 +51,14 @@ const Chat = () => {
             })}
         </List>
       </Box>
-      <Box sx={{ flex: 2 }}>
+      <Box
+        sx={{
+          width: "800px",
+          position: "fixed",
+          right: 0,
+          overflow: "hidden",
+        }}
+      >
         <ChatUI />
       </Box>
     </Box>
