@@ -123,7 +123,11 @@ const ChatUI = () => {
           </Box>
         </Box>
       ) : (
-        <NoChatMessages />
+        <Box sx={{ textAlign: "center", mt: 10 }}>
+          {" "}
+          <NoChatMessages />
+          <Typography variant="h2">{t("let's_write")}</Typography>
+        </Box>
       )}
     </>
   );
@@ -141,9 +145,8 @@ const Message = ({ message }: { message: IMessage }) => {
   const { data } = useChatContext();
 
   const isBot = message.senderId !== user.uid;
-  const [isVisibleDelete] = useState(true);
   const { mutateAsync: updateChats } = useUpdateChats();
-
+  const [isVisible, setIsVisible] = useState(false);
   const handleDeleteMessage = () => {
     updateChats({
       id: data.chatId,
@@ -154,6 +157,8 @@ const Message = ({ message }: { message: IMessage }) => {
   };
   return (
     <Box
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
       sx={{
         display: "flex",
         justifyContent: isBot ? "flex-start" : "flex-end",
@@ -165,18 +170,26 @@ const Message = ({ message }: { message: IMessage }) => {
         sx={{
           p: 1,
           backgroundColor: isBot ? "primary.light" : "secondary.light",
+          position: "relative",
         }}
       >
         <Typography variant="body1">{message.text.value}</Typography>
         <Typography variant="body2">
           {formatDate(message?.date?.seconds * 1000)}
         </Typography>
-        {isVisibleDelete ? (
-          <Box>
-            <Button variant="contained" onClick={handleDeleteMessage}>
-              <Delete />
-            </Button>
-          </Box>
+        {isVisible ? (
+          <Button
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: -50,
+              color: "primary.accent",
+            }}
+            variant="text"
+            onClick={handleDeleteMessage}
+          >
+            <Delete color="inherit" />
+          </Button>
         ) : null}
       </Paper>
     </Box>

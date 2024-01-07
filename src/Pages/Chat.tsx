@@ -7,12 +7,10 @@ import ChatUI from "src/Components/ChatUI";
 
 import { useGetUserMessages } from "src/lib/react-query";
 import useSelectUserChat from "src/hooks/useSelectUserChat";
-import { useEffect, useState } from "react";
 
 const Chat = () => {
   const { user: currentUser } = useUserContext();
   const { data: msg } = useGetUserMessages(currentUser.uid);
-  const [lastMsg, setLastMsg] = useState();
 
   const { handleSelect } = useSelectUserChat();
 
@@ -30,7 +28,7 @@ const Chat = () => {
     >
       <Box
         sx={{
-          position: "absolute",
+          position: "static",
           overflow: "hidden",
         }}
       >
@@ -58,7 +56,7 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          width: { md: "40%", lg: "50%", xl: "55%" },
+          width: { md: "40%", lg: "48%", xl: "53%" },
           position: "fixed",
           right: 0,
           overflow: "hidden",
