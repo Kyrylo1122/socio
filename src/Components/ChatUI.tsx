@@ -3,6 +3,7 @@ import { Box, Typography, Paper, Button } from "@mui/material";
 import { useChatContext } from "src/hooks/useChatContext";
 import {
   Timestamp,
+  arrayRemove,
   arrayUnion,
   doc,
   onSnapshot,
@@ -80,7 +81,7 @@ const ChatUI = () => {
   };
 
   return (
-    <Box>
+    <>
       {data.chatId !== "null" ? (
         <Box
           sx={{
@@ -124,7 +125,7 @@ const ChatUI = () => {
       ) : (
         <NoChatMessages />
       )}
-    </Box>
+    </>
   );
 };
 
@@ -137,8 +138,20 @@ interface IMessage {
 
 const Message = ({ message }: { message: IMessage }) => {
   const { user } = useUserContext();
+  const { data } = useChatContext();
+
   const isBot = message.senderId !== user.uid;
   const [isVisibleDelete] = useState(true);
+  const { mutateAsync: updateChats } = useUpdateChats();
+
+  const handleDeleteMessage = () => {
+    updateChats({
+      id: data.chatId,
+      data: {
+        messages: arrayRemove(message),
+      },
+    });
+  };
   return (
     <Box
       sx={{
@@ -160,7 +173,7 @@ const Message = ({ message }: { message: IMessage }) => {
         </Typography>
         {isVisibleDelete ? (
           <Box>
-            <Button variant="contained" onClick={() => console.log("click")}>
+            <Button variant="contained" onClick={handleDeleteMessage}>
               <Delete />
             </Button>
           </Box>
