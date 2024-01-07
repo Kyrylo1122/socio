@@ -16,7 +16,6 @@ const SimpleInputForm = ({
   isComment,
   defaultValue = "",
 }: ICommentForm) => {
-  console.log("defaultValue: ", defaultValue);
   const { register, handleSubmit, reset } = useForm<Inputs>({
     values: { value: defaultValue },
   });

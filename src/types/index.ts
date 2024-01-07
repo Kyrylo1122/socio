@@ -28,6 +28,12 @@ export interface IMessage {
   senderId?: string;
   date?: Date;
 }
+export interface IMessageResponse {
+  date: { seconds: number; nanoseconds: number };
+  id: string;
+  senderId: string;
+  text: { value: string };
+}
 export interface AvatarImageProps {
   photoUrl: string | null;
   defaultCharacter: number;

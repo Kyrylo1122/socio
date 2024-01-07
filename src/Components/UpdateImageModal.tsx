@@ -137,7 +137,7 @@ const UpdateImageModalContent = ({
         <Divider />
         <Box sx={{ p: 3, textAlign: "center" }}>
           {fileUrl ? (
-            <StyledBtn onClick={handleSubmit}>Share</StyledBtn>
+            <StyledBtn onClick={handleSubmit}>{t("share")}</StyledBtn>
           ) : (
             <Typography variant="body1">{t("update_image_footer")}</Typography>
           )}
