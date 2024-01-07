@@ -27,6 +27,8 @@ const ChatUI = () => {
   const { t } = useTranslation();
 
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [defaultInputValue, setDefaultInputValue] = useState("");
+
   const { data } = useChatContext();
   const { user: currentUser } = useUserContext();
   const { mutateAsync: updateUserChats } = useUpdateUserChats();
@@ -115,16 +117,52 @@ const ChatUI = () => {
                 <Message key={message.id} message={message} />
               ))
             ) : (
-              <NoChatMessages />
+              <Box>
+                <NoChatMessages />
+                <Box sx={{ display: "flex", gap: 3 }}>
+                  {" "}
+                  <Button
+                    variant="contained"
+                    onClick={() =>
+                      setDefaultInputValue(
+                        t("hi_name", { name: data.user.displayName })
+                      )
+                    }
+                  >
+                    {t("hi_name", { name: data.user.displayName })}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() =>
+                      setDefaultInputValue(
+                        t("what's_up", { name: data.user.displayName })
+                      )
+                    }
+                  >
+                    {t("what's_up", { name: data.user.displayName })}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    defaultValue={t("yo")}
+                    onClick={() => setDefaultInputValue(t("yo"))}
+                  >
+                    {t("yo")}
+                  </Button>
+                </Box>
+              </Box>
             )}
           </Box>
           <Box sx={{ p: 2, backgroundColor: "background.default" }}>
-            <SimpleInputForm handleClick={handleSend} isComment={false} />
+            <SimpleInputForm
+              handleClick={handleSend}
+              isComment={false}
+              defaultValue={defaultInputValue}
+              //   defaultValue="Default value is here"
+            />
           </Box>
         </Box>
       ) : (
         <Box sx={{ textAlign: "center", mt: 10 }}>
-          {" "}
           <NoChatMessages />
           <Typography variant="h2">{t("let's_write")}</Typography>
         </Box>

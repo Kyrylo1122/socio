@@ -33,10 +33,7 @@ const Chat = () => {
         }}
       >
         <List>
-          {sortedMessages.map((chat, index) => {
-            if (index === sortedMessages.length - 1) {
-              console.log(chat);
-            }
+          {sortedMessages.map((chat) => {
             return (
               <ListItem
                 key={chat[0]}

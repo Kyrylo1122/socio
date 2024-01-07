@@ -14,5 +14,8 @@
   "country": "Country",
   "status": "Status",
   "login": "Login or username",
-  "password": "Password"
+  "password": "Password",
+  "hi_name": "Привіт {{name}}",
+  "what's_up": "Привіт {{name}}! Давай кудись вийдемо",
+  "yo": "Yo broooooo"
 }

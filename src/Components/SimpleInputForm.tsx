@@ -9,9 +9,17 @@ type Inputs = {
 interface ICommentForm {
   handleClick: (value: Inputs) => void;
   isComment: boolean;
+  defaultValue?: string;
 }
-const SimpleInputForm = ({ handleClick, isComment }: ICommentForm) => {
-  const { register, handleSubmit, reset } = useForm<Inputs>();
+const SimpleInputForm = ({
+  handleClick,
+  isComment,
+  defaultValue = "",
+}: ICommentForm) => {
+  console.log("defaultValue: ", defaultValue);
+  const { register, handleSubmit, reset } = useForm<Inputs>({
+    values: { value: defaultValue },
+  });
   const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -23,7 +31,6 @@ const SimpleInputForm = ({ handleClick, isComment }: ICommentForm) => {
       <TextField
         autoComplete="off"
         fullWidth
-        defaultValue=""
         placeholder={t(
           isComment ? "write_comment_placeholder" : "write_message_placeholder"
         )}
