@@ -3,12 +3,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import ChatUI from "./ChatUI";
 import useThemeContext from "src/hooks/useThemeContext";
+import useDialogContext from "src/hooks/useDialogContext";
 
-interface ICustomizedDialogs {
-  handleClose: () => void;
-}
-export default function CustomizedDialogs({ handleClose }: ICustomizedDialogs) {
+export default function CustomizedDialogs() {
   const { mode } = useThemeContext();
+  const { close } = useDialogContext();
+
   return (
     <Box
       sx={{
@@ -26,14 +26,13 @@ export default function CustomizedDialogs({ handleClose }: ICustomizedDialogs) {
         sx={{
           position: "absolute",
           color: mode === "light" ? "primary.accent" : "primary.white",
-          //   bgcolor: "black",
           top: 0,
           right: 0,
           "&:hover,&:focus": {
             color: "primary.accent",
           },
         }}
-        onClick={() => handleClose()}
+        onClick={() => close()}
       >
         <ClearIcon />
       </Button>

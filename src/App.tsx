@@ -1,16 +1,16 @@
-import { Box, Button, SpeedDial, SpeedDialIcon } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import { Header } from "./Components";
 import Body from "./Components/Body";
 import { useUserContext } from "./hooks/useUserContext";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
-import { useState } from "react";
 import CustomizedDialogs from "./Components/Dialog";
 import SubtitlesOffIcon from "@mui/icons-material/SubtitlesOff";
+import useDialogContext from "./hooks/useDialogContext";
 
 const App = () => {
   const { user } = useUserContext();
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const { isOpen, toggle } = useDialogContext();
 
   return (
     <Box
@@ -35,14 +35,12 @@ const App = () => {
           bottom: 16,
           right: 16,
         }}
-        onClick={() => setIsOpenDialog((state) => !state)}
+        onClick={() => toggle()}
       >
-        {isOpenDialog ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
+        {isOpen ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
       </Button>
 
-      {isOpenDialog ? (
-        <CustomizedDialogs handleClose={() => setIsOpenDialog(false)} />
-      ) : null}
+      {isOpen ? <CustomizedDialogs /> : null}
     </Box>
   );
 };

@@ -22,7 +22,7 @@ import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
 import { IMessageResponse } from "src/types";
 import { useMessageContext } from "src/hooks/useMessageContext";
 
-const ChatUI = ({ isDialog = false }: { isDialog: boolean }) => {
+const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   const { t } = useTranslation();
 
   const [defaultInputValue, setDefaultInputValue] = useState("");

@@ -7,12 +7,19 @@ import ChatUI from "src/Components/ChatUI";
 
 import { useGetUserMessages } from "src/lib/react-query";
 import useSelectUserChat from "src/hooks/useSelectUserChat";
+import { useEffect } from "react";
+import useDialogContext from "src/hooks/useDialogContext";
 
 const Chat = () => {
   const { user: currentUser } = useUserContext();
   const { data: msg } = useGetUserMessages(currentUser.uid);
 
   const { handleSelect } = useSelectUserChat();
+  const { close } = useDialogContext();
+
+  useEffect(() => {
+    close();
+  }, []);
 
   if (!msg) return;
   const sortedMessages = Object.entries(msg)?.sort(
@@ -59,7 +66,7 @@ const Chat = () => {
           overflow: "hidden",
         }}
       >
-        <ChatUI />
+        <ChatUI isDialog={false} />
       </Box>
     </Box>
   );
