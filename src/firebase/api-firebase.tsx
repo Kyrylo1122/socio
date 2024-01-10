@@ -1,4 +1,10 @@
-import { CollectionNameType, IUser, IUserChats, IUserNew } from "src/types";
+import {
+  CollectionNameType,
+  INewPost,
+  IUser,
+  IUserChats,
+  IUserNew,
+} from "src/types";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,6 +13,7 @@ import {
 import { auth, db, storage } from "./config";
 import {
   FieldValue,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -65,6 +72,60 @@ export const updateUserChats = async (id: string, data: IUserChats) => {
     console.error(error);
   }
 };
+export const createNewPost = async (
+  id: string,
+  data: INewPost,
+  file: File | null | undefined
+) => {
+  if (file) {
+    const storageRef = ref(storage, data.id);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        console.error(error);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        await updateDatabase({
+          id,
+          collectionName: "posts",
+          data: { posts: arrayUnion({ ...data, photoUrl: downloadURL }) },
+        });
+      }
+    );
+  } else {
+    await updateDatabase({
+      id,
+      collectionName: "posts",
+      data: { posts: arrayUnion(data) },
+    });
+  }
+};
+export const updatePosts = async (
+  id: string,
+  data: { posts: FieldValue | [] }
+) => {
+  try {
+    console.log({ id, data });
+    await updateDatabase({ id, collectionName: "posts", data });
+  } catch (error) {
+    console.error(error);
+  }
+};
 export const updateChats = async (
   id: string,
   data: { messages: FieldValue | [] }
@@ -83,7 +144,11 @@ export const updateDatabase = async ({
 }: {
   id: string;
   collectionName: CollectionNameType;
-  data: Partial<IUser> | IUserChats | { messages: FieldValue | [] };
+  data:
+    | Partial<IUser>
+    | IUserChats
+    | { messages: FieldValue | [] }
+    | { posts: FieldValue | [] };
 }) => {
   try {
     await setDoc(doc(db, collectionName, id), data, { merge: true });
@@ -192,8 +257,6 @@ export const uploadAvatarImage = async (
       console.error(error);
     },
     async () => {
-      // Handle successful uploads on complete
-      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
       return await updateDatabase({

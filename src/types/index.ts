@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
 
-export type CollectionNameType = "users" | "userChats" | "chats";
+export type CollectionNameType = "posts" | "users" | "userChats" | "chats";
 
 export interface IUserNew {
   name: string;
@@ -8,15 +8,15 @@ export interface IUserNew {
   password: string;
   defaultCharacter: number;
 }
-export interface IChatUserInfo {
+export interface IUserShortInfo {
   displayName: string;
   defaultCharacter: number;
   photoUrl: null | string;
   uid: string;
 }
 export interface IUserChats {
-  lastMessage?: { text: { value: string } };
-  userInfo?: IChatUserInfo;
+  lastMessage?: { text: IText };
+  userInfo?: IUserShortInfo;
   date?: Date;
 }
 interface IText {
@@ -32,7 +32,7 @@ export interface IMessageResponse {
   date: { seconds: number; nanoseconds: number };
   id: string;
   senderId: string;
-  text: { value: string };
+  text: IText;
 }
 export interface AvatarImageProps {
   photoUrl: string | null;
@@ -80,14 +80,42 @@ export interface IUserContext {
   isLoading?: boolean;
 }
 
-export interface INewPost {
-  userId: string;
-  caption?: string;
-  imageUrl?: File;
+export interface INewPostForm {
+  caption: string;
+  photoUrl?: File | null;
   location?: string;
-  tags?: string[];
 }
-export type CreatePostFormType = Omit<INewPost, "userId">;
+export interface INewPost {
+  id: string;
+  location: string;
+  caption: string;
+  tags: string[];
+  photoUrl?: File | null;
+  creator: IUserShortInfo;
+  likes: string[];
+  createdAt: Date;
+}
+
+interface IComment {
+  name: string;
+  imageUrl?: string | null;
+  defaultCharacter: number;
+  createdAt: DataTransfer;
+  text: IText;
+}
+export interface ICreatePost {
+  posts: {
+    id: string;
+    creator: IUser;
+    caption?: string;
+    imageUrl?: File;
+    location?: string;
+    tags: string[];
+    likes: string[];
+    createdAt: Date;
+    comments: IComment[];
+  };
+}
 
 export interface IPostResponse {
   $id: string;
@@ -117,4 +145,11 @@ export interface IFormNames {
   email: string;
   password: string;
   comment: string;
+}
+
+export interface IDialogContext {
+  isOpen: boolean;
+  close: () => void;
+  open: () => void;
+  toggle: () => void;
 }

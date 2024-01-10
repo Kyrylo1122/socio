@@ -4,8 +4,6 @@ import Typography from "@mui/material/Typography";
 import { users } from "@Assets/data/Users";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
-import Avatar from "@mui/material/Avatar";
-
 import { Divider } from "@mui/material";
 import CreatePost from "src/Components/CreatePost";
 import { useState } from "react";
@@ -58,17 +56,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
       console.error(error);
     }
   };
-  const { mutateAsync: createNewPost, isPending: isCreatingPost } =
-    useCreatePost();
 
-  const handleCreatePost = async (value: CreatePostFormType) => {
-    try {
-      const newValue = { ...value, userId: user.$id };
-      await createNewPost(newValue);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const UserFriends = () => {
     return (
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -213,20 +201,11 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
           </Box>
         </Box>
       </Box>
-      {/* {currentUserPage ? (
+      {currentUserPage ? (
         <Modal open={modalIsOpen} close={closeModal}>
-          <CreatePost
-            defaultCaption=""
-            defaultLocation=""
-            defaultImageUrl=""
-            defaultCreatedAt=""
-            defaultTags={[]}
-            handleSubmit={handleCreatePost}
-            close={closeModal}
-            isPending={isCreatingPost}
-          />
+          <CreatePost close={closeModal} />
         </Modal>
-      ) : null} */}
+      ) : null}
     </Box>
   );
 };

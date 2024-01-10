@@ -2,14 +2,14 @@ import { Avatar, CardHeader } from "@mui/material";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { formatDate } from "src/utils/formatDate";
 interface IPostCardHeader {
-  imageUrl: string | null;
+  photoUrl: string | null;
   name: string;
   date?: string;
   defaultCharacter: number;
   location?: string;
 }
 const PostCardHeader = ({
-  imageUrl,
+  photoUrl,
   defaultCharacter,
   name,
   date,
@@ -22,7 +22,7 @@ const PostCardHeader = ({
     <CardHeader
       avatar={
         <Avatar
-          src={createAvatarLink(imageUrl, defaultCharacter)}
+          src={createAvatarLink({ photoUrl, defaultCharacter })}
           aria-label={name}
           sx={{ width: 70, height: 70 }}
         />

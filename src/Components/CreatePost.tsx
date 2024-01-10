@@ -19,7 +19,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import * as Yup from "yup";
-import { CreatePostFormType, INewPost, IPostResponse } from "src/types";
+import { INewPost, INewPostForm, IPostResponse } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -30,7 +30,10 @@ import TagsForm from "./TagsForm";
 
 import useThemeContext from "src/hooks/useThemeContext";
 import { useTranslation } from "react-i18next";
-import PostCardHeader from "./PostCardHeader";
+import PostCardHeader from "./PostCard/PostCardHeader";
+import { useCreatePost } from "src/lib/react-query";
+import { Timestamp, arrayUnion } from "firebase/firestore";
+import { v4 as uuid } from "uuid";
 
 const schema = Yup.object({
   caption: Yup.string().max(2200),
@@ -51,15 +54,7 @@ const IconBox = styled(Box)(({ theme }) => ({
   },
 }));
 interface ICreatePost {
-  imageReadOnly?: boolean;
   close: () => void;
-  defaultCaption: string;
-  defaultLocation: string;
-  defaultTags: string[];
-  defaultImageUrl: string;
-  isPending: boolean;
-  defaultCreatedAt: string;
-  handleSubmit: (value: Partial<IPostResponse>) => void;
 }
 const StyledButton = styled(Button)`
   ${({ theme }) => `
@@ -78,44 +73,55 @@ const StyledButton = styled(Button)`
   `}
 `;
 
-const CreatePost = ({
-  close,
-  imageReadOnly,
-  defaultCaption,
-  defaultLocation,
-  defaultTags,
-  defaultImageUrl,
-  defaultCreatedAt,
-  isPending,
-  handleSubmit,
-}: ICreatePost) => {
+const CreatePost = ({ close }: ICreatePost) => {
   const { t } = useTranslation();
 
-  const [fileUrl, setFileUrl] = useState<string>(defaultImageUrl);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [editImage, setEditImage] = useState(false);
-  const [isOpenLocation, setOpenLocation] = useState(Boolean(defaultLocation));
-  const [isOpenTags, setOpenTags] = useState(Boolean(defaultTags));
+  const [isOpenLocation, setOpenLocation] = useState(false);
+  const [isOpenTags, setOpenTags] = useState(false);
   const { user } = useUserContext();
   const { mode } = useThemeContext();
 
-  const [chipData, setChipData] = useState<string[]>(defaultTags || []);
+  const [chipData, setChipData] = useState<string[]>([]);
 
   const cleanImage = () => setFileUrl("");
   const toggleLocation = () => setOpenLocation((state) => !state);
   const toggleTags = () => setOpenTags((state) => !state);
+  const { mutateAsync: createNewPost } = useCreatePost();
 
   const {
     register,
     handleSubmit: handleFormSubmit,
     control,
-  } = useForm<CreatePostFormType>({
-    resolver: yupResolver(schema),
-  });
+  } = useForm<INewPost>();
+  //   {resolver: yupResolver(schema),    }
 
-  const onSubmit = (value: CreatePostFormType) => {
+  const onSubmit = ({ caption, location, photoUrl }: INewPostForm) => {
+    const postId = uuid();
+
     try {
-      const newValue = { ...value, tags: chipData };
-      handleSubmit(newValue);
+      const data = {
+        id: postId,
+        location: isOpenLocation ? location : "",
+        tags: isOpenTags ? chipData : [],
+        photoUrl,
+        caption,
+        creator: {
+          uid: user.uid,
+
+          photoUrl: user.photoUrl,
+          name: user.name,
+          defaultCharacter: user.defaultCharacter,
+        },
+        createdAt: Timestamp.now(),
+        likes: [],
+      };
+      createNewPost({
+        id: user.uid,
+        data,
+        file: photoUrl,
+      });
       close();
     } catch (error) {
       console.error(error);
@@ -123,14 +129,13 @@ const CreatePost = ({
   };
   const ImageController = () => (
     <Controller
-      name="imageUrl"
+      name="photoUrl"
       control={control}
       render={({ field: { onChange } }) => (
         <FileUploader setFileUrl={setFileUrl} onChange={onChange} />
       )}
     />
   );
-  if (isPending) return <Spinner />;
   return (
     <Box
       sx={{
@@ -165,7 +170,6 @@ const CreatePost = ({
             bgcolor: mode === "light" ? "primary.dark" : "primary.main",
             color: "primary.white",
             "&:hover,&:focus": {
-              transform: "scale(1.1)",
               bgcolor: "primary.dark",
             },
           }}
@@ -179,8 +183,6 @@ const CreatePost = ({
       <Box
         component="form"
         sx={{
-          //   outline: "1px solid brown",
-
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -197,26 +199,16 @@ const CreatePost = ({
             alignItems: "flex-start",
           }}
         >
-          {/* <Avatar
-            src={createAvatarLink(user.imageUrl, user.defaultCharacter)}
-            alt={user.name}
-            sx={{ width: 70, height: 70 }}
-          />
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography variant="h4">{user.name}</Typography>
-            <Typography variant="body2">{}</Typography>
-          </Box> */}
           <PostCardHeader
-            imageUrl={user.imageUrl}
+            photoUrl={user.photoUrl}
             defaultCharacter={user.defaultCharacter}
             name={user.name}
-            date={defaultCreatedAt}
-            location={defaultLocation}
+            date={Date.now()}
+            location=""
           />
         </Box>
         <Box
           sx={{
-            // outline: "1px solid green",
             mt: 2,
             display: "flex",
             gap: 3,
@@ -232,7 +224,6 @@ const CreatePost = ({
               gap: 2,
               flexDirection: "column",
               width: "100%",
-              //   outline: "1px solid blue",
             }}
           >
             <Collapse in={isOpenLocation}>
@@ -254,7 +245,6 @@ const CreatePost = ({
                   }}
                   label={t("location")}
                   placeholder="Add your location"
-                  defaultValue={defaultLocation}
                   {...register("location")}
                 />
               </Box>
@@ -267,21 +257,22 @@ const CreatePost = ({
                   gap: 2,
                   width: "100%",
                   position: "relative",
-                  //   outline: "1px solid blue",
                 }}
               >
                 <Box>
-                  <CardMedia
-                    onMouseOver={() => setEditImage(true)}
-                    component="img"
-                    height="250"
-                    width="500"
-                    image={fileUrl}
-                    alt="Post photo"
-                    sx={{ objectFit: "contain" }}
-                  />
+                  {fileUrl ? (
+                    <CardMedia
+                      onMouseOver={() => setEditImage(true)}
+                      component="img"
+                      height="250"
+                      width="500"
+                      image={fileUrl}
+                      alt="Post photo"
+                      sx={{ objectFit: "contain" }}
+                    />
+                  ) : null}
                 </Box>
-                {editImage && !imageReadOnly ? (
+                {editImage ? (
                   <Box
                     sx={{
                       position: "absolute",
@@ -324,7 +315,6 @@ const CreatePost = ({
                 },
               }}
               placeholder={t("what_in_mind", { val: user.name })}
-              defaultValue={defaultCaption}
               {...register("caption")}
             />
 
@@ -349,16 +339,13 @@ const CreatePost = ({
             display: "flex",
             gap: 3,
             justifyContent: "center",
-            // outline: "1px solid brown",
           }}
         >
-          {!imageReadOnly ? (
-            <StyledButton component="label" sx={{ color: "primary.contrast" }}>
-              <AddPhotoAlternateIcon color="secondary" />{" "}
-              {t(fileUrl ? "change_photo" : "add_photo")}
-              <ImageController />
-            </StyledButton>
-          ) : null}
+          <StyledButton component="label" sx={{ color: "primary.contrast" }}>
+            <AddPhotoAlternateIcon color="secondary" />{" "}
+            {t(fileUrl ? "change_photo" : "add_photo")}
+            <ImageController />
+          </StyledButton>
 
           <StyledButton
             onClick={toggleLocation}
@@ -373,7 +360,6 @@ const CreatePost = ({
           </StyledButton>
           <Fade in={!fileUrl} {...{ timeout: 500 }}>
             <Box>
-              {" "}
               <Button
                 type="submit"
                 variant="text"
@@ -388,7 +374,7 @@ const CreatePost = ({
                   },
                 }}
               >
-                Share here
+                {t("share")}
               </Button>
             </Box>
           </Fade>
@@ -409,7 +395,7 @@ const CreatePost = ({
                 },
               }}
             >
-              Share here
+              {t("share")}
             </Button>
           </Box>
         </Fade>

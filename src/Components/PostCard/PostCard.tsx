@@ -3,26 +3,21 @@ import { Card, CardContent, Typography, CardMedia, Box } from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
-import PostStats from "./PostStats";
+import PostStats from "../PostStats";
 import { Models } from "appwrite";
-import {
-  useCreateComment,
-  useDeletePost,
-  useUpdatePost,
-} from "src/lib/react-query";
-import CommentForm from "./SimpleInputForm";
+import { useCreateComment, useDeletePost } from "src/lib/react-query";
+import CommentForm from "../SimpleInputForm";
 
 import PostCardHeader from "./PostCardHeader";
-import PlaygroundSpeedDial from "./SpeedDial";
+import PlaygroundSpeedDial from "../SpeedDial";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CreatePost from "./CreatePost";
-import Modal from "./Modal";
-import ChipsArray from "./ChipArray";
-import { IPostResponse } from "src/types";
+import CreatePost from "../CreatePost";
+import Modal from "../Modal";
+import ChipsArray from "../ChipArray";
 import { useUserContext } from "src/hooks/useUserContext";
-import PostSkeleton from "./Skeleton/PostSkeleton";
-import SharePost from "./SharePost";
+import PostSkeleton from "../Skeleton/PostSkeleton";
+import SharePost from "../SharePost";
 
 interface IPostCardProps {
   user: Models.Document;
@@ -44,7 +39,6 @@ const PostCard = ({
   tags,
   createdAt,
   likes,
-  comments,
 }: IPostCardProps) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
@@ -55,7 +49,7 @@ const PostCard = ({
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
-  const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
+  //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
   const handleExpandClick = () => {
     setExpanded((state) => !state);
@@ -79,16 +73,7 @@ const PostCard = ({
       console.error(error);
     }
   };
-  const handleEditPost = async (value: Partial<IPostResponse>) => {
-    try {
-      await editPost({
-        postId: id,
-        attribute: value,
-      });
-    } catch (error) {
-      console.error();
-    }
-  };
+
   const actions = [
     {
       icon: <DeleteForeverIcon />,
@@ -101,7 +86,7 @@ const PostCard = ({
       onClick: () => setEditPostModal(true),
     },
   ];
-  if ((isPendingEdit, isPending)) return <PostSkeleton />;
+  if (isPending) return <PostSkeleton />;
   return (
     <Card
       sx={{

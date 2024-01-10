@@ -1,16 +1,6 @@
 import { createContext } from "react";
+import { DIALOG_INITIAL_STATE } from "src/constant";
+import { IDialogContext } from "src/types";
 
-export interface IDialogContext {
-  isOpen: boolean;
-  close: () => void;
-  open: () => void;
-  toggle: () => void;
-}
-const DIALOG_INITIAL_STATE = {
-  isOpen: true,
-  close: () => {},
-  open: () => {},
-  toggle: () => {},
-};
 export const DialogContext =
   createContext<IDialogContext>(DIALOG_INITIAL_STATE);

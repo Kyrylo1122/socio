@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  IMessage,
+  INewPost,
   IPostResponse,
   IUser,
   IUserChats,
@@ -9,6 +9,7 @@ import {
 
 import { QUERY_KEYS } from "./QueryKeys";
 import {
+  createNewPost,
   createUserAccount,
   deleteAvatarImage,
   getAllUsers,
@@ -18,12 +19,12 @@ import {
   signOutAccount,
   updateChats,
   updateDatabase,
+  updatePosts,
   updateUserChats,
   uploadAvatarImage,
 } from "src/firebase/api-firebase";
 import {
   createComment,
-  createNewPost,
   deletePost,
   getSavePost,
   likePost,
@@ -44,15 +45,6 @@ export const useDeleteFile = () =>
     mutationFn: (id: string) => deleteFile(id),
   });
 
-export const useCreatePost = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: createNewPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-    },
-  });
-};
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -79,21 +71,21 @@ export const useLikePost = () => {
   });
 };
 
-export const useUpdatePost = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      postId,
-      attribute,
-    }: {
-      postId: string;
-      attribute: Partial<IPostResponse>;
-    }) => updatePost(postId, attribute),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-    },
-  });
-};
+// export const useUpdatePost = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation({
+//     mutationFn: ({
+//       postId,
+//       attribute,
+//     }: {
+//       postId: string;
+//       attribute: Partial<IPostResponse>;
+//     }) => updatePost(postId, attribute),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+//     },
+//   });
+// };
 
 export const useCreateComment = () => {
   const queryClient = useQueryClient();
@@ -144,7 +136,23 @@ export const useUpdateUserChats = () => {
     },
   });
 };
-
+export const useCreatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+      file,
+    }: {
+      id: string;
+      data: INewPost;
+      file: File | undefined | null;
+    }) => createNewPost(id, data, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
 export const useUpdateChats = () => {
   const queryClient = useQueryClient();
   return useMutation({
