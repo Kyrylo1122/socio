@@ -1,9 +1,10 @@
+import { CURRENT_USER_INITIAL } from "src/constant";
 import { IUser, ModeType } from "src/types";
 
 const useLocaleStorageData = () => {
   const getCurrentUser = () => {
     const currentUser = localStorage.getItem("currentUser");
-    return currentUser ? JSON.parse(currentUser) : null;
+    return currentUser ? JSON.parse(currentUser) : CURRENT_USER_INITIAL;
   };
 
   const setCurrentUser = (value: IUser | null) => {

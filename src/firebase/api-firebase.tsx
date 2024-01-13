@@ -1,6 +1,7 @@
 import {
   CollectionNameType,
   INewPost,
+  IPostResponse,
   IUser,
   IUserChats,
   IUserNew,
@@ -13,6 +14,7 @@ import {
 import { auth, db, storage } from "./config";
 import {
   FieldValue,
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
@@ -36,6 +38,19 @@ export const getAllUsers = async (id: string | null | undefined) => {
     });
 
     return users;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const getUserPosts = async (id: string | null | undefined) => {
+  try {
+    if (!id) throw Error;
+    const docRef = doc(db, "posts", id);
+
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw Error;
+    return docSnap.data();
   } catch (error) {
     console.error(error);
   }
@@ -71,6 +86,13 @@ export const updateUserChats = async (id: string, data: IUserChats) => {
   } catch (error) {
     console.error(error);
   }
+};
+export const deletePost = async (id: string, post: IPostResponse) => {
+  await updateDatabase({
+    id,
+    collectionName: "posts",
+    data: { posts: arrayRemove(post) },
+  });
 };
 export const createNewPost = async (
   id: string,

@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import FileUploader from "./FileUploader";
 import { Controller, useForm } from "react-hook-form";
@@ -18,12 +17,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
-import * as Yup from "yup";
-import { INewPost, INewPostForm, IPostResponse } from "src/types";
+import { INewPost, INewPostForm } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import Spinner from "./Spinner";
+// import Spinner from "./Spinner";
 import { useUserContext } from "src/hooks/useUserContext";
 import ChipsArray from "./ChipArray";
 import TagsForm from "./TagsForm";
@@ -32,15 +30,8 @@ import useThemeContext from "src/hooks/useThemeContext";
 import { useTranslation } from "react-i18next";
 import PostCardHeader from "./PostCard/PostCardHeader";
 import { useCreatePost } from "src/lib/react-query";
-import { Timestamp, arrayUnion } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
-
-const schema = Yup.object({
-  caption: Yup.string().max(2200),
-  location: Yup.string().max(2200),
-  tags: Yup.array().of(Yup.string()),
-  imageUrl: Yup.mixed().nullable(),
-}).required();
 
 const IconBox = styled(Box)(({ theme }) => ({
   p: theme.spacing(1),
@@ -95,7 +86,6 @@ const CreatePost = ({ close }: ICreatePost) => {
     handleSubmit: handleFormSubmit,
     control,
   } = useForm<INewPost>();
-  //   {resolver: yupResolver(schema),    }
 
   const onSubmit = ({ caption, location, photoUrl }: INewPostForm) => {
     const postId = uuid();
@@ -105,7 +95,7 @@ const CreatePost = ({ close }: ICreatePost) => {
         id: postId,
         location: isOpenLocation ? location : "",
         tags: isOpenTags ? chipData : [],
-        photoUrl,
+        photoUrl: photoUrl ? photoUrl : null,
         caption,
         creator: {
           uid: user.uid,
@@ -115,7 +105,6 @@ const CreatePost = ({ close }: ICreatePost) => {
           defaultCharacter: user.defaultCharacter,
         },
         createdAt: Timestamp.now(),
-        likes: [],
       };
       createNewPost({
         id: user.uid,
@@ -203,7 +192,6 @@ const CreatePost = ({ close }: ICreatePost) => {
             photoUrl={user.photoUrl}
             defaultCharacter={user.defaultCharacter}
             name={user.name}
-            date={Date.now()}
             location=""
           />
         </Box>

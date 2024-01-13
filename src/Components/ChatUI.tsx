@@ -97,10 +97,10 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
             <AvatarImage
               sx={{ width: isDialog ? 50 : 75, height: isDialog ? 50 : 75 }}
               photoUrl={data.user.photoUrl}
-              name={data.user.displayName}
+              name={data.user.name}
               defaultCharacter={data.user.defaultCharacter}
             />
-            <Typography variant="h2">{data.user.displayName}</Typography>
+            <Typography variant="h2">{data.user.name}</Typography>
           </Box>
           <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={ref}>
             {messages.length ? (
@@ -116,21 +116,21 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
                     variant="contained"
                     onClick={() =>
                       setDefaultInputValue(
-                        t("hi_name", { name: data.user.displayName })
+                        t("hi_name", { name: data.user.name })
                       )
                     }
                   >
-                    {t("hi_name", { name: data.user.displayName })}
+                    {t("hi_name", { name: data.user.name })}
                   </Button>
                   <Button
                     variant="contained"
                     onClick={() =>
                       setDefaultInputValue(
-                        t("what's_up", { name: data.user.displayName })
+                        t("what's_up", { name: data.user.name })
                       )
                     }
                   >
-                    {t("what's_up", { name: data.user.displayName })}
+                    {t("what's_up", { name: data.user.name })}
                   </Button>
                   <Button
                     variant="contained"
@@ -196,7 +196,7 @@ export const Message = ({ message }: { message: IMessageResponse }) => {
       >
         <Typography variant="body1">{message.text.value}</Typography>
         <Typography variant="body2">
-          {formatDate(message?.date?.seconds * 1000)}
+          {formatDate(message?.date?.seconds)}
         </Typography>
         {isVisible ? (
           <Button

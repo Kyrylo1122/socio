@@ -1,43 +1,24 @@
-import { List, ListItem, Typography } from "@mui/material";
+import { List, ListItem } from "@mui/material";
 import PostCard from "./PostCard/PostCard";
-import { Models } from "appwrite";
-// import { IUserResponse } from "src/types";
+import { IPostResponse } from "src/types";
 
-interface IPostList {
-  posts: Models.Document[];
-  user: Models.Document;
-}
-const PostList = ({ posts, user }: IPostList) => {
+const PostList = ({ posts }: { posts: IPostResponse[] }) => {
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      {posts.length ? (
-        posts.map((post) => (
+      {posts
+        .map((post) => (
           <ListItem
             sx={{
               boxShadow: "8px 8px 24px 0px rgba(66, 68, 90, 1)",
               p: 0,
               borderRadius: 1,
             }}
-            key={post.$id}
+            key={post.id}
           >
-            <PostCard
-              user={user}
-              id={post.$id}
-              caption={post.caption}
-              location={post.location}
-              tags={post.tags}
-              image={post.imageUrl}
-              createdAt={post.$createdAt}
-              likes={post.likes}
-              comments={post.comments}
-            />
+            <PostCard post={post} />
           </ListItem>
         ))
-      ) : (
-        <Typography>
-          You do not have any post. Let's create the first!
-        </Typography>
-      )}
+        .reverse()}
     </List>
   );
 };

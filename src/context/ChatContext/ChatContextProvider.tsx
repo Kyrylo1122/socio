@@ -2,7 +2,7 @@ import { ReactNode, useReducer } from "react";
 
 import createCombinedId from "src/utils/createCombinedId";
 import { useUserContext } from "src/hooks/useUserContext";
-import { IChatUserInfo } from "src/types";
+import { IUserShortInfo } from "src/types";
 import { ChatContext } from "./ChatContext";
 import { USER_INITIAL } from "src/constant";
 export const ChatContextProvider = ({ children }: { children: ReactNode }) => {
@@ -13,8 +13,8 @@ export const ChatContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const chatReducer = (
-    state: { chatId: string; user: IChatUserInfo },
-    action: { type: string; payload: IChatUserInfo }
+    state: { chatId: string; user: IUserShortInfo },
+    action: { type: string; payload: IUserShortInfo }
   ) => {
     switch (action.type) {
       case "CHANGE_USER":

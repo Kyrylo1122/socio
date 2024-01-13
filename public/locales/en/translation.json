@@ -72,5 +72,6 @@
   "hi_name": "Hello {{name}}?",
   "what's_up": "What's up {{name}}? Let's go out somewhere",
   "yo": "You broooooo",
-  "share": "share"
+  "share": "share",
+  "tags_form_empty_error": "The tags field cannot be empty"
 }

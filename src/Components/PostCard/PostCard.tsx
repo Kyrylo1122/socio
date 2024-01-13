@@ -18,34 +18,15 @@ import ChipsArray from "../ChipArray";
 import { useUserContext } from "src/hooks/useUserContext";
 import PostSkeleton from "../Skeleton/PostSkeleton";
 import SharePost from "../SharePost";
+import { IPostResponse, IUser, IUserShortInfo } from "src/types";
 
-interface IPostCardProps {
-  user: Models.Document;
-  id: string;
-  image?: string;
-  caption?: string;
-  createdAt: string;
-  likes: Models.Document;
-  comments: string[];
-  location: string;
-  tags: string[];
-}
-const PostCard = ({
-  user,
-  id,
-  image,
-  caption,
-  location,
-  tags,
-  createdAt,
-  likes,
-}: IPostCardProps) => {
+const PostCard = ({ post }: { post: IPostResponse }) => {
+  const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
   const [expanded, setExpanded] = useState(false);
   const [editPostModal, setEditPostModal] = useState(false);
   const closeModal = () => setEditPostModal(false);
-
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
@@ -56,7 +37,10 @@ const PostCard = ({
   };
   const handleDeletePost = async () => {
     try {
-      await deletePost(id);
+      await deletePost({
+        id: currentUser.uid,
+        post,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -96,16 +80,16 @@ const PostCard = ({
         p: 1,
       }}
     >
-      {currentUser.$id === user.$id ? (
+      {currentUser.uid === creator.uid ? (
         <Box sx={{ position: "absolute", right: 10 }}>
           <PlaygroundSpeedDial actions={actions} direction="left" />
         </Box>
       ) : null}
 
       <PostCardHeader
-        imageUrl={user.imageId}
-        defaultCharacter={user.defaultCharacter}
-        name={user.name}
+        photoUrl={creator.photoUrl}
+        defaultCharacter={creator.defaultCharacter}
+        name={creator.name}
         date={createdAt}
         location={location}
       />
@@ -113,14 +97,17 @@ const PostCard = ({
         {caption}
       </Typography>
       <ChipsArray chipData={tags} />
-      <CardMedia
-        component="img"
-        sx={{ height: 350, objectFit: "contain" }}
-        image={image}
-        alt="Paella dish"
-      />
-      <CommentForm handleClick={handleCreateComment} />
-      <SharePost />
+      {photoUrl ? (
+        <CardMedia
+          component="img"
+          sx={{ height: 350, objectFit: "contain" }}
+          image={photoUrl}
+          alt="Paella dish"
+        />
+      ) : null}
+
+      {/* <CommentForm isComment={true} handleClick={handleCreateComment} /> */}
+      {/* <SharePost />
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}
@@ -129,7 +116,7 @@ const PostCard = ({
           likes={likes}
           postId={id}
         />
-      </Box>
+      </Box> */}
       {/* <Collapse
         in={expanded}
         timeout="auto"
@@ -157,19 +144,6 @@ const PostCard = ({
           </List>
         </CardContent>
       </Collapse> */}
-      <Modal open={editPostModal} close={closeModal}>
-        <CreatePost
-          imageReadOnly={true}
-          defaultCaption={caption || ""}
-          defaultLocation={location || ""}
-          defaultTags={tags || []}
-          defaultCreatedAt={createdAt}
-          defaultImageUrl={image || ""}
-          handleSubmit={handleEditPost}
-          close={closeModal}
-          isPending={false}
-        />
-      </Modal>
     </Card>
   );
 };

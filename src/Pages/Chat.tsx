@@ -25,6 +25,7 @@ const Chat = () => {
   const sortedMessages = Object.entries(msg)?.sort(
     (a, b) => b[1].date - a[1].date
   );
+  console.log("sortedMessages: ", sortedMessages);
   return (
     <Box
       sx={{
@@ -39,24 +40,26 @@ const Chat = () => {
           overflow: "hidden",
         }}
       >
-        <List>
-          {sortedMessages.map((chat) => {
-            return (
-              <ListItem
-                key={chat[0]}
-                onClick={async () => await handleSelect(chat[1].userInfo)}
-              >
-                <UserChatItemMarkup
-                  name={chat[1].userInfo.displayName}
-                  photoUrl={chat[1].userInfo.photoUrl}
-                  lastMessage={chat[1]?.lastMessage?.text?.value}
-                  lastMessageDate={chat[1]?.date?.seconds * 1000}
-                  defaultCharacter={chat[1]?.userInfo?.defaultCharacter}
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        {sortedMessages ? (
+          <List>
+            {sortedMessages.map((chat) => {
+              return (
+                <ListItem
+                  key={chat[0]}
+                  onClick={async () => await handleSelect(chat[1].userInfo)}
+                >
+                  <UserChatItemMarkup
+                    name={chat[1].userInfo.name}
+                    photoUrl={chat[1]?.userInfo.photoUrl}
+                    lastMessage={chat[1]?.lastMessage?.text?.value}
+                    lastMessageDate={chat[1]?.date?.seconds * 1000}
+                    defaultCharacter={chat[1]?.userInfo?.defaultCharacter}
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        ) : null}
       </Box>
       <Box
         sx={{

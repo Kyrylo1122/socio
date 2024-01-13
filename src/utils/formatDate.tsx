@@ -1,10 +1,7 @@
 import { format, isToday } from "date-fns";
 
-export const formatDate = (date: string | number) => {
-  const convertedDate = new Date(date);
+export const formatDate = (seconds: number) => {
+  const milliseconds = seconds * 1000;
 
-  return format(
-    convertedDate,
-    isToday(convertedDate) ? "HH:mm" : "dd MMM HH:mm"
-  );
+  return format(milliseconds, isToday(milliseconds) ? "HH:mm" : "dd MMM HH:mm");
 };

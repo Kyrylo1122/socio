@@ -1,4 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
+import { Timestamp } from "firebase/firestore";
 
 export type CollectionNameType = "posts" | "users" | "userChats" | "chats";
 
@@ -9,7 +10,7 @@ export interface IUserNew {
   defaultCharacter: number;
 }
 export interface IUserShortInfo {
-  displayName: string;
+  name: string;
   defaultCharacter: number;
   photoUrl: null | string;
   uid: string;
@@ -87,16 +88,15 @@ export interface INewPostForm {
 }
 export interface INewPost {
   id: string;
-  location: string;
+  location?: string;
   caption: string;
   tags: string[];
   photoUrl?: File | null;
   creator: IUserShortInfo;
-  likes: string[];
-  createdAt: Date;
+  createdAt: Timestamp;
 }
 
-interface IComment {
+export interface IComment {
   name: string;
   imageUrl?: string | null;
   defaultCharacter: number;
@@ -108,29 +108,23 @@ export interface ICreatePost {
     id: string;
     creator: IUser;
     caption?: string;
-    imageUrl?: File;
+    photoUrl?: File;
     location?: string;
     tags: string[];
-    likes: string[];
     createdAt: Date;
-    comments: IComment[];
   };
 }
 
 export interface IPostResponse {
-  $id: string;
+  id: string;
 
   caption?: string;
 
-  imageUrl: string | null;
+  photoUrl: string | null;
   tags: string[];
   location?: string;
-  imageId?: string;
-  creator?: string;
-  postCreator: string;
-  likes: any;
-  $createdAt: string;
-  comments?: any;
+  creator: IUser;
+  createdAt: Timestamp;
 }
 export type ModeType = "light" | "dark";
 

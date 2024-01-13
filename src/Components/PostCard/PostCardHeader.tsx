@@ -1,10 +1,12 @@
 import { Avatar, CardHeader } from "@mui/material";
+import { Timestamp } from "firebase/firestore";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { formatDate } from "src/utils/formatDate";
+
 interface IPostCardHeader {
   photoUrl: string | null;
   name: string;
-  date?: string;
+  date?: Timestamp;
   defaultCharacter: number;
   location?: string;
 }
@@ -16,7 +18,7 @@ const PostCardHeader = ({
   location,
 }: IPostCardHeader) => {
   const subHeader = `${location ? location + ", " : ""}${
-    date ? formatDate(date) : ""
+    date ? formatDate(date.seconds) : ""
   }`;
   return (
     <CardHeader

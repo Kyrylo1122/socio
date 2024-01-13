@@ -12,9 +12,11 @@ import {
   createNewPost,
   createUserAccount,
   deleteAvatarImage,
+  deletePost,
   getAllUsers,
   getUserById,
   getUserMessagesById,
+  getUserPosts,
   signInAccount,
   signOutAccount,
   updateChats,
@@ -25,7 +27,6 @@ import {
 } from "src/firebase/api-firebase";
 import {
   createComment,
-  deletePost,
   getSavePost,
   likePost,
   savePost,
@@ -33,27 +34,10 @@ import {
 } from "../api";
 import { FieldValue } from "firebase/firestore";
 
-export const useGetUserPosts = (id: string) =>
-  useQuery({
-    queryKey: [QUERY_KEYS.GET_POSTS],
-
-    queryFn: () => getUserPosts(id),
-  });
-
 export const useDeleteFile = () =>
   useMutation({
     mutationFn: (id: string) => deleteFile(id),
   });
-
-export const useDeletePost = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => deletePost(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-    },
-  });
-};
 
 export const useLikePost = () => {
   const queryClient = useQueryClient();
@@ -136,6 +120,13 @@ export const useUpdateUserChats = () => {
     },
   });
 };
+export const useGetUserPosts = (id: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_POSTS, id],
+
+    queryFn: () => getUserPosts(id),
+  });
+
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -148,6 +139,16 @@ export const useCreatePost = () => {
       data: INewPost;
       file: File | undefined | null;
     }) => createNewPost(id, data, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+export const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, post }: { id: string; post: IPostResponse }) =>
+      deletePost(id, post),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
     },

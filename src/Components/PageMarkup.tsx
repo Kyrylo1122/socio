@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, List, ListItem, Avatar as AvatarMui } from "@mui/material";
 
 import Typography from "@mui/material/Typography";
 import { users } from "@Assets/data/Users";
@@ -12,13 +12,7 @@ import { useTranslation } from "react-i18next";
 import UserInfo from "src/Components/UserInfo";
 import MouseImageOver from "src/Components/MouseImageOver";
 import UpdateImageModalContent from "src/Components/UpdateImageModal";
-import {
-  useCreatePost,
-  useDeleteAvatarImage,
-  useDeleteFile,
-  useGetUserPosts,
-  useUpdateUserInfo,
-} from "src/lib/react-query";
+import { useDeleteAvatarImage, useGetUserPosts } from "src/lib/react-query";
 import { toast } from "react-toastify";
 import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 
@@ -26,7 +20,7 @@ import PostList from "src/Components/PostList";
 import PostCreator from "src/Components/PostCreator";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { useUserContext } from "src/hooks/useUserContext";
-import { CreatePostFormType, IUser } from "src/types";
+import { IUser } from "src/types";
 import Spinner from "./Spinner";
 import AvatarImage from "./AvatarImage";
 
@@ -40,7 +34,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
   const currentUserPage = user?.uid === currentUser?.uid;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  //   const { data: posts } = useGetUserPosts(user.$id);
+  const { data: posts } = useGetUserPosts(user.uid);
   const { mutateAsync: deleteAvatarImg, isPending } = useDeleteAvatarImage();
 
   const openModal = () => setModalIsOpen(true);
@@ -73,15 +67,19 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
             "& .MuiAvatar-root": { width: 56, height: 56 },
           }}
         >
-          {users.map((user) => (
-            <Avatar
-              key={user.id}
-              alt={user.username}
-              src={user.profilePicture}
-              sx={{ width: 56, height: 56 }}
-              variant="square"
-            />
-          ))}
+          <List>
+            {" "}
+            {users.map((user) => (
+              <ListItem key={user.id}>
+                <AvatarMui
+                  alt={user.username}
+                  src={user.profilePicture}
+                  sx={{ width: 56, height: 56 }}
+                  variant="square"
+                />
+              </ListItem>
+            ))}
+          </List>
         </AvatarGroup>
       </Box>
     );
@@ -181,7 +179,13 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
               </Box>
             ) : null}
 
-            {/* {posts && <PostList user={user} posts={posts.documents} />} */}
+            {posts?.posts ? (
+              <PostList posts={posts.posts} />
+            ) : (
+              <Typography>
+                You do not have any post. Let's create the first!
+              </Typography>
+            )}
           </Box>
           <Box
             sx={{

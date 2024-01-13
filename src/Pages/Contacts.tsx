@@ -22,7 +22,7 @@ const ContactsMarkup = ({
   name,
 }: ContactsMarkupType) => {
   const { t } = useTranslation();
-  const user = { uid, photoUrl, defaultCharacter, displayName: name };
+  const user = { uid, photoUrl, defaultCharacter, name };
   const { handleSelect } = useSelectUserChat();
 
   const handleSendMsg = async () => {

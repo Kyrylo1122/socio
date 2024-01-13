@@ -1,10 +1,10 @@
-import { IChatUserInfo } from "src/types";
 import createCombinedId from "src/utils/createCombinedId";
 import { useChatContext } from "./useChatContext";
 import { doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "src/firebase/config";
 import { useUserContext } from "./useUserContext";
 import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
+import { IUserShortInfo } from "src/types";
 
 const useSelectUserChat = () => {
   const { mutateAsync: updateUserChats } = useUpdateUserChats();
@@ -13,7 +13,7 @@ const useSelectUserChat = () => {
   const { dispatch, data } = useChatContext();
   const { user: currentUser } = useUserContext();
 
-  const handleSelect = async (user: IChatUserInfo) => {
+  const handleSelect = async (user: IUserShortInfo) => {
     const combinedId = createCombinedId(currentUser.uid, user.uid);
     if (data.chatId === combinedId) return console.log("Same chat");
     dispatch({ type: "CHANGE_USER", payload: user });
@@ -29,7 +29,7 @@ const useSelectUserChat = () => {
             [combinedId]: {
               userInfo: {
                 uid: user.uid,
-                displayName: user.displayName,
+                name: user.name,
                 photoUrl: user.photoUrl,
                 defaultCharacter: user.defaultCharacter,
               },
@@ -43,7 +43,7 @@ const useSelectUserChat = () => {
             [combinedId]: {
               userInfo: {
                 uid: currentUser.uid,
-                displayName: currentUser.name,
+                name: currentUser.name,
                 photoUrl: currentUser.photoUrl,
                 defaultCharacter: currentUser.defaultCharacter,
               },

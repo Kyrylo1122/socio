@@ -19,7 +19,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const [authUserId, setAuthUserId] = useState<string | null>(
     currentUserLocalStorage?.uid ?? null
   );
-  const [user, setUser] = useState<IUser | null>(currentUserLocalStorage);
+  const [user, setUser] = useState<IUser>(currentUserLocalStorage);
 
   const { data: currentUser, isPending: isLoading } =
     useGetUsersById(authUserId);

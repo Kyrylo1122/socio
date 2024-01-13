@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { USER_INITIAL } from "src/constant";
+import { CURRENT_USER_INITIAL } from "src/constant";
 
 import { IUserContext } from "src/types";
 
 export const AuthContext = createContext<IUserContext>({
-  user: USER_INITIAL,
+  user: CURRENT_USER_INITIAL,
   friends: [],
   isLoading: false,
 });
