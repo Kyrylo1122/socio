@@ -15,10 +15,14 @@ const Chat = () => {
   const { data: msg } = useGetUserMessages(currentUser.uid);
 
   const { handleSelect } = useSelectUserChat();
-  const { close } = useDialogContext();
+  const { close, setIsInvisibleBtn, setIsVisibleBtn } = useDialogContext();
 
   useEffect(() => {
+    setIsInvisibleBtn();
     close();
+    return () => {
+      setIsVisibleBtn();
+    };
   }, []);
 
   if (!msg) return;
@@ -42,22 +46,20 @@ const Chat = () => {
       >
         {sortedMessages ? (
           <List>
-            {sortedMessages.map((chat) => {
-              return (
-                <ListItem
-                  key={chat[0]}
-                  onClick={async () => await handleSelect(chat[1].userInfo)}
-                >
-                  <UserChatItemMarkup
-                    name={chat[1].userInfo.name}
-                    photoUrl={chat[1]?.userInfo.photoUrl}
-                    lastMessage={chat[1]?.lastMessage?.text?.value}
-                    lastMessageDate={chat[1]?.date?.seconds * 1000}
-                    defaultCharacter={chat[1]?.userInfo?.defaultCharacter}
-                  />
-                </ListItem>
-              );
-            })}
+            {sortedMessages.map((chat) => (
+              <ListItem
+                key={chat[0]}
+                onClick={async () => await handleSelect(chat[1].userInfo)}
+              >
+                <UserChatItemMarkup
+                  name={chat[1].userInfo.name}
+                  photoUrl={chat[1]?.userInfo.photoUrl}
+                  lastMessage={chat[1]?.lastMessage?.text?.value}
+                  lastMessageDate={chat[1]?.date?.seconds * 1000}
+                  defaultCharacter={chat[1]?.userInfo?.defaultCharacter}
+                />
+              </ListItem>
+            ))}
           </List>
         ) : null}
       </Box>

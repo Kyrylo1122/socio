@@ -23,6 +23,9 @@ export const CHAT_INITIAL_STATE = {
 };
 
 export const DIALOG_INITIAL_STATE = {
+  isVisibleChatBtn: true,
+  setIsVisibleBtn: () => {},
+  setIsInvisibleBtn: () => {},
   isOpen: true,
   close: () => {},
   open: () => {},

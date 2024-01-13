@@ -142,6 +142,9 @@ export interface IFormNames {
 }
 
 export interface IDialogContext {
+  isVisibleChatBtn: boolean;
+  setIsVisibleBtn: () => void;
+  setIsInvisibleBtn: () => void;
   isOpen: boolean;
   close: () => void;
   open: () => void;

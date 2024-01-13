@@ -20,6 +20,8 @@ export default function CustomizedDialogs() {
         borderRadius: 2,
         right: 100,
         bottom: 0,
+
+        boxShadow: "6px 8px 24px 0px rgba(66, 68, 90, 1)",
       }}
     >
       <Button

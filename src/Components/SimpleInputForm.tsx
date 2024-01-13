@@ -26,7 +26,12 @@ const SimpleInputForm = ({
     reset();
   };
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+    <Box
+      component="form"
+      sx={{ display: "flex", gap: 1 }}
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <TextField
         autoComplete="off"
         fullWidth

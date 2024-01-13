@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Fade } from "@mui/material";
 
 import { Header } from "./Components";
 import Body from "./Components/Body";
@@ -10,7 +10,7 @@ import useDialogContext from "./hooks/useDialogContext";
 
 const App = () => {
   const { user } = useUserContext();
-  const { isOpen, toggle } = useDialogContext();
+  const { isOpen, toggle, isVisibleChatBtn } = useDialogContext();
 
   return (
     <Box
@@ -24,21 +24,25 @@ const App = () => {
         </Box>
       ) : null}
       <Body />
-      <Button
-        variant="contained"
-        sx={{
-          position: "fixed",
-          p: 3,
-          bgcolor: "primary.white",
-          color: "primary.accent",
-          borderRadius: "50%",
-          bottom: 16,
-          right: 16,
-        }}
-        onClick={() => toggle()}
-      >
-        {isOpen ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
-      </Button>
+      <Fade in={isVisibleChatBtn}>
+        {
+          <Button
+            variant="contained"
+            sx={{
+              position: "fixed",
+              p: 3,
+              bgcolor: "primary.white",
+              color: "primary.accent",
+              borderRadius: "50%",
+              bottom: 16,
+              right: 16,
+            }}
+            onClick={() => toggle()}
+          >
+            {isOpen ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
+          </Button>
+        }
+      </Fade>
 
       {isOpen ? <CustomizedDialogs /> : null}
     </Box>

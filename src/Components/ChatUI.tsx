@@ -16,11 +16,12 @@ import SimpleInputForm from "./SimpleInputForm";
 import AvatarImage from "./AvatarImage";
 import { formatDate } from "src/utils/formatDate";
 
-import NoChatMessages from "./NoChatMessages";
 import { Delete } from "@mui/icons-material";
 import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
 import { IMessageResponse } from "src/types";
 import { useMessageContext } from "src/hooks/useMessageContext";
+import NoChatMessages from "./NoChatMessages/NoChatMessages";
+import NoChatMessagesBtn from "./NoChatMessages/NoChatMessagesBtn";
 
 const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   const { t } = useTranslation();
@@ -86,7 +87,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
           <Box
             sx={{
               gap: 2,
-              p: 3,
+              p: isDialog ? 2 : 3,
               display: "flex",
 
               width: "100%",
@@ -108,38 +109,20 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
                 <Message key={message.id} message={message} />
               ))
             ) : (
-              <Box>
-                <NoChatMessages />
-                <Box sx={{ display: "flex", gap: 3 }}>
-                  {" "}
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      setDefaultInputValue(
-                        t("hi_name", { name: data.user.name })
-                      )
-                    }
-                  >
-                    {t("hi_name", { name: data.user.name })}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      setDefaultInputValue(
-                        t("what's_up", { name: data.user.name })
-                      )
-                    }
-                  >
-                    {t("what's_up", { name: data.user.name })}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    defaultValue={t("yo")}
-                    onClick={() => setDefaultInputValue(t("yo"))}
-                  >
-                    {t("yo")}
-                  </Button>
-                </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <NoChatMessages isDialog={isDialog} />
+                <NoChatMessagesBtn
+                  isDialog={isDialog}
+                  setDefaultInputValue={setDefaultInputValue}
+                  name={data.user.name}
+                />
               </Box>
             )}
           </Box>
@@ -153,7 +136,8 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
         </Box>
       ) : (
         <Box sx={{ textAlign: "center", mt: 10 }}>
-          <NoChatMessages />
+          <NoChatMessages isDialog={isDialog} />
+
           <Typography variant="h2">{t("let's_write")}</Typography>
         </Box>
       )}
