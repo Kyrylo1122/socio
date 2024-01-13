@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { VideocamOff, PhoneDisabled } from "@mui/icons-material";
 import { formatDate } from "src/utils/formatDate";
+import shortenString from "src/utils/shortenString";
 
 type UserChatItemMarkupProp = AvatarImageProps & {
   lastMessage?: string;
@@ -20,7 +21,7 @@ const UserChatItemMarkup = ({
 }: UserChatItemMarkupProp) => {
   const { t } = useTranslation();
   const lastMessageSubTitle = lastMessage
-    ? `${lastMessage} ${formatDate(lastMessageDate)}`
+    ? `${shortenString(lastMessage)} ${formatDate(lastMessageDate)}`
     : "No messages";
 
   return (

@@ -48,6 +48,7 @@ const Chat = () => {
           <List>
             {sortedMessages.map((chat) => (
               <ListItem
+                sx={{ maxWidth: "300px", p: 1 }}
                 key={chat[0]}
                 onClick={async () => await handleSelect(chat[1].userInfo)}
               >
