@@ -23,6 +23,7 @@ import { useUserContext } from "src/hooks/useUserContext";
 import { IUser } from "src/types";
 import Spinner from "./Spinner";
 import AvatarImage from "./AvatarImage";
+import PostSkeleton from "./Skeleton/PostSkeleton";
 
 interface IPageMarkUp {
   user: IUser;
@@ -34,7 +35,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
   const currentUserPage = user?.uid === currentUser?.uid;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { data: posts } = useGetUserPosts(user.uid);
+  const { data: posts, isPending: isLoadPosts } = useGetUserPosts(user.uid);
   const { mutateAsync: deleteAvatarImg, isPending } = useDeleteAvatarImage();
 
   const openModal = () => setModalIsOpen(true);
@@ -178,14 +179,14 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
                 />
               </Box>
             ) : null}
-
-            {posts?.posts ? (
+            {isLoadPosts ? <PostSkeleton /> : <PostList posts={posts?.posts} />}
+            {/* {posts?.posts ? (
               <PostList posts={posts.posts} />
             ) : (
               <Typography>
                 You do not have any post. Let's create the first!
               </Typography>
-            )}
+            )} */}
           </Box>
           <Box
             sx={{

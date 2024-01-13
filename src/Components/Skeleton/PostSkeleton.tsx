@@ -1,55 +1,20 @@
-import { styled } from "@mui/material/styles";
-import { Typography, Box, Avatar, Grid, Skeleton } from "@mui/material";
+import { Box, Grid, Skeleton } from "@mui/material";
 
-const Image = styled("img")({
-  width: "100%",
-});
-
-function SkeletonChildrenDemo(props: { loading?: boolean }) {
-  const { loading = true } = props;
-
+function SkeletonChildrenDemo() {
   return (
-    <div>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ margin: 1 }}>
-          {loading ? (
-            <Skeleton variant="circular">
-              <Avatar />
-            </Skeleton>
-          ) : (
-            <Avatar src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg" />
-          )}
-        </Box>
-        <Box sx={{ width: "100%" }}>
-          {loading ? (
-            <Skeleton width="100%">
-              <Typography>.</Typography>
-            </Skeleton>
-          ) : (
-            <Typography>Ted</Typography>
-          )}
-        </Box>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width="100%" height="2rem" />
       </Box>
-      {loading ? (
-        <Skeleton variant="rectangular" width="100%">
-          <div style={{ paddingTop: "57%" }} />
-        </Skeleton>
-      ) : (
-        <Image
-          src="https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512"
-          alt=""
-        />
-      )}
-    </div>
+      <Skeleton variant="rectangular" width="100%" height={150} />
+    </Box>
   );
 }
 
 export default function PostSkeleton() {
   return (
     <Grid container spacing={8}>
-      <Grid item xs>
-        <SkeletonChildrenDemo loading />
-      </Grid>
       <Grid item xs>
         <SkeletonChildrenDemo />
       </Grid>

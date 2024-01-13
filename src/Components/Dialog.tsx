@@ -16,6 +16,7 @@ export default function CustomizedDialogs() {
         width: "350px",
         height: "500px",
         position: "fixed",
+        zIndex: 2000,
         borderRadius: 2,
         right: 100,
         bottom: 0,
