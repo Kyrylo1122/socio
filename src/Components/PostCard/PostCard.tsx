@@ -19,6 +19,7 @@ import { useUserContext } from "src/hooks/useUserContext";
 import PostSkeleton from "../Skeleton/PostSkeleton";
 import SharePost from "../SharePost";
 import { IPostResponse, IUser, IUserShortInfo } from "src/types";
+import { Timestamp } from "firebase/firestore";
 
 const PostCard = ({ post }: { post: IPostResponse }) => {
   const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
@@ -45,14 +46,20 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
       console.error(error);
     }
   };
-  const handleCreateComment = async (value: { body: string }) => {
-    const newValue = {
-      postId: id,
-      userId: user.$id,
-      body: value.body,
+  const handleCreateComment = async (comment: { value: string }) => {
+    const { name, defaultCharacter, photoUrl, uid } = currentUser;
+    const data = {
+      user: {
+        name,
+        defaultCharacter,
+        photoUrl,
+        uid,
+      },
+      text: comment,
+      createdAt: Timestamp.now(),
     };
     try {
-      await createComment(newValue);
+      await createComment({ postId: id, data });
     } catch (error) {
       console.error(error);
     }
@@ -106,7 +113,7 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
         />
       ) : null}
 
-      {/* <CommentForm isComment={true} handleClick={handleCreateComment} /> */}
+      <CommentForm isComment={true} handleClick={handleCreateComment} />
       {/* <SharePost />
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats

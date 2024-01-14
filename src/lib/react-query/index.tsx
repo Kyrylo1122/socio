@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  IComment,
   INewPost,
   IPostResponse,
   IUser,
@@ -24,14 +25,10 @@ import {
   updatePosts,
   updateUserChats,
   uploadAvatarImage,
-} from "src/firebase/api-firebase";
-import {
   createComment,
-  getSavePost,
-  likePost,
-  savePost,
-  updatePost,
-} from "../api";
+  createPostReaction,
+} from "src/firebase/api-firebase";
+import { getSavePost, likePost, savePost, updatePost } from "../api";
 import { FieldValue } from "firebase/firestore";
 
 export const useDeleteFile = () =>
@@ -71,16 +68,6 @@ export const useLikePost = () => {
 //   });
 // };
 
-export const useCreateComment = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (comment: { postId: string; userId: string; body: string }) =>
-      createComment(comment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-    },
-  });
-};
 export const useSavePost = () =>
   useMutation({
     mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
@@ -126,6 +113,10 @@ export const useGetUserPosts = (id: string) =>
 
     queryFn: () => getUserPosts(id),
   });
+export const useCreatePostReaction = () =>
+  useMutation({
+    mutationFn: ({ postId }: { postId: string }) => createPostReaction(postId),
+  });
 
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
@@ -139,6 +130,7 @@ export const useCreatePost = () => {
       data: INewPost;
       file: File | undefined | null;
     }) => createNewPost(id, data, file),
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
     },
@@ -243,3 +235,14 @@ export const useSignOutAccount = () =>
   useMutation({
     mutationFn: signOutAccount,
   });
+
+export const useCreateComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, data }: { postId: string; data: IComment }) =>
+      createComment(postId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};

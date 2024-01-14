@@ -22,7 +22,7 @@ const UserChatItemMarkup = ({
   const { t } = useTranslation();
   const lastMessageSubTitle = lastMessage
     ? `${shortenString(lastMessage)} ${formatDate(lastMessageDate)}`
-    : "No messages";
+    : t("no_messages");
 
   return (
     <Card

@@ -73,5 +73,6 @@
   "what's_up": "What's up {{name}}? Let's go out somewhere",
   "yo": "You broooooo",
   "share": "share",
-  "tags_form_empty_error": "The tags field cannot be empty"
+  "tags_form_empty_error": "The tags field cannot be empty",
+  "no_messages": "No messages"
 }

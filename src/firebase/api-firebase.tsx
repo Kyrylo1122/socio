@@ -1,5 +1,6 @@
 import {
   CollectionNameType,
+  IComment,
   INewPost,
   IPostResponse,
   IUser,
@@ -137,12 +138,25 @@ export const createNewPost = async (
     });
   }
 };
+export const createPostReaction = async (postId: string) =>
+  await updateDatabase({
+    id: postId,
+    collectionName: "postReaction",
+    data: { comments: [], likes: [] },
+  });
+
+export const createComment = async (postId: string, data: IComment) => {
+  await updateDatabase({
+    id: postId,
+    collectionName: "postReaction",
+    data: { comments: arrayUnion(data) },
+  });
+};
 export const updatePosts = async (
   id: string,
   data: { posts: FieldValue | [] }
 ) => {
   try {
-    console.log({ id, data });
     await updateDatabase({ id, collectionName: "posts", data });
   } catch (error) {
     console.error(error);
@@ -170,7 +184,11 @@ export const updateDatabase = async ({
     | Partial<IUser>
     | IUserChats
     | { messages: FieldValue | [] }
-    | { posts: FieldValue | [] };
+    | { posts: FieldValue | [] }
+    | {
+        comments?: FieldValue | [];
+        likes?: FieldValue | [];
+      };
 }) => {
   try {
     await setDoc(doc(db, collectionName, id), data, { merge: true });

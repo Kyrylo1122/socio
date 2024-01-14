@@ -29,7 +29,7 @@ import TagsForm from "./TagsForm";
 import useThemeContext from "src/hooks/useThemeContext";
 import { useTranslation } from "react-i18next";
 import PostCardHeader from "./PostCard/PostCardHeader";
-import { useCreatePost } from "src/lib/react-query";
+import { useCreatePost, useCreatePostReaction } from "src/lib/react-query";
 import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 
@@ -80,6 +80,7 @@ const CreatePost = ({ close }: ICreatePost) => {
   const toggleLocation = () => setOpenLocation((state) => !state);
   const toggleTags = () => setOpenTags((state) => !state);
   const { mutateAsync: createNewPost } = useCreatePost();
+  const { mutateAsync: createPostReaction } = useCreatePostReaction();
 
   const {
     register,
@@ -111,6 +112,7 @@ const CreatePost = ({ close }: ICreatePost) => {
         data,
         file: photoUrl,
       });
+      createPostReaction({ postId });
       close();
     } catch (error) {
       console.error(error);

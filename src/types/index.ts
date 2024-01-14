@@ -1,7 +1,12 @@
 import { SxProps, Theme } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 
-export type CollectionNameType = "posts" | "users" | "userChats" | "chats";
+export type CollectionNameType =
+  | "posts"
+  | "users"
+  | "userChats"
+  | "chats"
+  | "postReaction";
 
 export interface IUserNew {
   name: string;
@@ -97,10 +102,9 @@ export interface INewPost {
 }
 
 export interface IComment {
-  name: string;
-  imageUrl?: string | null;
-  defaultCharacter: number;
-  createdAt: DataTransfer;
+  user: IUserShortInfo;
+
+  createdAt: Timestamp;
   text: IText;
 }
 export interface ICreatePost {

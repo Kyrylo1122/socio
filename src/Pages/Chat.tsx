@@ -29,7 +29,6 @@ const Chat = () => {
   const sortedMessages = Object.entries(msg)?.sort(
     (a, b) => b[1].date - a[1].date
   );
-  console.log("sortedMessages: ", sortedMessages);
   return (
     <Box
       sx={{
