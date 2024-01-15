@@ -18,7 +18,7 @@ const App = () => {
         position: "relative",
       }}
     >
-      {user ? (
+      {user.uid ? (
         <Box>
           <Header />
         </Box>

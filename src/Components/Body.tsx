@@ -15,7 +15,7 @@ const Body = () => {
         pt: 11,
       }}
     >
-      {user ? (
+      {user.uid ? (
         <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
           <Sidebar />
         </Box>
