@@ -1,11 +1,25 @@
 import { useState } from "react";
-import { Card, CardContent, Typography, CardMedia, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  CardMedia,
+  Box,
+  Collapse,
+  List,
+  ListItem,
+  Divider,
+} from "@mui/material";
 
 import { useTranslation } from "react-i18next";
 
 import PostStats from "../PostStats";
 import { Models } from "appwrite";
-import { useCreateComment, useDeletePost } from "src/lib/react-query";
+import {
+  useCreateComment,
+  useDeletePost,
+  useGetPostReactions,
+} from "src/lib/react-query";
 import CommentForm from "../SimpleInputForm";
 
 import PostCardHeader from "./PostCardHeader";
@@ -20,17 +34,19 @@ import PostSkeleton from "../Skeleton/PostSkeleton";
 import SharePost from "../SharePost";
 import { IPostResponse, IUser, IUserShortInfo } from "src/types";
 import { Timestamp } from "firebase/firestore";
+import PostComment from "../PostComment";
 
 const PostCard = ({ post }: { post: IPostResponse }) => {
   const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [editPostModal, setEditPostModal] = useState(false);
   const closeModal = () => setEditPostModal(false);
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
+  const { data, isPending: isPendingComments } = useGetPostReactions(id);
   //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
   const handleExpandClick = () => {
@@ -81,10 +97,16 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
   return (
     <Card
       sx={{
+        position: "relative",
+
+        display: "flex",
+        flexDirection: "column",
+        gap: 1,
+
+        p: 2,
+
         width: "100%",
         backgroundImage: "none",
-        position: "relative",
-        p: 1,
       }}
     >
       {currentUser.uid === creator.uid ? (
@@ -97,10 +119,10 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
         photoUrl={creator.photoUrl}
         defaultCharacter={creator.defaultCharacter}
         name={creator.name}
-        date={createdAt}
+        createdAt={createdAt}
         location={location}
       />
-      <Typography variant="body2" color="text.light">
+      <Typography variant="body1" color="text.light">
         {caption}
       </Typography>
       <ChipsArray chipData={tags} />
@@ -114,17 +136,17 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
       ) : null}
 
       <CommentForm isComment={true} handleClick={handleCreateComment} />
-      {/* <SharePost />
+      {/* <SharePost /> */}
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}
-          commentsLength={1}
+          commentsLength={data?.comments.length}
           handleExpandClick={handleExpandClick}
-          likes={likes}
+          likes={data?.likes}
           postId={id}
         />
-      </Box> */}
-      {/* <Collapse
+      </Box>
+      <Collapse
         in={expanded}
         timeout="auto"
         unmountOnExit
@@ -132,25 +154,28 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
       >
         <CardContent>
           <List>
-            {comments.map((postComment) => {
-              const comment = JSON.parse(postComment);
-              return (
-                <ListItem
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                  }}
-                  key={comment.commentId}
-                >
-                  <PostComment key={comment} comment={comment} />
-                  <Divider sx={{ color: "red", width: "100%" }} />
-                </ListItem>
-              );
-            })}
+            {data?.comments.length ? (
+              data?.comments.map((postComment) => {
+                return (
+                  <ListItem
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                    }}
+                    key={postComment.createdAt.seconds}
+                  >
+                    <PostComment comment={postComment} />
+                    <Divider sx={{ mt: 1, color: "red", width: "100%" }} />
+                  </ListItem>
+                );
+              })
+            ) : (
+              <Typography>{t("no_comments")}</Typography>
+            )}
           </List>
         </CardContent>
-      </Collapse> */}
+      </Collapse>
     </Card>
   );
 };

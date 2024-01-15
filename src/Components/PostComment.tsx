@@ -1,37 +1,36 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 import { createAvatarLink } from "src/utils/createAvatarLink";
-import { format } from "date-fns";
+import { IComment } from "src/types";
+import { formatDate } from "src/utils/formatDate";
 
 interface IPostComment {
-  comment: Models.Document;
+  comment: IComment;
 }
 const PostComment = ({ comment }: IPostComment) => {
   const {
-    user: { $id, imageUrl, defaultCharacter, name },
-    commentId,
+    user: { uid, name, photoUrl, defaultCharacter },
+
     createdAt,
-    updated,
-    body,
+    text,
   } = comment;
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Link to={`/${$id}`}>
+        <Link to={`/${uid}`}>
           <Avatar
-            src={createAvatarLink(imageUrl, defaultCharacter)}
-            alt={name}
+            src={createAvatarLink({ photoUrl, defaultCharacter })}
+            aria-label={name}
+            sx={{ width: 60, height: 60 }}
           />
         </Link>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography variant="body2" color="secondary">
             {name}
           </Typography>
-          <Typography variant="body2">{body}</Typography>
-          <Typography sx={{ fontSize: 10 }}>
-            {updated ? "Updated" : null}
-            {format(createdAt, "dd MMM HH:mm")}
+          <Typography variant="body2">{text.value}</Typography>
+          <Typography sx={{ fontSize: 10, fontStyle: "italic" }}>
+            {formatDate(createdAt.seconds)}
           </Typography>
         </Box>
       </Box>

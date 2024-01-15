@@ -154,3 +154,8 @@ export interface IDialogContext {
   open: () => void;
   toggle: () => void;
 }
+
+export interface IPostReactions {
+  comments: IComment[];
+  likes: string[];
+}

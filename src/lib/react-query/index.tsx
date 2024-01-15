@@ -22,13 +22,14 @@ import {
   signOutAccount,
   updateChats,
   updateDatabase,
-  updatePosts,
   updateUserChats,
   uploadAvatarImage,
   createComment,
   createPostReaction,
+  getPostReactions,
+  toggleLikes,
 } from "src/firebase/api-firebase";
-import { getSavePost, likePost, savePost, updatePost } from "../api";
+import { getSavePost, savePost } from "../api";
 import { FieldValue } from "firebase/firestore";
 
 export const useDeleteFile = () =>
@@ -45,9 +46,11 @@ export const useLikePost = () => {
     }: {
       postId: string;
       arrayOfLikes: string[];
-    }) => likePost(postId, arrayOfLikes),
+    }) => toggleLikes(postId, arrayOfLikes),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
+      });
     },
   });
 };
@@ -82,6 +85,13 @@ export const useGetSaves = (userId: string) =>
   });
 //
 // ===================================================
+export const useGetPostReactions = (postId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
+
+    queryFn: () => getPostReactions(postId),
+  });
+
 export const useGetUsers = (id: string | null | undefined) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
@@ -242,7 +252,9 @@ export const useCreateComment = () => {
     mutationFn: ({ postId, data }: { postId: string; data: IComment }) =>
       createComment(postId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS, QUERY_KEYS.GET_POST_COMMENTS],
+      });
     },
   });
 };

@@ -183,9 +183,7 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
             {/* {posts?.posts ? (
               <PostList posts={posts.posts} />
             ) : (
-              <Typography>
-                You do not have any post. Let's create the first!
-              </Typography>
+            
             )} */}
           </Box>
           <Box

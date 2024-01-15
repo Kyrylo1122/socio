@@ -17,7 +17,7 @@ const TagsForm = ({ chipData, setChipData }: ITagsForm) => {
   const handleAddTag = () => {
     if (value.trim() === "") return toast.info(t("tags_form_empty_error"));
     if (chipData.includes(value)) return toast.info(t("error_repeat_tag"));
-    setChipData([...chipData, value]);
+    setChipData([...chipData, `# ${value}`]);
     setValue("");
   };
   return (

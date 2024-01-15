@@ -9,7 +9,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { useTranslation } from "react-i18next";
 import { useLikePost, useSavePost } from "src/lib/react-query";
-import { Models } from "appwrite";
 import { useUserContext } from "src/hooks/useUserContext";
 import { MouseEventHandler, useState } from "react";
 import {
@@ -33,7 +32,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 interface IPostStats {
-  likes: Models.Document;
+  likes: string[];
   postId: string;
   expanded: boolean;
   handleExpandClick: MouseEventHandler<HTMLButtonElement> | undefined;
@@ -50,18 +49,17 @@ const PostStats = ({
   const { t } = useTranslation();
   const { user } = useUserContext();
   const { mutateAsync: likePost } = useLikePost();
-  let arrayOfLikes = likes.map((likedUser: Models.Document) => likedUser.$id);
-  const [isLiked, setIsLiked] = useState(() => arrayOfLikes.includes(user.$id));
-  const [countLikes, setCountLikes] = useState(likes.length);
+
+  const [isLiked, setIsLiked] = useState(() => likes?.includes(user.uid));
+  const [countLikes, setCountLikes] = useState(likes?.length);
   const { mutateAsync: savePost } = useSavePost();
 
   const onLikeClick = async () => {
-    if (arrayOfLikes.includes(user.$id)) {
-      arrayOfLikes = arrayOfLikes.filter(
-        (usersId: string) => usersId !== user.$id
-      );
+    let arrayOfLikes;
+    if (isLiked) {
+      arrayOfLikes = likes.filter((usersId: string) => usersId !== user.uid);
     } else {
-      arrayOfLikes.push(user.$id);
+      arrayOfLikes = [...likes, user.uid];
     }
     try {
       await likePost({ postId, arrayOfLikes });
@@ -71,7 +69,7 @@ const PostStats = ({
   };
   const onSaveClick = async () => {
     try {
-      await savePost({ userId: user.$id, postId });
+      await savePost({ userId: user.uid, postId });
     } catch (error) {
       console.error(error);
     }
@@ -105,7 +103,7 @@ const PostStats = ({
           {expanded ? <ExpandLessIcon /> : null}
           <ChatBubbleOutlineIcon />
           <Typography sx={{ display: "inline" }}>
-            commentsLength {"commentsLength"}
+            commentsLength {commentsLength}
           </Typography>
         </ExpandMore>
       </Box>

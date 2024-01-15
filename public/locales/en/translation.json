@@ -64,7 +64,7 @@
   "phone_call": "The phone call is disabled",
   "empty_field_error": "The field cannot be empty",
   "write_comment_placeholder": "Write your comment",
-  "write_message_placeholder": "Write your write message",
+  "write_message_placeholder": "Write your message",
   "submit": "Submit",
   "socio_users": "Socio users",
   "write_message": "Send an message",
@@ -74,5 +74,7 @@
   "yo": "You broooooo",
   "share": "share",
   "tags_form_empty_error": "The tags field cannot be empty",
-  "no_messages": "No messages"
+  "no_messages": "No messages",
+  "no_posts": "You do not have any post. Let's create the first!",
+  "no_comments": "No comments"
 }

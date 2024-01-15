@@ -15,7 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { INewPost, INewPostForm } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
@@ -66,6 +66,7 @@ const StyledButton = styled(Button)`
 
 const CreatePost = ({ close }: ICreatePost) => {
   const { t } = useTranslation();
+  const locationRef = useRef();
 
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [editImage, setEditImage] = useState(false);
@@ -77,7 +78,14 @@ const CreatePost = ({ close }: ICreatePost) => {
   const [chipData, setChipData] = useState<string[]>([]);
 
   const cleanImage = () => setFileUrl("");
-  const toggleLocation = () => setOpenLocation((state) => !state);
+  const toggleLocation = () => {
+    if (!isOpenLocation)
+      locationRef.current?.scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
+    setOpenLocation((state) => !state);
+  };
   const toggleTags = () => setOpenTags((state) => !state);
   const { mutateAsync: createNewPost } = useCreatePost();
   const { mutateAsync: createPostReaction } = useCreatePostReaction();
@@ -218,6 +226,7 @@ const CreatePost = ({ close }: ICreatePost) => {
           >
             <Collapse in={isOpenLocation}>
               <Box
+                ref={locationRef}
                 sx={{
                   display: "flex",
                   position: "relative",

@@ -2,6 +2,7 @@ import {
   CollectionNameType,
   IComment,
   INewPost,
+  IPostReactions,
   IPostResponse,
   IUser,
   IUserChats,
@@ -80,6 +81,18 @@ export const getUserMessagesById = async (id: string | null | undefined) => {
     console.error(error);
   }
 };
+export const getPostReactions = async (postid: string | null | undefined) => {
+  try {
+    if (!postid) throw Error;
+    const docRef = doc(db, "postReaction", postid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw Error;
+    return docSnap.data() as IPostReactions;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const updateUserChats = async (id: string, data: IUserChats) => {
   try {
@@ -144,6 +157,14 @@ export const createPostReaction = async (postId: string) =>
     collectionName: "postReaction",
     data: { comments: [], likes: [] },
   });
+
+export const toggleLikes = async (postId: string, arrayOfLikes: string[]) => {
+  await updateDatabase({
+    id: postId,
+    collectionName: "postReaction",
+    data: { likes: arrayUnion(arrayOfLikes) },
+  });
+};
 
 export const createComment = async (postId: string, data: IComment) => {
   await updateDatabase({
