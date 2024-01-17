@@ -47,6 +47,8 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
   const { data, isPending: isPendingComments } = useGetPostReactions(id);
+  console.log("useGetPostReactions: ", { id, data });
+
   //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
   const handleExpandClick = () => {

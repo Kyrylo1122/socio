@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 const PostList = ({ posts }: { posts: IPostResponse[] }) => {
   const { t } = useTranslation();
-  const reversePosts = posts.reverse();
+  const reversePosts = posts?.reverse();
   return (
     <List sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {reversePosts?.length ? (

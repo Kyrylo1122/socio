@@ -87,7 +87,7 @@ export const useGetSaves = (userId: string) =>
 // ===================================================
 export const useGetPostReactions = (postId: string) =>
   useQuery({
-    queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
+    queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
 
     queryFn: () => getPostReactions(postId),
   });
