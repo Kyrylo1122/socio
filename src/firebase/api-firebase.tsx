@@ -158,11 +158,11 @@ export const createPostReaction = async (postId: string) =>
     data: { comments: [], likes: [] },
   });
 
-export const toggleLikes = async (postId: string, arrayOfLikes: string[]) => {
+export const toggleLikes = async (postId: string, arrayOfLikes: FieldValue) => {
   await updateDatabase({
     id: postId,
     collectionName: "postReaction",
-    data: { likes: arrayUnion(arrayOfLikes) },
+    data: { likes: arrayOfLikes },
   });
 };
 

@@ -45,7 +45,7 @@ export const useLikePost = () => {
       arrayOfLikes,
     }: {
       postId: string;
-      arrayOfLikes: string[];
+      arrayOfLikes: FieldValue;
     }) => toggleLikes(postId, arrayOfLikes),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -90,6 +90,7 @@ export const useGetPostReactions = (postId: string) =>
     queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
 
     queryFn: () => getPostReactions(postId),
+    enabled: Boolean(postId),
   });
 
 export const useGetUsers = (id: string | null | undefined) =>

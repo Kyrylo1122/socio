@@ -12,12 +12,12 @@ import { useLikePost, useSavePost } from "src/lib/react-query";
 import { useUserContext } from "src/hooks/useUserContext";
 import { MouseEventHandler, useState } from "react";
 import {
-  ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
   BookmarkBorder as SaveIcon,
 } from "@mui/icons-material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { styled } from "@mui/material/styles";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -53,16 +53,13 @@ const PostStats = ({
   const [isLiked, setIsLiked] = useState(() => likes?.includes(user.uid));
   const [countLikes, setCountLikes] = useState(likes?.length);
   const { mutateAsync: savePost } = useSavePost();
-
   const onLikeClick = async () => {
-    let arrayOfLikes;
-    if (isLiked) {
-      arrayOfLikes = likes.filter((usersId: string) => usersId !== user.uid);
-    } else {
-      arrayOfLikes = [...likes, user.uid];
-    }
     try {
-      await likePost({ postId, arrayOfLikes });
+      if (isLiked) {
+        await likePost({ postId, arrayOfLikes: arrayRemove(user.uid) });
+      } else {
+        await likePost({ postId, arrayOfLikes: arrayUnion(user.uid) });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +90,7 @@ const PostStats = ({
         {countLikes} {t("liked_it")}
       </Button>
 
-      <Box>
+      <Box sx={{ display: "flex" }}>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -101,10 +98,10 @@ const PostStats = ({
           aria-label="show more"
         >
           {expanded ? <ExpandLessIcon /> : null}
-          <ChatBubbleOutlineIcon />
-          <Typography sx={{ display: "inline" }}>
-            commentsLength {commentsLength}
-          </Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <ChatBubbleOutlineIcon />
+            <Typography sx={{ display: "inline" }}>{commentsLength}</Typography>
+          </Box>
         </ExpandMore>
       </Box>
       <IconButton aria-label="share">

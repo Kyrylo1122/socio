@@ -46,8 +46,7 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
   const { mutateAsync: deletePost, isPending } = useDeletePost();
   const { mutateAsync: createComment, isPending: isCreatingComment } =
     useCreateComment();
-  const { data, isPending: isPendingComments } = useGetPostReactions(id);
-  console.log("useGetPostReactions: ", { id, data });
+  const { data } = useGetPostReactions(id);
 
   //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
@@ -96,6 +95,7 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
     },
   ];
   if (isPending) return <PostSkeleton />;
+  if (!data) return;
   return (
     <Card
       sx={{
