@@ -76,5 +76,6 @@
   "tags_form_empty_error": "The tags field cannot be empty",
   "no_messages": "No messages",
   "no_posts": "You do not have any post. Let's create the first!",
-  "no_comments": "No comments"
+  "no_comments": "No comments",
+  "answer": "answer"
 }

@@ -173,6 +173,13 @@ export const createComment = async (postId: string, data: IComment) => {
     data: { comments: arrayUnion(data) },
   });
 };
+export const deleteComment = async (postId: string, data: IComment) => {
+  await updateDatabase({
+    id: postId,
+    collectionName: "postReaction",
+    data: { comments: arrayRemove(data) },
+  });
+};
 export const updatePosts = async (
   id: string,
   data: { posts: FieldValue | [] }

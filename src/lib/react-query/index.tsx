@@ -28,6 +28,7 @@ import {
   createPostReaction,
   getPostReactions,
   toggleLikes,
+  deleteComment,
 } from "src/firebase/api-firebase";
 import { getSavePost, savePost } from "../api";
 import { FieldValue } from "firebase/firestore";
@@ -254,7 +255,19 @@ export const useCreateComment = () => {
       createComment(postId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS, QUERY_KEYS.GET_POST_COMMENTS],
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
+      });
+    },
+  });
+};
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, data }: { postId: string; data: IComment }) =>
+      deleteComment(postId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_COMMENTS],
       });
     },
   });

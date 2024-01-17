@@ -39,13 +39,12 @@ import PostComment from "../PostComment";
 const PostCard = ({ post }: { post: IPostResponse }) => {
   const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
   const { t } = useTranslation();
+  const [commentValue, setCommentValue] = useState("");
+
   const { user: currentUser } = useUserContext();
   const [expanded, setExpanded] = useState(true);
-  const [editPostModal, setEditPostModal] = useState(false);
-  const closeModal = () => setEditPostModal(false);
   const { mutateAsync: deletePost, isPending } = useDeletePost();
-  const { mutateAsync: createComment, isPending: isCreatingComment } =
-    useCreateComment();
+  const { mutateAsync: createComment } = useCreateComment();
   const { data } = useGetPostReactions(id);
 
   //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
@@ -77,6 +76,7 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
     };
     try {
       await createComment({ postId: id, data });
+      setCommentValue("");
     } catch (error) {
       console.error(error);
     }
@@ -88,14 +88,10 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
       name: t("delete"),
       onClick: handleDeletePost,
     },
-    {
-      icon: <EditIcon />,
-      name: t("edit"),
-      onClick: () => setEditPostModal(true),
-    },
   ];
   if (isPending) return <PostSkeleton />;
   if (!data) return;
+  const { likes, comments } = data;
   return (
     <Card
       sx={{
@@ -137,14 +133,18 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
         />
       ) : null}
 
-      <CommentForm isComment={true} handleClick={handleCreateComment} />
+      <CommentForm
+        defaultValue={commentValue}
+        isComment={true}
+        handleClick={handleCreateComment}
+      />
       {/* <SharePost /> */}
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}
           commentsLength={data?.comments.length}
           handleExpandClick={handleExpandClick}
-          likes={data?.likes}
+          likes={likes}
           postId={id}
         />
       </Box>
@@ -156,8 +156,8 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
       >
         <CardContent>
           <List>
-            {data?.comments.length ? (
-              data?.comments.map((postComment) => {
+            {comments?.length ? (
+              comments.map((postComment) => {
                 return (
                   <ListItem
                     sx={{
@@ -167,7 +167,11 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
                     }}
                     key={postComment.createdAt.seconds}
                   >
-                    <PostComment comment={postComment} />
+                    <PostComment
+                      setCommentValue={setCommentValue}
+                      postId={id}
+                      comment={postComment}
+                    />
                     <Divider sx={{ mt: 1, color: "red", width: "100%" }} />
                   </ListItem>
                 );
