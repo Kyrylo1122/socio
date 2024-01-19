@@ -25,11 +25,7 @@ import Spinner from "./Spinner";
 import AvatarImage from "./AvatarImage";
 import PostSkeleton from "./Skeleton/PostSkeleton";
 
-interface IPageMarkUp {
-  user: IUser;
-}
-
-const PageMarkUp = ({ user }: IPageMarkUp) => {
+const PageMarkUp = ({ user }: { user: IUser }) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
   const currentUserPage = user?.uid === currentUser?.uid;
@@ -179,12 +175,11 @@ const PageMarkUp = ({ user }: IPageMarkUp) => {
                 />
               </Box>
             ) : null}
-            {isLoadPosts ? <PostSkeleton /> : <PostList posts={posts?.posts} />}
-            {/* {posts?.posts ? (
-              <PostList posts={posts.posts} />
+            {isLoadPosts && !posts ? (
+              <PostSkeleton />
             ) : (
-            
-            )} */}
+              <PostList posts={posts?.posts} />
+            )}
           </Box>
           <Box
             sx={{

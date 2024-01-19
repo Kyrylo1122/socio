@@ -25,8 +25,6 @@ const PostCardHeader = ({
         alignItems: "center",
         gap: 1,
         pb: 1,
-        borderBottom: "1px solid",
-        borderColor: "secondary.grey",
       }}
     >
       <Avatar
@@ -54,7 +52,5 @@ const PostCardHeader = ({
     </Box>
   );
 };
-//  color: "text.light",
-//           fontStyle: "italic",
-//           fontWeight: "200",
+
 export default PostCardHeader;

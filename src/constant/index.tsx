@@ -31,3 +31,6 @@ export const DIALOG_INITIAL_STATE = {
   open: () => {},
   toggle: () => {},
 };
+export const SAVES_INITIAL_STATE = {
+  posts: [],
+};

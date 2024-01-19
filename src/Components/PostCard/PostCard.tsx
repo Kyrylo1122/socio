@@ -14,7 +14,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import PostStats from "../PostStats";
-import { Models } from "appwrite";
 import {
   useCreateComment,
   useDeletePost,
@@ -24,7 +23,6 @@ import CommentForm from "../SimpleInputForm";
 
 import PostCardHeader from "./PostCardHeader";
 import PlaygroundSpeedDial from "../SpeedDial";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CreatePost from "../CreatePost";
 import Modal from "../Modal";
@@ -36,32 +34,27 @@ import { IPostResponse, IUser, IUserShortInfo } from "src/types";
 import { Timestamp } from "firebase/firestore";
 import PostComment from "../PostComment";
 
-const PostCard = ({ post }: { post: IPostResponse }) => {
+const PostCard = ({
+  deletePost,
+  post,
+  isSaves,
+}: {
+  deletePost: (post: IPostResponse) => void;
+  post: IPostResponse;
+  isSaves: boolean;
+}) => {
   const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
   const { t } = useTranslation();
   const [commentValue, setCommentValue] = useState("");
-
   const { user: currentUser } = useUserContext();
-  const [expanded, setExpanded] = useState(true);
-  const { mutateAsync: deletePost, isPending } = useDeletePost();
+  const [expanded, setExpanded] = useState(false);
   const { mutateAsync: createComment } = useCreateComment();
   const { data } = useGetPostReactions(id);
-
-  //   const { mutateAsync: editPost, isPending: isPendingEdit } = useUpdatePost();
 
   const handleExpandClick = () => {
     setExpanded((state) => !state);
   };
-  const handleDeletePost = async () => {
-    try {
-      await deletePost({
-        id: currentUser.uid,
-        post,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
   const handleCreateComment = async (comment: { value: string }) => {
     const { name, defaultCharacter, photoUrl, uid } = currentUser;
     const data = {
@@ -86,10 +79,9 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
     {
       icon: <DeleteForeverIcon />,
       name: t("delete"),
-      onClick: handleDeletePost,
+      onClick: () => deletePost(post),
     },
   ];
-  if (isPending) return <PostSkeleton />;
   if (!data) return;
   const { likes, comments } = data;
   return (
@@ -138,14 +130,13 @@ const PostCard = ({ post }: { post: IPostResponse }) => {
         isComment={true}
         handleClick={handleCreateComment}
       />
-      {/* <SharePost /> */}
       <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
         <PostStats
           expanded={expanded}
           commentsLength={data?.comments.length}
           handleExpandClick={handleExpandClick}
           likes={likes}
-          postId={id}
+          post={post}
         />
       </Box>
       <Collapse

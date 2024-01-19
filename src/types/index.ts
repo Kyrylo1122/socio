@@ -6,7 +6,8 @@ export type CollectionNameType =
   | "users"
   | "userChats"
   | "chats"
-  | "postReaction";
+  | "postReaction"
+  | "saves";
 
 export interface IUserNew {
   name: string;
@@ -39,6 +40,10 @@ export interface IMessageResponse {
   id: string;
   senderId: string;
   text: IText;
+}
+export interface ISavesContext {
+  posts: IPostResponse[];
+  isPending: boolean;
 }
 export interface AvatarImageProps {
   photoUrl: string | null;

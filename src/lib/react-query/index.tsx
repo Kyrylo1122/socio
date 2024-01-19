@@ -29,8 +29,10 @@ import {
   getPostReactions,
   toggleLikes,
   deleteComment,
+  addSaves,
+  deleteSaves,
+  getSaves,
 } from "src/firebase/api-firebase";
-import { getSavePost, savePost } from "../api";
 import { FieldValue } from "firebase/firestore";
 
 export const useDeleteFile = () =>
@@ -72,20 +74,15 @@ export const useLikePost = () => {
 //   });
 // };
 
-export const useSavePost = () =>
-  useMutation({
-    mutationFn: ({ userId, postId }: { userId: string; postId: string }) =>
-      savePost(userId, postId),
-  });
-
-export const useGetSaves = (userId: string) =>
-  useQuery({
-    queryKey: [QUERY_KEYS.GET_USERS],
-
-    queryFn: () => getSavePost(userId),
-  });
 //
 // ===================================================
+export const useGetSaves = (userId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.GET_SAVES, userId],
+
+    queryFn: () => getSaves(userId),
+    enabled: Boolean(userId),
+  });
 export const useGetPostReactions = (postId: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_POST_COMMENTS, postId],
@@ -155,6 +152,28 @@ export const useDeletePost = () => {
       deletePost(id, post),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+    },
+  });
+};
+export const useAddSavePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, post }: { userId: string; post: IPostResponse }) =>
+      addSaves(userId, post),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_SAVES] });
+    },
+  });
+};
+
+export const useDeleteSavePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, post }: { userId: string; post: IPostResponse }) =>
+      deleteSaves(userId, post),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_SAVES] });
     },
   });
 };

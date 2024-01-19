@@ -4,6 +4,7 @@ import {
   INewPost,
   IPostReactions,
   IPostResponse,
+  ISavesContext,
   IUser,
   IUserChats,
   IUserNew,
@@ -81,14 +82,26 @@ export const getUserMessagesById = async (id: string | null | undefined) => {
     console.error(error);
   }
 };
-export const getPostReactions = async (postid: string | null | undefined) => {
+export const getPostReactions = async (postId: string | null | undefined) => {
   try {
-    if (!postid) throw Error;
-    const docRef = doc(db, "postReaction", postid);
+    if (!postId) throw Error;
+    const docRef = doc(db, "postReaction", postId);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) throw Error;
     return docSnap.data() as IPostReactions;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const getSaves = async (userId: string | null | undefined) => {
+  try {
+    if (!userId) throw Error;
+    const docRef = doc(db, "saves", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) throw Error;
+    return docSnap.data() as ISavesContext;
   } catch (error) {
     console.error(error);
   }
@@ -171,6 +184,20 @@ export const createComment = async (postId: string, data: IComment) => {
     id: postId,
     collectionName: "postReaction",
     data: { comments: arrayUnion(data) },
+  });
+};
+export const addSaves = async (userId: string, data: IPostResponse) => {
+  await updateDatabase({
+    id: userId,
+    collectionName: "saves",
+    data: { posts: arrayUnion(data) },
+  });
+};
+export const deleteSaves = async (userId: string, data: IPostResponse) => {
+  await updateDatabase({
+    id: userId,
+    collectionName: "saves",
+    data: { posts: arrayRemove(data) },
   });
 };
 export const deleteComment = async (postId: string, data: IComment) => {

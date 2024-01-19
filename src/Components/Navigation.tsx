@@ -7,11 +7,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useTranslation } from "react-i18next";
 import {
-  BookmarkBorder as SaveIcon,
-  Favorite,
   PeopleAlt,
   Home,
   Chat,
+  Bookmark as SaveIcon,
 } from "@mui/icons-material";
 
 import {
@@ -71,9 +70,6 @@ const Navigation = () => {
           </ListItemLink>
           <ListItemLink to="/saves" icon={<SaveIcon />}>
             {t("navigation_saves")}
-          </ListItemLink>
-          <ListItemLink to="/likes" icon={<Favorite />}>
-            {t("navigation_likes")}
           </ListItemLink>
         </List>
       </Paper>

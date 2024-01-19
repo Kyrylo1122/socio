@@ -8,16 +8,24 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { useTranslation } from "react-i18next";
-import { useLikePost, useSavePost } from "src/lib/react-query";
+import {
+  useAddSavePost,
+  useDeleteSavePost,
+  useLikePost,
+} from "src/lib/react-query";
 import { useUserContext } from "src/hooks/useUserContext";
 import { MouseEventHandler, useState } from "react";
 import {
   ExpandLess as ExpandLessIcon,
-  BookmarkBorder as SaveIcon,
+  Bookmark as SaveIcon,
 } from "@mui/icons-material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { styled } from "@mui/material/styles";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { IPostResponse } from "src/types";
+import useSavesContext from "src/hooks/useSavesContext";
+import { toast } from "react-toastify";
+import SharePost from "./SharePost";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -31,34 +39,55 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+const IconBtnStyle = { borderRadius: "50%", m: 0, p: 2, minWidth: "auto" };
+
 interface IPostStats {
   likes: string[];
-  postId: string;
   expanded: boolean;
   handleExpandClick: MouseEventHandler<HTMLButtonElement> | undefined;
   commentsLength?: number;
+  post: IPostResponse;
 }
 
 const PostStats = ({
   likes,
-  postId,
   expanded,
   handleExpandClick,
   commentsLength,
+  post,
 }: IPostStats) => {
   const { t } = useTranslation();
   const { user } = useUserContext();
+  const { posts } = useSavesContext();
+
   const { mutateAsync: likePost } = useLikePost();
 
   const [isLiked, setIsLiked] = useState(() => likes?.includes(user.uid));
+  const isSaved = posts.map((post) => post.id)?.includes(post.id);
+
   const [countLikes, setCountLikes] = useState(likes?.length);
-  const { mutateAsync: savePost } = useSavePost();
+  const { mutateAsync: savePost } = useAddSavePost();
+  const { mutateAsync: deleteSave } = useDeleteSavePost();
+
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const onLikeClick = async () => {
     try {
       if (isLiked) {
-        await likePost({ postId, arrayOfLikes: arrayRemove(user.uid) });
+        await likePost({
+          postId: post.id,
+          arrayOfLikes: arrayRemove(user.uid),
+        });
       } else {
-        await likePost({ postId, arrayOfLikes: arrayUnion(user.uid) });
+        await likePost({ postId: post.id, arrayOfLikes: arrayUnion(user.uid) });
       }
     } catch (error) {
       console.error(error);
@@ -66,11 +95,24 @@ const PostStats = ({
   };
   const onSaveClick = async () => {
     try {
-      await savePost({ userId: user.uid, postId });
+      if (isSaved) {
+        await deleteSave({
+          userId: user.uid,
+          post,
+        });
+        return toast.warn(t("remove_saved_post"));
+      }
+
+      await savePost({ userId: user.uid, post });
+      return toast.success(t("saved_post"));
     } catch (error) {
       console.error(error);
     }
   };
+  const open = Boolean(anchorEl);
+
+  const id = open ? "simple-popover" : undefined;
+
   return (
     <>
       <Button
@@ -81,8 +123,7 @@ const PostStats = ({
           await onLikeClick();
         }}
         sx={{
-          p: 0,
-          m: 0,
+          ...IconBtnStyle,
           color: `${isLiked ? "primary.accent" : "primary.grey"}`,
         }}
       >
@@ -104,11 +145,29 @@ const PostStats = ({
           </Box>
         </ExpandMore>
       </Box>
-      <IconButton aria-label="share">
+      <IconButton
+        sx={IconBtnStyle}
+        id={id}
+        aria-label="share"
+        onClick={handleClick}
+      >
         <ShareIcon sx={{ color: "text.dark" }} />
       </IconButton>
-      <IconButton onClick={onSaveClick}>
-        <SaveIcon />
+      <SharePost
+        open={open}
+        id={id}
+        anchorEl={anchorEl}
+        handleClose={handleClose}
+      />
+
+      <IconButton
+        sx={{
+          ...IconBtnStyle,
+          color: `${isSaved ? "primary.accent" : ""}`,
+        }}
+        onClick={onSaveClick}
+      >
+        <SaveIcon color="inherit" />
       </IconButton>
     </>
   );

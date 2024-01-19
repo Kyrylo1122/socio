@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ChatContextProvider } from "./context/ChatContext/ChatContextProvider";
 import { MessagesContextProvider } from "./context/MessagesContext/MessagesContextProvider";
 import DialogContextProvider from "./context/DialogContext/DialogContextProvider";
+import { SavesContextProvider } from "./context/SavesContext/SavesContextProvider";
 
 const MainLayout = () => {
   const { theme } = useThemeContext();
@@ -20,10 +21,12 @@ const MainLayout = () => {
           <ChatContextProvider>
             <DialogContextProvider>
               <MessagesContextProvider>
-                <ThemeProvider theme={{ [THEME_ID]: theme }}>
-                  <CssBaseline />
-                  <App />
-                </ThemeProvider>
+                <SavesContextProvider>
+                  <ThemeProvider theme={{ [THEME_ID]: theme }}>
+                    <CssBaseline />
+                    <App />
+                  </ThemeProvider>
+                </SavesContextProvider>
               </MessagesContextProvider>
             </DialogContextProvider>
           </ChatContextProvider>

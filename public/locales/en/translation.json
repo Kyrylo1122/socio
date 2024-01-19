@@ -77,5 +77,7 @@
   "no_messages": "No messages",
   "no_posts": "You do not have any post. Let's create the first!",
   "no_comments": "No comments",
-  "answer": "answer"
+  "answer": "answer",
+  "saved_post": "The post was added to saves",
+  "remove_saved_post": "The post was removed from saves"
 }
