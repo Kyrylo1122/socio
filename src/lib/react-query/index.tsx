@@ -91,7 +91,7 @@ export const useGetPostReactions = (postId: string) =>
     enabled: Boolean(postId),
   });
 
-export const useGetUsers = (id: string | null | undefined) =>
+export const useGetFriendsById = (id: string | null | undefined) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
 
@@ -218,7 +218,7 @@ export const useCreateUserAccount = () => {
     },
   });
 };
-export const useGetUsersById = (id: string | null | undefined) =>
+export const useGetUserById = (id: string | null | undefined) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER, id],
 

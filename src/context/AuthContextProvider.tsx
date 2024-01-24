@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthContext";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "src/firebase/config";
-import { useGetUsers, useGetUsersById } from "src/lib/react-query";
+import { useGetFriendsById, useGetUserById } from "src/lib/react-query";
 import { IUser } from "src/types";
 import useLocaleStorageData from "src/hooks/useLocaleStorageData";
 
@@ -22,8 +22,8 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
   const [user, setUser] = useState<IUser>(currentUserLocalStorage);
 
   const { data: currentUser, isPending: isLoading } =
-    useGetUsersById(authUserId);
-  const { data: friends } = useGetUsers(authUserId);
+    useGetUserById(authUserId);
+  const { data: friends } = useGetFriendsById(authUserId);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -57,6 +57,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
     user,
     friends,
     isLoading,
+    setUser,
   };
 
   return <AuthContext.Provider value={value}>{children} </AuthContext.Provider>;

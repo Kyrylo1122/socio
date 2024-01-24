@@ -1,21 +1,10 @@
 import { useState, forwardRef } from "react";
-import {
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-  styled,
-} from "@mui/material";
+import { SpeedDial, SpeedDialIcon } from "@mui/material";
 import Editor from "react-avatar-editor";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import { SliderRotate, SliderScale } from "./ui/Sliders";
-
-const StyledSpeedDialAction = styled(SpeedDialAction)(({ theme }) => ({
-  "&:hover, &:focus": {
-    backgroundColor: "red",
-    color: theme.palette.text.white,
-  },
-}));
+import { StyledSpeedDialAction } from "./ui/StyledComponents";
 
 interface IProp {
   file: File;

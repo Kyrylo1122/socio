@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography, styled } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import Modal, { IBasicModal } from "./Modal";
 import { useTranslation } from "react-i18next";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -10,18 +10,7 @@ import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { useUserContext } from "src/hooks/useUserContext";
 import { IUser } from "src/types";
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  cursor: "pointer",
-  transition: theme.transitions.create("all"),
-}));
-const StyledBtn = styled(Button)(({ theme }) => ({
-  transition: theme.transitions.create("all"),
-  color: theme.palette.secondary.main,
-  "&:hover,&:focus": {
-    transform: "scale(1.3)",
-  },
-}));
+import { StyledBox, StyledBtn } from "./ui/StyledComponents";
 
 type IOmitModal = Omit<IBasicModal, "children">;
 type ImageType = {
@@ -103,15 +92,7 @@ const UpdateImageModalContent = ({
         >
           {file && <AvatarEditor file={file} ref={editor} />}
           {file ? (
-            <StyledBox
-              sx={{
-                "&:hover": {
-                  transform: "scale(1.1)",
-                },
-              }}
-              component="label"
-              mt={1}
-            >
+            <StyledBox component="label" mt={1}>
               {t("update_image")} <Uploader />
             </StyledBox>
           ) : (

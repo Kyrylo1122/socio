@@ -13,6 +13,7 @@ import { useUserContext } from "src/hooks/useUserContext";
 import { AvatarImageProps } from "src/types";
 import { MailOutline } from "@mui/icons-material";
 import useSelectUserChat from "src/hooks/useSelectUserChat";
+import useDialogContext from "src/hooks/useDialogContext";
 
 type ContactsMarkupType = AvatarImageProps & { uid: string };
 const ContactsMarkup = ({
@@ -24,10 +25,12 @@ const ContactsMarkup = ({
   const { t } = useTranslation();
   const user = { uid, photoUrl, defaultCharacter, name };
   const { handleSelect } = useSelectUserChat();
+  const { isOpen, open } = useDialogContext();
 
   const handleSendMsg = async () => {
     try {
       await handleSelect(user);
+      if (!isOpen) open();
     } catch (error) {
       console.error(error);
     }
@@ -53,8 +56,19 @@ const ContactsMarkup = ({
       <Box>
         <Button
           onClick={handleSendMsg}
-          variant="outlined"
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          variant="contained"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            border: "1px solid",
+            borderColor: "primary.accent",
+            "&:hover,&:focus": {
+              bgcolor: "primary.accent",
+              color: "primary.white",
+              borderColor: "primary.accent",
+            },
+          }}
         >
           {t("write_message")}
           <MailOutline />
@@ -77,10 +91,7 @@ function Contacts() {
       <List sx={{ display: "flex", flexDirection: "column" }}>
         {friends.map(({ uid, photoUrl, defaultCharacter, name }) => {
           return (
-            <ListItem
-              key={uid}
-              sx={{ display: "flex", width: "100%", bgcolor: "brown   " }}
-            >
+            <ListItem key={uid} sx={{ display: "flex", width: "100%" }}>
               <ContactsMarkup
                 photoUrl={photoUrl}
                 defaultCharacter={defaultCharacter}

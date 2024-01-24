@@ -67,7 +67,7 @@
   "write_message_placeholder": "Write your message",
   "submit": "Submit",
   "socio_users": "Socio users",
-  "write_message": "Send an message",
+  "write_message": "Send a message",
   "let's_write": "Let's write somebody",
   "hi_name": "Hello {{name}}!",
   "what's_up": "What's up {{name}}? Let's go out somewhere",
@@ -79,5 +79,6 @@
   "no_comments": "No comments",
   "answer": "answer",
   "saved_post": "The post was added to saves",
-  "remove_saved_post": "The post was removed from saves"
+  "remove_saved_post": "The post was removed from saves",
+  "search": "Search..."
 }

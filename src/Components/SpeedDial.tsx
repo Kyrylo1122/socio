@@ -1,18 +1,7 @@
-import { styled } from "@mui/material/styles";
-import { SpeedDialAction, SpeedDial } from "@mui/material";
+import { SpeedDialAction } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useThemeContext from "src/hooks/useThemeContext";
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
+import { StyledSpeedDial } from "./ui/StyledComponents";
 
 interface IAction {
   icon: React.ReactElement;

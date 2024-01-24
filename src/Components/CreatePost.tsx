@@ -32,18 +32,8 @@ import PostCardHeader from "./PostCard/PostCardHeader";
 import { useCreatePost, useCreatePostReaction } from "src/lib/react-query";
 import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
+import { IconBox } from "./ui/StyledComponents";
 
-const IconBox = styled(Box)(({ theme }) => ({
-  p: theme.spacing(1),
-
-  borderRadius: theme.shape.borderRadius,
-  transition: theme.transitions.create("transform"),
-  cursor: "pointer",
-  "&:hover,&:focus": {
-    backgroundColor: theme.palette.background.translucent,
-    transform: "scale(1.4)",
-  },
-}));
 interface ICreatePost {
   close: () => void;
 }

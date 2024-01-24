@@ -2,12 +2,10 @@ import { Box, Button, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import SendIcon from "@mui/icons-material/Send";
+import { IText } from "src/types";
 
-type Inputs = {
-  value: string;
-};
 interface ICommentForm {
-  handleClick: (value: Inputs) => void;
+  handleClick: (value: IText) => void;
   isComment: boolean;
   defaultValue?: string;
 }
@@ -16,12 +14,12 @@ const SimpleInputForm = ({
   isComment,
   defaultValue = "",
 }: ICommentForm) => {
-  const { register, handleSubmit, reset } = useForm<Inputs>({
+  const { register, handleSubmit, reset } = useForm<IText>({
     values: { value: defaultValue },
   });
   const { t } = useTranslation();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<IText> = (data) => {
     handleClick(data);
     reset();
   };

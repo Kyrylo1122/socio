@@ -1,5 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
-import { Timestamp } from "firebase/firestore";
+import { DocumentData, Timestamp } from "firebase/firestore";
 
 export type CollectionNameType =
   | "posts"
@@ -26,7 +26,7 @@ export interface IUserChats {
   userInfo?: IUserShortInfo;
   date?: Date;
 }
-interface IText {
+export interface IText {
   value: string;
 }
 export interface IMessage {
@@ -87,8 +87,9 @@ export interface IUserResponse {
 
 export interface IUserContext {
   user: IUser;
-  friends: IUser[];
+  friends?: DocumentData[];
   isLoading?: boolean;
+  setUser?: (user: IUser) => void;
 }
 
 export interface INewPostForm {

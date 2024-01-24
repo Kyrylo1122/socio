@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  IconButtonProps,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { useTranslation } from "react-i18next";
@@ -20,25 +14,13 @@ import {
   Bookmark as SaveIcon,
 } from "@mui/icons-material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import { styled } from "@mui/material/styles";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { IPostResponse } from "src/types";
 import useSavesContext from "src/hooks/useSavesContext";
 import { toast } from "react-toastify";
 import SharePost from "./SharePost";
+import { ExpandMore } from "./ui/StyledComponents";
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme }) => ({
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 const IconBtnStyle = { borderRadius: "50%", m: 0, p: 2, minWidth: "auto" };
 
 interface IPostStats {

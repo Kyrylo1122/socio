@@ -1,7 +1,6 @@
-import { Box, List, ListItem, Avatar as AvatarMui } from "@mui/material";
+import { Box, Avatar as AvatarMui } from "@mui/material";
 
 import Typography from "@mui/material/Typography";
-import { users } from "@Assets/data/Users";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
 import { Divider } from "@mui/material";
@@ -24,8 +23,15 @@ import { IUser } from "src/types";
 import Spinner from "./Spinner";
 import AvatarImage from "./AvatarImage";
 import PostSkeleton from "./Skeleton/PostSkeleton";
+import { DocumentData } from "firebase/firestore";
 
-const PageMarkUp = ({ user }: { user: IUser }) => {
+const PageMarkUp = ({
+  user,
+  friends,
+}: {
+  user: IUser;
+  friends: DocumentData[] | undefined;
+}) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
   const currentUserPage = user?.uid === currentUser?.uid;
@@ -54,8 +60,9 @@ const PageMarkUp = ({ user }: { user: IUser }) => {
         <Typography variant="h4">{t("user_friends")}</Typography>
         <Divider />
         <AvatarGroup
-          total={users.length}
+          total={friends?.length}
           variant="square"
+          max={5}
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -64,19 +71,18 @@ const PageMarkUp = ({ user }: { user: IUser }) => {
             "& .MuiAvatar-root": { width: 56, height: 56 },
           }}
         >
-          <List>
-            {" "}
-            {users.map((user) => (
-              <ListItem key={user.id}>
-                <AvatarMui
-                  alt={user.username}
-                  src={user.profilePicture}
-                  sx={{ width: 56, height: 56 }}
-                  variant="square"
-                />
-              </ListItem>
-            ))}
-          </List>
+          {friends?.map((user) => (
+            <AvatarMui
+              key={user.uid}
+              alt={user.name}
+              src={createAvatarLink({
+                photoUrl: user.photoUrl,
+                defaultCharacter: user.defaultCharacter,
+              })}
+              sx={{ width: 56, height: 56 }}
+              variant="square"
+            />
+          ))}
         </AvatarGroup>
       </Box>
     );
