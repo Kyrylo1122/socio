@@ -148,10 +148,12 @@ export const createNewPost = async (
       },
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        const newPost = { ...data, photoUrl: downloadURL };
+
         await updateDatabase({
           id,
           collectionName: "posts",
-          data: { posts: arrayUnion({ ...data, photoUrl: downloadURL }) },
+          data: { posts: arrayUnion(newPost) },
         });
       }
     );

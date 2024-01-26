@@ -118,7 +118,11 @@ export const useCreatePost = () => {
     }) => createNewPost(id, data, file),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_POSTS],
+        });
+      }, 2000);
     },
   });
 };

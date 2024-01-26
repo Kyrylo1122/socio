@@ -40,7 +40,7 @@ const PageMarkUp = ({
   const currentUserPage = user?.uid === currentUser?.uid;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { data: posts, isPending: isLoadPosts } = useGetUserPosts(user.uid);
+  const { data: posts, isFetching: isLoadPosts } = useGetUserPosts(user.uid);
   const { mutateAsync: deleteAvatarImg, isPending } = useDeleteAvatarImage();
 
   const openModal = () => setModalIsOpen(true);
@@ -184,11 +184,7 @@ const PageMarkUp = ({
                 />
               </Box>
             ) : null}
-            {isLoadPosts && !posts ? (
-              <PostSkeleton />
-            ) : (
-              <PostList posts={posts?.posts} />
-            )}
+            {isLoadPosts ? <PostSkeleton /> : <PostList posts={posts?.posts} />}
           </Box>
           <Box
             sx={{
