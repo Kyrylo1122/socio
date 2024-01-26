@@ -1,11 +1,14 @@
-import { Box, Avatar as AvatarMui } from "@mui/material";
-
-import Typography from "@mui/material/Typography";
-import AvatarGroup from "@mui/material/AvatarGroup";
-
-import { Divider } from "@mui/material";
-import CreatePost from "src/Components/CreatePost";
 import { useState } from "react";
+
+import {
+  Box,
+  Avatar as AvatarMui,
+  Typography,
+  AvatarGroup,
+  Divider,
+} from "@mui/material";
+
+import CreatePost from "src/Components/CreatePost";
 import Modal from "src/Components/Modal";
 import { useTranslation } from "react-i18next";
 import UserInfo from "src/Components/UserInfo";

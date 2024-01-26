@@ -45,7 +45,7 @@ export default function FriendSearch() {
         msOverflowStyle: "none",
         "&::-webkit-scrollbar": { display: "none" },
       }}
-      options={friends}
+      options={friends ? friends : []}
       getOptionLabel={(option) => option.name}
       autoHighlight
       onBlur={onBlur}

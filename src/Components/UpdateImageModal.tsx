@@ -9,8 +9,8 @@ import { useUploadAvatarImage } from "src/lib/react-query";
 import AvatarEditor from "./CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { useUserContext } from "src/hooks/useUserContext";
-import { IUser } from "src/types";
 import { StyledBox, StyledBtn } from "./ui/StyledComponents";
+import AvatarEditorType from "react-avatar-editor";
 
 type IOmitModal = Omit<IBasicModal, "children">;
 type ImageType = {
@@ -35,12 +35,13 @@ const UpdateImageModalContent = ({
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { mutateAsync: uploadAvatarImg } = useUploadAvatarImage();
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
+  console.log("user: ", user);
 
   const Uploader = () => (
     <FileUploader setFileUrl={setFileUrl} onChange={setFile} />
   );
-  const editor = useRef<HTMLCanvasElement>(null);
+  const editor = useRef<AvatarEditorType>(null);
 
   const handleSubmit = async () => {
     try {
@@ -49,12 +50,12 @@ const UpdateImageModalContent = ({
       if (!editor.current) throw Error;
 
       const file = dataURLtoFile(
-        editor.current.getImage().toDataURL(),
+        editor?.current?.getImage().toDataURL(),
         "imageUrl"
       );
 
       await uploadAvatarImg({ id, name, file });
-      setUser((user: IUser) => ({ ...user, photoUrl: fileUrl }));
+      setUser({ ...user, photoUrl: fileUrl });
 
       close();
     } catch (error) {

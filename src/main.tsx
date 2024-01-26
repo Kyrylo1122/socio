@@ -15,7 +15,6 @@ import SignUp from "./_auth/forms/SignUp";
 import MainLayout from "./MainLayout";
 import { ContactPage } from "./Components/ContactPage";
 import Saves from "./Pages/Saves";
-import Likes from "./Pages/Likes";
 import Chat from "./Pages/Chat";
 
 const router = createBrowserRouter([
@@ -52,10 +51,7 @@ const router = createBrowserRouter([
         path: "/saves",
         element: <Saves />,
       },
-      {
-        path: "/likes",
-        element: <Likes />,
-      },
+
       {
         path: "/chats",
         element: <Chat />,

@@ -16,7 +16,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { useRef, useState } from "react";
-import { styled } from "@mui/material/styles";
 import { INewPost, INewPostForm } from "src/types";
 import TagIcon from "@mui/icons-material/Tag";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
@@ -32,31 +31,15 @@ import PostCardHeader from "./PostCard/PostCardHeader";
 import { useCreatePost, useCreatePostReaction } from "src/lib/react-query";
 import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
-import { IconBox } from "./ui/StyledComponents";
+import { IconBox, StyledButton } from "./ui/StyledComponents";
 
 interface ICreatePost {
   close: () => void;
 }
-const StyledButton = styled(Button)`
-  ${({ theme }) => `
-
-              width: auto,
-              fontSize: 14px,
-              p: 0,
-              display: flex,
-  background-color: ${theme.palette.primary.white};
-  transition: ${theme.transitions.create(["background-color", "transform"], {
-    duration: theme.transitions.duration.shorter,
-  })};
-  &:hover,&:focus {
-    transform: scale(1.1);
-  }
-  `}
-`;
 
 const CreatePost = ({ close }: ICreatePost) => {
   const { t } = useTranslation();
-  const locationRef = useRef();
+  const locationRef = useRef<HTMLDivElement>();
 
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [editImage, setEditImage] = useState(false);
@@ -152,7 +135,6 @@ const CreatePost = ({ close }: ICreatePost) => {
 
             minWidth: 40,
             position: "absolute",
-            p: 0,
             top: 10,
             right: 10,
             borderRadius: "50%",
@@ -330,11 +312,19 @@ const CreatePost = ({ close }: ICreatePost) => {
             justifyContent: "center",
           }}
         >
-          <StyledButton component="label" sx={{ color: "primary.contrast" }}>
-            <AddPhotoAlternateIcon color="secondary" />{" "}
+          <IconBox
+            component="label"
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+              color: "primary.contrast",
+            }}
+          >
+            <AddPhotoAlternateIcon color="secondary" />
             {t(fileUrl ? "change_photo" : "add_photo")}
             <ImageController />
-          </StyledButton>
+          </IconBox>
 
           <StyledButton
             onClick={toggleLocation}

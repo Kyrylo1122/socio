@@ -14,34 +14,26 @@ import {
 import { useTranslation } from "react-i18next";
 
 import PostStats from "../PostStats";
-import {
-  useCreateComment,
-  useDeletePost,
-  useGetPostReactions,
-} from "src/lib/react-query";
+import { useCreateComment, useGetPostReactions } from "src/lib/react-query";
 import CommentForm from "../SimpleInputForm";
 
 import PostCardHeader from "./PostCardHeader";
 import PlaygroundSpeedDial from "../SpeedDial";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CreatePost from "../CreatePost";
-import Modal from "../Modal";
+
 import ChipsArray from "../ChipArray";
 import { useUserContext } from "src/hooks/useUserContext";
-import PostSkeleton from "../Skeleton/PostSkeleton";
-import SharePost from "../SharePost";
-import { IPostResponse, IUser, IUserShortInfo } from "src/types";
+
+import { IPostResponse } from "src/types";
 import { Timestamp } from "firebase/firestore";
 import PostComment from "../PostComment";
 
 const PostCard = ({
   deletePost,
   post,
-  isSaves,
 }: {
   deletePost: (post: IPostResponse) => void;
   post: IPostResponse;
-  isSaves: boolean;
 }) => {
   const { id, caption, photoUrl, tags, location, creator, createdAt } = post;
   const { t } = useTranslation();

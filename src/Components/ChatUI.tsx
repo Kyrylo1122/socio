@@ -34,7 +34,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   const { mutateAsync: updateChats } = useUpdateChats();
   const { messages } = useMessageContext();
 
-  const ref = useRef();
+  const ref = useRef<Element>();
 
   useEffect(() => {
     ref.current?.lastElementChild?.scrollIntoView({ behavior: "smooth" });

@@ -1,10 +1,13 @@
 import * as React from "react";
-import List from "@mui/material/List";
-import { Box } from "@mui/material";
-import ListItem from "@mui/material/ListItem";
-import Paper from "@mui/material/Paper";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  Box,
+  List,
+  ListItem,
+  Paper,
+  ListItemText,
+  ListItemIcon,
+} from "@mui/material";
+
 import { useTranslation } from "react-i18next";
 import {
   PeopleAlt,

@@ -55,7 +55,7 @@ export const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 
   const value = {
     user,
-    friends,
+    friends: friends ? friends : [],
     isLoading,
     setUser,
   };

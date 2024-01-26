@@ -5,12 +5,13 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import { SliderRotate, SliderScale } from "./ui/Sliders";
 import { StyledSpeedDialAction } from "./ui/StyledComponents";
+import AvatarEditorType from "react-avatar-editor";
 
 interface IProp {
   file: File;
 }
 
-const AvatarEditor = forwardRef<any, IProp>(({ file }, ref) => {
+const AvatarEditor = forwardRef<AvatarEditorType, IProp>(({ file }, ref) => {
   const [openTools, setOpenTools] = useState(false);
   const [openRotate, setOpenRotate] = useState(false);
   const [openScale, setOpenScale] = useState(true);

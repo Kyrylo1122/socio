@@ -65,7 +65,6 @@ const PostList = ({
             key={post.id}
           >
             <PostCard
-              isSaves={isSaves}
               post={post}
               deletePost={isSaves ? handleDeleteSave : handleDeletePost}
             />

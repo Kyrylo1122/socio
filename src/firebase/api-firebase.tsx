@@ -37,7 +37,7 @@ export const getAllUsers = async (id: string | null | undefined) => {
 
     const docSnap = await getDocs(q);
     const users = docSnap.docs.map((doc) => {
-      return doc.data();
+      return doc.data() as IUser;
     });
 
     return users;

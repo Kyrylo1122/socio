@@ -1,3 +1,5 @@
+import { MouseEventHandler, useState } from "react";
+
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
@@ -8,7 +10,6 @@ import {
   useLikePost,
 } from "src/lib/react-query";
 import { useUserContext } from "src/hooks/useUserContext";
-import { MouseEventHandler, useState } from "react";
 import {
   ExpandLess as ExpandLessIcon,
   Bookmark as SaveIcon,

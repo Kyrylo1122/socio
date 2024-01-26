@@ -35,11 +35,6 @@ import {
 } from "src/firebase/api-firebase";
 import { FieldValue } from "firebase/firestore";
 
-export const useDeleteFile = () =>
-  useMutation({
-    mutationFn: (id: string) => deleteFile(id),
-  });
-
 export const useLikePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -58,24 +53,6 @@ export const useLikePost = () => {
   });
 };
 
-// export const useUpdatePost = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationFn: ({
-//       postId,
-//       attribute,
-//     }: {
-//       postId: string;
-//       attribute: Partial<IPostResponse>;
-//     }) => updatePost(postId, attribute),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.GET_POSTS] });
-//     },
-//   });
-// };
-
-//
-// ===================================================
 export const useGetSaves = (userId: string) =>
   useQuery({
     queryKey: [QUERY_KEYS.GET_SAVES, userId],
@@ -223,6 +200,7 @@ export const useGetUserById = (id: string | null | undefined) =>
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER, id],
 
     queryFn: () => getUserById(id),
+
     enabled: Boolean(id),
   });
 export const useGetUserMessages = (id: string | null | undefined) =>

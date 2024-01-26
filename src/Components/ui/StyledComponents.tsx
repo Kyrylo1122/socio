@@ -107,14 +107,14 @@ export const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 export const IconBox = styled(Box)(({ theme }) => ({
-  p: theme.spacing(1),
+  padding: theme.spacing(1),
 
   borderRadius: theme.shape.borderRadius,
   transition: theme.transitions.create("transform"),
   cursor: "pointer",
   "&:hover,&:focus": {
     backgroundColor: theme.palette.background.translucent,
-    transform: "scale(1.4)",
+    transform: "scale(1.1   )",
   },
 }));
 
@@ -129,3 +129,20 @@ export const StyledBtn = styled(Button)(({ theme }) => ({
     transform: "scale(1.3)",
   },
 }));
+
+export const StyledButton = styled(Button)`
+  ${({ theme }) => `
+
+              width: auto,
+              fontSize: 14px,
+              p: 0,
+              display: flex,
+  background-color: ${theme.palette.primary.white};
+  transition: ${theme.transitions.create(["background-color", "transform"], {
+    duration: theme.transitions.duration.shorter,
+  })};
+  &:hover,&:focus {
+    transform: scale(1.1);
+  }
+  `}
+`;
