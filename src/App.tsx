@@ -1,7 +1,7 @@
 import { Box, Button, Fade } from "@mui/material";
 
 import { Header } from "./Components";
-import Body from "./Components/Body";
+import Main from "./Components/Main";
 import { useUserContext } from "./hooks/useUserContext";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
 import CustomizedDialogs from "./Components/Dialog";
@@ -14,7 +14,9 @@ const App = () => {
 
   return (
     <Box
+      component="body"
       sx={{
+        flexDirection: "column",
         position: "relative",
       }}
     >
@@ -23,7 +25,7 @@ const App = () => {
           <Header />
         </Box>
       ) : null}
-      <Body />
+      <Main />
       <Fade in={isVisibleChatBtn}>
         {
           <Button

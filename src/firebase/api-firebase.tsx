@@ -52,7 +52,7 @@ export const getUserPosts = async (id: string | null | undefined) => {
 
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) throw Error;
+    if (!docSnap.exists()) return;
     return docSnap.data();
   } catch (error) {
     console.error(error);
@@ -82,9 +82,8 @@ export const getUserMessagesById = async (id: string | null | undefined) => {
     console.error(error);
   }
 };
-export const getPostReactions = async (postId: string | null | undefined) => {
+export const getPostReactions = async (postId: string) => {
   try {
-    if (!postId) throw Error;
     const docRef = doc(db, "postReaction", postId);
     const docSnap = await getDoc(docRef);
 
@@ -282,11 +281,38 @@ export const createUserAccount = async ({
         status: null,
       },
     });
-    await updateDatabase({
-      id: user.uid,
-      collectionName: "userChats",
-      data: {},
-    });
+    await Promise.allSettled([
+      updateDatabase({
+        id: user.uid,
+        collectionName: "userChats",
+        data: {},
+      }),
+      updateDatabase({
+        id: user.uid,
+        collectionName: "posts",
+        data: { posts: [] },
+      }),
+      updateDatabase({
+        id: user.uid,
+        collectionName: "saves",
+        data: { posts: [] },
+      }),
+    ]);
+    // await updateDatabase({
+    //   id: user.uid,
+    //   collectionName: "userChats",
+    //   data: {},
+    // });
+    // await updateDatabase({
+    //   id: user.uid,
+    //   collectionName: "posts",
+    //   data: { posts: [] },
+    // });
+    // await updateDatabase({
+    //   id: user.uid,
+    //   collectionName: "saves",
+    //   data: { posts: [] },
+    // });
   } catch (error) {
     console.error(error);
   }

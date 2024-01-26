@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
 
-const Body = () => {
+const Main = () => {
   const { user } = useUserContext();
 
   return (
     <Box
-      component="body"
+      component="main"
       sx={{
         display: "flex",
         overflow: "auto",
@@ -26,4 +26,4 @@ const Body = () => {
     </Box>
   );
 };
-export default Body;
+export default Main;
