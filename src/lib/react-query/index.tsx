@@ -227,9 +227,11 @@ export const useUploadAvatarImage = () => {
       file: File;
     }) => uploadAvatarImage(id, name, file),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
-      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_BY_ID, QUERY_KEYS.GET_CURRENT_USER],
+        });
+      }, 2000);
     },
   });
 };

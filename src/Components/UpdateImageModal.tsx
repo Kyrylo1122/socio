@@ -55,7 +55,6 @@ const UpdateImageModalContent = ({
       );
 
       await uploadAvatarImg({ id, name, file });
-      setUser({ ...user, photoUrl: fileUrl });
 
       close();
     } catch (error) {
