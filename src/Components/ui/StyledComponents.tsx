@@ -114,7 +114,7 @@ export const IconBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   "&:hover,&:focus": {
     backgroundColor: theme.palette.background.translucent,
-    transform: "scale(1.1   )",
+    transform: "scale(1.1)",
   },
 }));
 
