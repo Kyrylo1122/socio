@@ -12,7 +12,7 @@ const Main = () => {
       sx={{
         display: "flex",
         overflow: "auto",
-        pt: 11,
+        pt: user.uid ? 11 : 4,
       }}
     >
       {user.uid ? (

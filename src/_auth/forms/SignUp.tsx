@@ -22,6 +22,7 @@ import { avatars as avatarsArray } from "src/Components/ProfileAvatars/ProfilePi
 import { useTranslation } from "react-i18next";
 import Spinner from "src/Components/Spinner";
 import { Input } from "src/Components/ui/Input";
+import { NavLink } from "react-router-dom";
 
 const SignUp = () => {
   const { theme } = useThemeContext();
@@ -64,6 +65,9 @@ const SignUp = () => {
   return (
     <ThemeProvider theme={{ [THEME_ID]: theme }}>
       <CssBaseline />
+      <Box sx={{ ml: 2 }} component={NavLink} to="/sign-in">
+        {t("back_to_sign_in")}
+      </Box>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}

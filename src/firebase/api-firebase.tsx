@@ -327,17 +327,13 @@ export const signInAccount = async ({
   email: string;
   password: string;
 }) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const { user } = userCredential;
-    if (!user) throw Error;
-  } catch (error) {
-    console.error(error);
-  }
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  const { user } = userCredential;
+  if (!user) throw Error;
 };
 export const signOutAccount = async () => {
   try {
