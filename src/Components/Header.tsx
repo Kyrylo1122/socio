@@ -44,9 +44,17 @@ export default function Header() {
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+  };
+  const navigateToHome = () => {
+    handleProfileMenuClose();
+
+    navigate("/");
   };
 
   const handleMenuClose = async () => {
@@ -87,9 +95,9 @@ export default function Header() {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={handleProfileMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={navigateToHome}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
     </Menu>
   );
@@ -160,7 +168,9 @@ export default function Header() {
         p: 1,
       }}
     >
-      <Logo />
+      <NavLink to={"/"}>
+        <Logo />
+      </NavLink>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <SearchIcon sx={{ width: "32px", height: "32px" }} />
         <LanguageSelect />
@@ -216,15 +226,12 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Logo />
+          <NavLink to={"/"}>
+            <Logo />
+          </NavLink>
 
           <Search>
             <FriendSearch />
-            {/* <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              onChange={onSearch}
-            /> */}
           </Search>
 
           <Box sx={{ display: "flex" }}>
