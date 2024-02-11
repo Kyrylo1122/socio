@@ -95,6 +95,9 @@ export default function FriendSearch() {
           sx={{
             flex: 1,
             "& .MuiAutocomplete-endAdornment": { display: "none" },
+            "& .MuiFormLabel-root.Mui-focused": {
+              opacity: 0,
+            },
           }}
           placeholder={t("search")}
           label={<SearchIcon />}

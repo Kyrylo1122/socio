@@ -13,7 +13,6 @@ import useDialogContext from "src/hooks/useDialogContext";
 const Chat = () => {
   const { user: currentUser } = useUserContext();
   const { data: msg } = useGetUserMessages(currentUser.uid);
-
   const { handleSelect } = useSelectUserChat();
   const { close, setIsInvisibleBtn, setIsVisibleBtn } = useDialogContext();
 

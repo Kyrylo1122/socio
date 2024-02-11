@@ -25,6 +25,7 @@ import useLocaleStorageData from "src/hooks/useLocaleStorageData";
 import FriendSearch from "./ui/FriendsSearch";
 import SearchIcon from "@mui/icons-material/Search";
 import { MaterialUISwitch, Search } from "./ui/StyledComponents";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -112,7 +113,7 @@ export default function Header() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={40} color="success">
+          <Badge color="success">
             <MailIcon />
           </Badge>
         </IconButton>
@@ -238,16 +239,34 @@ export default function Header() {
             </Box>
           </Box>
           <>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  md: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                },
+              }}
+            >
+              <Box
+                component={NavLink}
+                sx={{
+                  //   bgcolor: "blue",
+                  borderRadius: "50%",
+                  color: "inherit",
+                  p: 1,
+                  "&:hover,&:focus": {
+                    bgcolor: "primary.accent",
+                    color: "primary.white",
+                  },
+                }}
+                to="chats"
               >
-                <Badge badgeContent={40} color="secondary">
+                <Badge color="secondary">
                   <MailIcon />
                 </Badge>
-              </IconButton>
+              </Box>
 
               <IconButton
                 size="large"

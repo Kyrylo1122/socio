@@ -7,7 +7,7 @@
 
   "language": "language",
   "online_friends": "Online friends",
-  "user_info": "My info",
+  "my_info": "My info",
   "user_friends": "My friends",
   "comments": "Comments",
   "liked_it": "Liked it",
@@ -19,7 +19,8 @@
   "email": "Email*",
   "surname": "Surname*",
   "name": "Name*",
-
+  "add_info": "Add info",
+  "user_info": "User's info",
   "default_bio": "Welcome everybody on my page",
   "add_city": "Add city",
   "remove_city": "Remove city",
