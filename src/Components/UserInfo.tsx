@@ -33,6 +33,7 @@ const inputStyle = {
   },
 };
 interface IUserInfo {
+  name?: string;
   id: string;
   city?: string;
   country?: string;
@@ -196,7 +197,7 @@ const UserInfoForm = ({
   );
 };
 
-const UserInfo = ({ id, city, country, status }: IUserInfo) => {
+const UserInfo = ({ id, city, country, status, name }: IUserInfo) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
   const isCurrentUser = currentUser.uid === id;
@@ -207,7 +208,7 @@ const UserInfo = ({ id, city, country, status }: IUserInfo) => {
   return (
     <Box>
       <Typography variant="h4">
-        {t(isCurrentUser ? "my_info" : "user_info")}
+        {t(isCurrentUser ? "my_info" : "user_info", { name })}
       </Typography>
       <Divider />
       <List>
