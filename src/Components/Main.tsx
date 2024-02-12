@@ -13,6 +13,7 @@ const Main = () => {
         display: "flex",
         overflow: "auto",
         pt: user.uid ? 11 : 4,
+        pb: 12,
       }}
     >
       {user.uid ? (

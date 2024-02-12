@@ -15,10 +15,10 @@ const App = () => {
 
   return (
     <Box
-      component="body"
       sx={{
         flexDirection: "column",
         position: "relative",
+        height: "100%",
       }}
     >
       {user.uid ? (

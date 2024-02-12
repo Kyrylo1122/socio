@@ -177,6 +177,8 @@ const PageMarkUp = ({
                   p: 3,
                   backgroundColor: "background.paper",
                   borderRadius: 1,
+                  maxWidth: 800,
+                  m: "0 auto",
                 }}
               >
                 <PostCreator

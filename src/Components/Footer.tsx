@@ -19,13 +19,15 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        position: "relative",
+        position: "absolute",
+        bottom: 0,
+        bgcolor: "background.paper",
 
         pt: 2,
 
         borderTop: "1px solid",
         borderColor: "primary.dark",
-        width: "100vw",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -46,6 +48,8 @@ const Footer = () => {
           justifyContent: "center",
           alignContent: "center",
           gap: 0,
+          p: 0,
+          m: 0,
         }}
       >
         <ListItem sx={{ width: "auto", p: 1 }}>

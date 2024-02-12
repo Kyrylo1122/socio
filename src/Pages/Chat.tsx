@@ -68,6 +68,7 @@ const Chat = () => {
           position: "fixed",
           right: 0,
           overflow: "hidden",
+          paddingBottom: 10,
         }}
       >
         <ChatUI isDialog={false} />
