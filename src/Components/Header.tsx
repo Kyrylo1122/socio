@@ -8,7 +8,6 @@ import {
   MenuItem,
   Menu,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -23,9 +22,10 @@ import { useNavigate } from "react-router-dom";
 import { useSignOutAccount } from "src/lib/react-query";
 import useLocaleStorageData from "src/hooks/useLocaleStorageData";
 import FriendSearch from "./ui/FriendsSearch";
-import SearchIcon from "@mui/icons-material/Search";
 import { MaterialUISwitch, Search } from "./ui/StyledComponents";
 import { NavLink } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Navigation } from ".";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -158,7 +158,9 @@ export default function Header() {
     <Box
       sx={{
         display: { xs: "flex", sm: "none" },
+        flexDirection: "column",
         justifyContent: "space-between",
+
         width: "100%",
         position: "fixed",
         backgroundColor: "background.paper",
@@ -168,23 +170,31 @@ export default function Header() {
         p: 1,
       }}
     >
-      <NavLink to={"/"}>
-        <Logo />
-      </NavLink>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <SearchIcon sx={{ width: "32px", height: "32px" }} />
-        <LanguageSelect />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <NavLink to={"/"}>
+          <Logo />
+        </NavLink>
+        <Search>
+          <FriendSearch />
+        </Search>
+        {/* <LanguageSelect />
         <MaterialUISwitch
           onChange={() => toggleColorMode()}
           checked={mode === "dark"}
         />
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+
+        <Badge color="secondary">
+          <MailIcon />
+        </Badge> */}
+        {/* <Button sx={{ color: "primary.accent" }} variant="text">
+          <MenuIcon color="inherit" />
+        </Button> */}
         <IconButton
           size="large"
           edge="end"
@@ -196,6 +206,9 @@ export default function Header() {
         >
           <HeaderAvatar />
         </IconButton>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Navigation isHeader />
       </Box>
     </Box>
   );

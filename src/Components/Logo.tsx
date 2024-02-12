@@ -19,7 +19,12 @@ const Logo = ({ sx = [] }: ILogo) => {
       <Typography variant="h2" sx={[style, ...(Array.isArray(sx) ? sx : [sx])]}>
         SOCIO
       </Typography>{" "}
-      <Box component="img" src={layingImage} alt="logo" width={150} />
+      <Box
+        component="img"
+        src={layingImage}
+        alt="logo"
+        sx={{ width: { xs: "100px", md: 150 } }}
+      />
     </Box>
   );
 };
