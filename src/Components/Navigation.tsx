@@ -39,6 +39,7 @@ function ListItemLink(props: ListItemLinkProps) {
   return (
     <ListItem
       sx={{
+        p: { xs: 1, sm: 2 },
         color: "text.primary",
         ":hover": { color: "text.accent" },
         "&.active": {
@@ -48,7 +49,11 @@ function ListItemLink(props: ListItemLinkProps) {
       component={Link}
       to={to}
     >
-      {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+      {icon ? (
+        <ListItemIcon sx={{ justifyContent: "center", color: "inherit" }}>
+          {icon}
+        </ListItemIcon>
+      ) : null}
       {primary && <ListItemText title={primary} />}
       {children}{" "}
     </ListItem>
@@ -62,7 +67,9 @@ const Navigation = ({ isHeader = false }: { isHeader?: boolean }) => {
       <List
         aria-label="main navigation"
         sx={{
+          width: "100%",
           display: "flex",
+          justifyContent: "space-around",
           flexDirection: isHeader ? "row" : "column",
         }}
       >

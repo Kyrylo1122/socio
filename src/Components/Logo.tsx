@@ -23,7 +23,7 @@ const Logo = ({ sx = [] }: ILogo) => {
         component="img"
         src={layingImage}
         alt="logo"
-        sx={{ width: { xs: "100px", md: 150 } }}
+        sx={{ width: { xs: 75, sm: 100, md: 150 } }}
       />
     </Box>
   );

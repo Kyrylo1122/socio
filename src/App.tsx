@@ -1,6 +1,6 @@
 import { Box, Button, Fade } from "@mui/material";
 
-import { Header } from "./Components";
+import Header from "./Components/Header/Header";
 import Main from "./Components/Main";
 import { useUserContext } from "./hooks/useUserContext";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";

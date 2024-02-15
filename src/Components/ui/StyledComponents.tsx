@@ -23,16 +23,23 @@ export const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 export const Search = styled("div")(({ theme }) => ({
   position: "relative",
+  width: "100%",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginRight: theme.spacing(2),
   marginLeft: 0,
+  [theme.breakpoints.up("xs")]: {
+    // marginLeft: theme.spacing(3),
+    flex: 1,
+    maxWidth: "200px",
+  },
   [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
+    maxWidth: "800px",
+  },
+  [theme.breakpoints.up("md")]: {
+    flex: 1,
   },
 }));
 

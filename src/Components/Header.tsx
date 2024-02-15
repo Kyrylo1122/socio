@@ -83,6 +83,7 @@ export default function Header() {
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
+      sx={{ width: "100%" }}
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -96,6 +97,9 @@ export default function Header() {
       }}
       open={isMenuOpen}
       onClose={handleProfileMenuClose}
+      MenuListProps={{
+        "aria-labelledby": "basic-button",
+      }}
     >
       <MenuItem onClick={navigateToHome}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
@@ -103,56 +107,6 @@ export default function Header() {
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge color="success">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={18} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   const MobileHeader = () => (
     <Box
@@ -184,23 +138,24 @@ export default function Header() {
           <FriendSearch />
         </Search>
         {/* <LanguageSelect />
-        <MaterialUISwitch
-          onChange={() => toggleColorMode()}
-          checked={mode === "dark"}
-        />
+            <MaterialUISwitch
+            onChange={() => toggleColorMode()}
+            checked={mode === "dark"}
+            />
 
-        <Badge color="secondary">
-          <MailIcon />
-        </Badge> */}
+            <Badge color="secondary">
+            <MailIcon />
+            </Badge> */}
         {/* <Button sx={{ color: "primary.accent" }} variant="text">
-          <MenuIcon color="inherit" />
-        </Button> */}
+            <MenuIcon color="inherit" />
+            </Button> */}
         <IconButton
           size="large"
           edge="end"
           aria-label="account of current user"
           aria-controls={menuId}
           aria-haspopup="true"
+          id="basic-button"
           onClick={handleProfileMenuOpen}
           color="inherit"
         >
@@ -209,6 +164,15 @@ export default function Header() {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Navigation isHeader />
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
       </Box>
     </Box>
   );
@@ -272,7 +236,6 @@ export default function Header() {
               <Box
                 component={NavLink}
                 sx={{
-                  //   bgcolor: "blue",
                   borderRadius: "50%",
                   color: "inherit",
                   p: 1,
@@ -316,7 +279,7 @@ export default function Header() {
         </Toolbar>
       </AppBar>
       <MobileHeader />
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
       {renderMenu}
     </Box>
   );
