@@ -139,6 +139,9 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   width: "auto",
   p: 0,
   display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  color: theme.palette.mode === "light" ? "black" : "white",
   transition: theme.transitions.create(["background-color", "transform"], {
     duration: theme.transitions.duration.shorter,
   }),
@@ -155,22 +158,3 @@ export const StyledButton = styled(Button)(({ theme }) => ({
     fontSize: "14px",
   },
 }));
-
-// export const StyledButton = styled(Button)
-//   (({ theme }) => ({    width: auto,
-//               fontSize: 14px,
-//               p: 0,
-//               display: flex,
-//   background-color: ${theme.palette.primary.white};
-
-//   transition: ${theme.transitions.create(["background-color", "transform"], {
-//     duration: theme.transitions.duration.shorter,
-//   })};
-//   &:hover,&:focus {
-//     transform: scale(1.1);
-//   }
-//     [theme.breakpoints.up("xs")]: {
-//     // marginLeft: theme.spacing(3),
-//     flex: 1,
-//     maxWidth: "200px",
-//   },}))

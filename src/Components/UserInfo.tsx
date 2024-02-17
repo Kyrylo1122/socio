@@ -18,6 +18,7 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import FormBackground from "/MeditatingDoodle.png";
 import { useUpdateUserInfo } from "src/lib/react-query";
 import { useUserContext } from "src/hooks/useUserContext";
+import { StyledButton } from "./ui/StyledComponents";
 
 const Btn = styled(Button)(({ theme }) => ({
   transition: theme.transitions.create("transform"),
@@ -102,7 +103,7 @@ const UserInfoForm = ({
           alignItems: "center",
           background: "transparent",
           gap: 3,
-          p: 6,
+          p: { xs: 1, sm: 1, md: 2 },
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -156,24 +157,19 @@ const UserInfoForm = ({
         <Box
           sx={{
             display: "flex",
-            gap: 3,
             justifyContent: "center",
             background: "transparent",
           }}
         >
-          <Btn variant="text" onClick={toggleCity}>
-            <Box component="label" sx={{ mr: 1 }}>
-              <LocationCityIcon color="secondary" />
-            </Box>
+          <StyledButton variant="text" onClick={toggleCity}>
+            <LocationCityIcon color="secondary" sx={{ mr: 1 }} />
             {t(isOpenCity ? "remove_city" : "add_city")}
-          </Btn>
+          </StyledButton>
 
-          <Btn type="button" variant="text" onClick={toggleRelationsStatus}>
-            <Box component="label" sx={{ mr: 1 }}>
-              <Diversity1Icon color="secondary" />{" "}
-            </Box>
+          <StyledButton variant="text" onClick={toggleRelationsStatus}>
+            <Diversity1Icon color="secondary" sx={{ mr: 1 }} />{" "}
             {t(relationsStatus ? "remove_status" : "add_status")}
-          </Btn>
+          </StyledButton>
 
           <Button
             type="submit"
