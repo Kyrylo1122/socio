@@ -30,7 +30,10 @@ const PostCardHeader = ({
       <Avatar
         src={createAvatarLink({ photoUrl, defaultCharacter })}
         aria-label={name}
-        sx={{ width: 70, height: 70 }}
+        sx={{
+          width: { xs: 50, sm: 60, md: 70 },
+          height: { xs: 50, sm: 60, md: 70 },
+        }}
       />
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography variant="h6">{name}</Typography>

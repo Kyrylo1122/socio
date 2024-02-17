@@ -112,7 +112,7 @@ const CreatePost = ({ close }: ICreatePost) => {
     <Box
       sx={{
         position: "relative",
-        p: 3,
+        p: { xs: 1, md: 3 },
 
         minHeight: 100,
         maxHeight: "80vh",
@@ -131,9 +131,10 @@ const CreatePost = ({ close }: ICreatePost) => {
         </Typography>
         <StyledButton
           sx={{
-            height: 40,
+            height: { xs: 30, sm: 40 },
+            width: { xs: 30, sm: 40 },
 
-            minWidth: 40,
+            minWidth: { xs: 30, sm: 40 },
             position: "absolute",
             top: 10,
             right: 10,
@@ -179,7 +180,6 @@ const CreatePost = ({ close }: ICreatePost) => {
         </Box>
         <Box
           sx={{
-            mt: 2,
             display: "flex",
             gap: 3,
             width: "100%",
@@ -193,10 +193,11 @@ const CreatePost = ({ close }: ICreatePost) => {
               display: "flex",
               gap: 2,
               flexDirection: "column",
+              alignItems: "center",
               width: "100%",
             }}
           >
-            <Collapse in={isOpenLocation}>
+            <Collapse sx={{ width: "100%" }} in={isOpenLocation}>
               <Box
                 ref={locationRef}
                 sx={{
@@ -220,7 +221,11 @@ const CreatePost = ({ close }: ICreatePost) => {
                 />
               </Box>
             </Collapse>
-            <Collapse in={Boolean(fileUrl)} unmountOnExit>
+            <Collapse
+              sx={{ width: "100%" }}
+              in={Boolean(fileUrl)}
+              unmountOnExit
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -289,7 +294,7 @@ const CreatePost = ({ close }: ICreatePost) => {
               {...register("caption")}
             />
 
-            <Collapse in={isOpenTags}>
+            <Collapse sx={{ width: "100%" }} in={isOpenTags}>
               <Box
                 sx={{
                   display: "flex",
@@ -308,17 +313,21 @@ const CreatePost = ({ close }: ICreatePost) => {
         <Box
           sx={{
             display: "flex",
-            gap: 3,
             justifyContent: "center",
+            alignContent: "center",
           }}
         >
           <IconBox
             component="label"
             sx={{
               display: "flex",
-              alignContent: "center",
+              fontWeight: "500",
+              alignItems: "center",
               justifyContent: "center",
               color: "primary.contrast",
+              textTransform: "uppercase",
+              textAlign: "center",
+              fontSize: { xs: "10px", sm: "12px", md: "14px" },
             }}
           >
             <AddPhotoAlternateIcon color="secondary" />

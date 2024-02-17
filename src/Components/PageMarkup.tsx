@@ -212,7 +212,11 @@ const PageMarkUp = ({
         </Box>
       </Box>
       {currentUserPage ? (
-        <Modal open={modalIsOpen} close={closeModal}>
+        <Modal
+          sx={{ width: { xs: "80%", sm: "60%", md: "50%" } }}
+          open={modalIsOpen}
+          close={closeModal}
+        >
           <CreatePost close={closeModal} />
         </Modal>
       ) : null}
