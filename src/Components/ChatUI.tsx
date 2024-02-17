@@ -81,7 +81,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: isDialog ? "500px" : " calc(100vh - 88px)",
+            height: isDialog ? "500px" : " calc(100vh - 176px)",
           }}
         >
           <Box

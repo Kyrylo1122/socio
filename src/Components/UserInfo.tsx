@@ -17,6 +17,7 @@ import Diversity1Icon from "@mui/icons-material/Diversity1";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import FormBackground from "/MeditatingDoodle.png";
 import { useUpdateUserInfo } from "src/lib/react-query";
+import { useUserContext } from "src/hooks/useUserContext";
 
 const Btn = styled(Button)(({ theme }) => ({
   transition: theme.transitions.create("transform"),
@@ -25,14 +26,21 @@ const Btn = styled(Button)(({ theme }) => ({
     transform: "scale(1.05)",
   },
 }));
-
-interface IValue {
+const inputStyle = {
+  outline: "none",
+  "& .MuiFormLabel-root.Mui-focused": {
+    color: "text.accent",
+  },
+};
+interface IUserInfo {
+  name?: string;
   id: string;
   city?: string;
   country?: string;
   status?: string | null;
 }
-type UserInfoFormType = IValue & { close: () => void };
+type UserInfoFormType = IUserInfo & { close: () => void };
+
 const UserInfoForm = ({
   id,
   close,
@@ -57,7 +65,7 @@ const UserInfoForm = ({
   });
   const { mutateAsync: updateUserInfo, isPending } = useUpdateUserInfo();
 
-  const onSubmit = async (data: Partial<IValue>) => {
+  const onSubmit = async (data: Partial<IUserInfo>) => {
     try {
       await updateUserInfo({ uid: id, data });
       close();
@@ -102,13 +110,8 @@ const UserInfoForm = ({
           <TextField
             variant="standard"
             fullWidth
-            sx={{
-              outline: "none",
-              "& .MuiFormLabel-root.Mui-focused": {
-                color: "text.accent",
-              },
-            }}
-            label="Country"
+            sx={inputStyle}
+            label={t("country")}
             placeholder="Ukraine..., Spain..."
             {...register("country")}
           />
@@ -123,13 +126,8 @@ const UserInfoForm = ({
               <TextField
                 variant="standard"
                 fullWidth
-                sx={{
-                  outline: "none",
-                  "& .MuiFormLabel-root.Mui-focused": {
-                    color: "text.accent",
-                  },
-                }}
-                label="City"
+                sx={inputStyle}
+                label={t("city")}
                 placeholder="Kyiv..., Barcelona..."
                 {...register("city")}
               />
@@ -146,13 +144,8 @@ const UserInfoForm = ({
               <TextField
                 variant="standard"
                 fullWidth
-                sx={{
-                  outline: "none",
-                  "& .MuiFormLabel-root.Mui-focused": {
-                    color: "text.accent",
-                  },
-                }}
-                label="Relations status"
+                sx={inputStyle}
+                label={t("status")}
                 placeholder="Looking for a love..."
                 {...register("status")}
               />
@@ -196,7 +189,7 @@ const UserInfoForm = ({
               },
             }}
           >
-            Share here
+            {t("share")}
           </Button>
         </Box>
       </Box>
@@ -204,16 +197,19 @@ const UserInfoForm = ({
   );
 };
 
-const UserInfo = ({ id, city, country, status }: IValue) => {
+const UserInfo = ({ id, city, country, status, name }: IUserInfo) => {
   const { t } = useTranslation();
+  const { user: currentUser } = useUserContext();
+  const isCurrentUser = currentUser.uid === id;
 
   const [infoModal, setInfoModal] = useState(false);
   const closeModal = () => setInfoModal(false);
   const openModal = () => setInfoModal(true);
-
   return (
     <Box>
-      <Typography variant="h4">{t("user_info")}</Typography>
+      <Typography variant="h4">
+        {t(isCurrentUser ? "my_info" : "user_info", { name })}
+      </Typography>
       <Divider />
       <List>
         <ListItem sx={{ pt: 0, pb: 0 }}>
@@ -226,9 +222,11 @@ const UserInfo = ({ id, city, country, status }: IValue) => {
           {t("status")} : {status}
         </ListItem>
 
-        <Button variant="contained" onClick={openModal}>
-          Add some info
-        </Button>
+        {isCurrentUser ? (
+          <Button variant="contained" onClick={openModal}>
+            {t("add_info")}
+          </Button>
+        ) : null}
 
         <Modal open={infoModal} close={closeModal}>
           <UserInfoForm

@@ -1,12 +1,13 @@
 import { Box, Button, Fade } from "@mui/material";
 
-import { Header } from "./Components";
+import Header from "./Components/Header/Header";
 import Main from "./Components/Main";
 import { useUserContext } from "./hooks/useUserContext";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
 import CustomizedDialogs from "./Components/Dialog";
 import SubtitlesOffIcon from "@mui/icons-material/SubtitlesOff";
 import useDialogContext from "./hooks/useDialogContext";
+import Footer from "./Components/Footer";
 
 const App = () => {
   const { user } = useUserContext();
@@ -14,10 +15,10 @@ const App = () => {
 
   return (
     <Box
-      component="body"
       sx={{
         flexDirection: "column",
         position: "relative",
+        height: "100%",
       }}
     >
       {user.uid ? (
@@ -26,27 +27,29 @@ const App = () => {
         </Box>
       ) : null}
       <Main />
-      <Fade in={isVisibleChatBtn}>
-        {
-          <Button
-            variant="contained"
-            sx={{
-              position: "fixed",
-              p: 3,
-              bgcolor: "primary.white",
-              color: "primary.accent",
-              borderRadius: "50%",
-              bottom: 16,
-              right: 16,
-            }}
-            onClick={() => toggle()}
-          >
-            {isOpen ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
-          </Button>
-        }
-      </Fade>
-
-      {isOpen ? <CustomizedDialogs /> : null}
+      {user.uid ? (
+        <Fade in={isVisibleChatBtn}>
+          {
+            <Button
+              variant="contained"
+              sx={{
+                position: "fixed",
+                p: 3,
+                bgcolor: "primary.white",
+                color: "primary.accent",
+                borderRadius: "50%",
+                bottom: 16,
+                right: 16,
+              }}
+              onClick={() => toggle()}
+            >
+              {isOpen ? <SubtitlesOffIcon /> : <MarkChatUnreadIcon />}
+            </Button>
+          }
+        </Fade>
+      ) : null}
+      {isOpen && user.uid ? <CustomizedDialogs /> : null}
+      <Footer />
     </Box>
   );
 };

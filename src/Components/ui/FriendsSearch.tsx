@@ -37,7 +37,7 @@ export default function FriendSearch() {
     <Autocomplete
       id="country-select-demo"
       sx={{
-        width: 300,
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -93,8 +93,12 @@ export default function FriendSearch() {
         <TextField
           {...params}
           sx={{
+            width: "100%",
             flex: 1,
             "& .MuiAutocomplete-endAdornment": { display: "none" },
+            "& .MuiFormLabel-root.Mui-focused": {
+              opacity: 0,
+            },
           }}
           placeholder={t("search")}
           label={<SearchIcon />}

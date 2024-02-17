@@ -60,7 +60,11 @@ const PageMarkUp = ({
   const UserFriends = () => {
     return (
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="h4">{t("user_friends")}</Typography>
+        <Typography variant="h4">
+          {t(currentUserPage ? "my_friends" : "user_friends", {
+            name: user.name,
+          })}
+        </Typography>
         <Divider />
         <AvatarGroup
           total={friends?.length}
@@ -173,6 +177,8 @@ const PageMarkUp = ({
                   p: 3,
                   backgroundColor: "background.paper",
                   borderRadius: 1,
+                  maxWidth: 800,
+                  m: "0 auto",
                 }}
               >
                 <PostCreator
@@ -195,6 +201,7 @@ const PageMarkUp = ({
             }}
           >
             <UserInfo
+              name={user.name}
               id={user.uid}
               city={user.city}
               country={user.country}

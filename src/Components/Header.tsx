@@ -8,7 +8,6 @@ import {
   MenuItem,
   Menu,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -23,8 +22,10 @@ import { useNavigate } from "react-router-dom";
 import { useSignOutAccount } from "src/lib/react-query";
 import useLocaleStorageData from "src/hooks/useLocaleStorageData";
 import FriendSearch from "./ui/FriendsSearch";
-import SearchIcon from "@mui/icons-material/Search";
 import { MaterialUISwitch, Search } from "./ui/StyledComponents";
+import { NavLink } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Navigation } from ".";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,9 +44,17 @@ export default function Header() {
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+  };
+  const navigateToHome = () => {
+    handleProfileMenuClose();
+
+    navigate("/");
   };
 
   const handleMenuClose = async () => {
@@ -74,6 +83,7 @@ export default function Header() {
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
+      sx={{ width: "100%" }}
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -86,70 +96,25 @@ export default function Header() {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={handleProfileMenuClose}
+      MenuListProps={{
+        "aria-labelledby": "basic-button",
+      }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={navigateToHome}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
     </Menu>
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={40} color="success">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={18} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   const MobileHeader = () => (
     <Box
       sx={{
         display: { xs: "flex", sm: "none" },
+        flexDirection: "column",
         justifyContent: "space-between",
+
         width: "100%",
         position: "fixed",
         backgroundColor: "background.paper",
@@ -159,31 +124,54 @@ export default function Header() {
         p: 1,
       }}
     >
-      <Logo />
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <SearchIcon sx={{ width: "32px", height: "32px" }} />
-        <LanguageSelect />
-        <MaterialUISwitch
-          onChange={() => toggleColorMode()}
-          checked={mode === "dark"}
-        />
-      </Box>
       <Box
         sx={{
           display: "flex",
+          justifyContent: "space-around",
           alignItems: "center",
         }}
       >
+        <NavLink to={"/"}>
+          <Logo />
+        </NavLink>
+        <Search>
+          <FriendSearch />
+        </Search>
+        {/* <LanguageSelect />
+            <MaterialUISwitch
+            onChange={() => toggleColorMode()}
+            checked={mode === "dark"}
+            />
+
+            <Badge color="secondary">
+            <MailIcon />
+            </Badge> */}
+        {/* <Button sx={{ color: "primary.accent" }} variant="text">
+            <MenuIcon color="inherit" />
+            </Button> */}
         <IconButton
           size="large"
           edge="end"
           aria-label="account of current user"
           aria-controls={menuId}
           aria-haspopup="true"
+          id="basic-button"
           onClick={handleProfileMenuOpen}
           color="inherit"
         >
           <HeaderAvatar />
+        </IconButton>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Navigation isHeader />
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
         </IconButton>
       </Box>
     </Box>
@@ -215,15 +203,12 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Logo />
+          <NavLink to={"/"}>
+            <Logo />
+          </NavLink>
 
           <Search>
             <FriendSearch />
-            {/* <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              onChange={onSearch}
-            /> */}
           </Search>
 
           <Box sx={{ display: "flex" }}>
@@ -238,16 +223,33 @@ export default function Header() {
             </Box>
           </Box>
           <>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  md: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                },
+              }}
+            >
+              <Box
+                component={NavLink}
+                sx={{
+                  borderRadius: "50%",
+                  color: "inherit",
+                  p: 1,
+                  "&:hover,&:focus": {
+                    bgcolor: "primary.accent",
+                    color: "primary.white",
+                  },
+                }}
+                to="chats"
               >
-                <Badge badgeContent={40} color="secondary">
+                <Badge color="secondary">
                   <MailIcon />
                 </Badge>
-              </IconButton>
+              </Box>
 
               <IconButton
                 size="large"
@@ -277,7 +279,7 @@ export default function Header() {
         </Toolbar>
       </AppBar>
       <MobileHeader />
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
       {renderMenu}
     </Box>
   );

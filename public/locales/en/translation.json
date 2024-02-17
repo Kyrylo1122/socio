@@ -7,8 +7,10 @@
 
   "language": "language",
   "online_friends": "Online friends",
-  "user_info": "My info",
-  "user_friends": "My friends",
+  "my_info": "My info",
+  "my_friends": "My friends",
+  "user_friends": "{{name}}'s  friends",
+
   "comments": "Comments",
   "liked_it": "Liked it",
   "city": "City",
@@ -19,7 +21,8 @@
   "email": "Email*",
   "surname": "Surname*",
   "name": "Name*",
-
+  "add_info": "Add info",
+  "user_info": "{{name}} info",
   "default_bio": "Welcome everybody on my page",
   "add_city": "Add city",
   "remove_city": "Remove city",
@@ -38,12 +41,14 @@
   "sign_in_btn": "Sign In",
 
   "error_repeat_signin": "Oops...Something went wrong. Please repeat sign up again",
-  "error_signin_failed": "SignIn failed. Please repeat it again",
+  "error_signin_failed": "Email or password is wrong. Please repeat it again",
   "error_signup_failed": "SignUp failed. Please repeat it again",
 
   "field_required": "This field is required",
   "choose_your_character": "Choose your character",
   "do_not_have_account": "Don't have an account? Sign Up",
+  "back_to_sign_in": "Back to sign in",
+
   "do_not_have_saves": "Oops, looks like you do not have saves",
   "delete": "Delete",
   "edit": "Edit",
@@ -75,7 +80,8 @@
   "share": "share",
   "tags_form_empty_error": "The tags field cannot be empty",
   "no_messages": "No messages",
-  "no_posts": "You do not have any post. Let's create the first!",
+  "no_posts": "There is no posts.",
+
   "no_comments": "No comments",
   "answer": "answer",
   "saved_post": "The post was added to saves",

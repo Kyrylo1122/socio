@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Box,
   List,
   ListItem,
   Paper,
@@ -40,6 +39,7 @@ function ListItemLink(props: ListItemLinkProps) {
   return (
     <ListItem
       sx={{
+        p: { xs: 1, sm: 2 },
         color: "text.primary",
         ":hover": { color: "text.accent" },
         "&.active": {
@@ -49,34 +49,44 @@ function ListItemLink(props: ListItemLinkProps) {
       component={Link}
       to={to}
     >
-      {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+      {icon ? (
+        <ListItemIcon sx={{ justifyContent: "center", color: "inherit" }}>
+          {icon}
+        </ListItemIcon>
+      ) : null}
       {primary && <ListItemText title={primary} />}
       {children}{" "}
     </ListItem>
   );
 }
 
-const Navigation = () => {
+const Navigation = ({ isHeader = false }: { isHeader?: boolean }) => {
   const { t } = useTranslation();
   return (
-    <Box>
-      <Paper sx={{ backgroundColor: "inherit" }} elevation={0}>
-        <List aria-label="main navigation">
-          <ListItemLink to="/" icon={<Home />}>
-            {t("navigation_homepage")}
-          </ListItemLink>
-          <ListItemLink to="/contacts" icon={<PeopleAlt />}>
-            {t("navigation_contacts")}
-          </ListItemLink>
-          <ListItemLink to="/chats" icon={<Chat />}>
-            {t("navigation_chats")}
-          </ListItemLink>
-          <ListItemLink to="/saves" icon={<SaveIcon />}>
-            {t("navigation_saves")}
-          </ListItemLink>
-        </List>
-      </Paper>
-    </Box>
+    <Paper sx={{ backgroundColor: "inherit" }} elevation={0}>
+      <List
+        aria-label="main navigation"
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-around",
+          flexDirection: isHeader ? "row" : "column",
+        }}
+      >
+        <ListItemLink to="/" icon={<Home />}>
+          {!isHeader ? t("navigation_homepage") : ""}
+        </ListItemLink>
+        <ListItemLink to="/contacts" icon={<PeopleAlt />}>
+          {!isHeader ? t("navigation_contacts") : ""}
+        </ListItemLink>
+        <ListItemLink to="/chats" icon={<Chat />}>
+          {!isHeader ? t("navigation_chats") : ""}
+        </ListItemLink>
+        <ListItemLink to="/saves" icon={<SaveIcon />}>
+          {!isHeader ? t("navigation_saves") : ""}
+        </ListItemLink>
+      </List>
+    </Paper>
   );
 };
 
