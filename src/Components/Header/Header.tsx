@@ -175,9 +175,11 @@ export default function Header() {
       >
         <Toolbar
           sx={{
-            alignItems: "center",
             p: 0,
+
+            alignItems: "center",
             justifyContent: "space-around",
+            width: "100%",
           }}
         >
           <Box>
