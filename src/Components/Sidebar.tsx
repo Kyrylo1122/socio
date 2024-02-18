@@ -9,7 +9,7 @@ const Sidebar = () => {
         flexDirection: "column",
         height: "100vh",
         position: "fixed",
-        width: "25%",
+        width: { xs: "25%", md: "20%" },
         backgroundColor: "background.default",
       }}
     >

@@ -40,13 +40,13 @@ const Chat = () => {
         sx={{
           position: "static",
           overflow: "hidden",
+          flex: 1,
         }}
       >
         {sortedMessages ? (
           <List>
             {sortedMessages.map((chat) => (
               <ListItem
-                sx={{ maxWidth: "300px", p: 1 }}
                 key={chat[0]}
                 onClick={async () => await handleSelect(chat[1].userInfo)}
               >
@@ -64,9 +64,10 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          width: { md: "40%", lg: "48%", xl: "53%" },
-          position: "fixed",
-          right: 0,
+          bgcolor: "brown",
+          position: "relative",
+          flex: 1.5,
+
           overflow: "hidden",
           paddingBottom: 10,
         }}

@@ -39,6 +39,7 @@ function ListItemLink(props: ListItemLinkProps) {
   return (
     <ListItem
       sx={{
+        width: "100%",
         p: { xs: 1, sm: 2 },
         color: "text.primary",
         ":hover": { color: "text.accent" },
@@ -63,7 +64,7 @@ function ListItemLink(props: ListItemLinkProps) {
 const Navigation = ({ isHeader = false }: { isHeader?: boolean }) => {
   const { t } = useTranslation();
   return (
-    <Paper sx={{ backgroundColor: "inherit" }} elevation={0}>
+    <Paper sx={{ width: "100%", backgroundColor: "inherit" }} elevation={0}>
       <List
         aria-label="main navigation"
         sx={{

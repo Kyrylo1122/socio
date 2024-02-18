@@ -12,16 +12,24 @@ const Main = () => {
       sx={{
         display: "flex",
         overflow: "auto",
-        pt: user.uid ? 11 : 4,
+        pt: user.uid ? { xs: 15, sm: 11 } : 4,
         pb: 12,
       }}
     >
       {user.uid ? (
-        <Box sx={{ flex: 1, display: { xs: "none", sm: "block" } }}>
+        <Box
+          sx={{
+            position: "relative",
+            flex: 1,
+            display: { xs: "none", sm: "block" },
+          }}
+        >
           <Sidebar />
         </Box>
       ) : null}
-      <Box sx={{ flex: 3, bgcolor: "background.default" }}>
+      <Box
+        sx={{ flex: { xs: 1, sm: 3, md: 4 }, bgcolor: "background.default" }}
+      >
         <Outlet />
       </Box>
     </Box>

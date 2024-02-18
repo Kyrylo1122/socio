@@ -75,7 +75,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   };
 
   return (
-    <>
+    <Box sx={{ position: "fixed" }}>
       {data.chatId !== "null" ? (
         <Box
           sx={{
@@ -87,7 +87,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
           <Box
             sx={{
               gap: 2,
-              p: isDialog ? 2 : 3,
+              p: isDialog ? 2 : { xs: 1, md: 3 },
               display: "flex",
 
               width: "100%",
@@ -141,7 +141,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
           <Typography variant="h2">{t("let's_write")}</Typography>
         </Box>
       )}
-    </>
+    </Box>
   );
 };
 
