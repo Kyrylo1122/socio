@@ -49,7 +49,10 @@ const ContactsMarkup = ({
           name={name}
           photoUrl={photoUrl}
           defaultCharacter={defaultCharacter}
-          sx={{ width: 70, height: 70 }}
+          sx={{
+            width: { xs: 50, sm: 60, md: 70 },
+            height: { xs: 50, sm: 60, md: 70 },
+          }}
         />
         <Typography>{name}</Typography>
       </Box>
@@ -58,6 +61,8 @@ const ContactsMarkup = ({
           onClick={handleSendMsg}
           variant="contained"
           sx={{
+            p: { xs: "2px 4px", sm: "6px 16px" },
+            fontSize: { xs: "10px", sm: "12px" },
             display: "flex",
             alignItems: "center",
             gap: 1,
