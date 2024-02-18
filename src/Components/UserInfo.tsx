@@ -7,7 +7,6 @@ import {
   ListItem,
   TextField,
   Typography,
-  styled,
 } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,13 +19,6 @@ import { useUpdateUserInfo } from "src/lib/react-query";
 import { useUserContext } from "src/hooks/useUserContext";
 import { StyledButton } from "./ui/StyledComponents";
 
-const Btn = styled(Button)(({ theme }) => ({
-  transition: theme.transitions.create("transform"),
-  color: theme.palette.mode === "dark" ? "white" : "black",
-  "&:hover,&:focus": {
-    transform: "scale(1.05)",
-  },
-}));
 const inputStyle = {
   outline: "none",
   "& .MuiFormLabel-root.Mui-focused": {
