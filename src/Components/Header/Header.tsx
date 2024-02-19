@@ -197,7 +197,6 @@ export default function Header() {
             sx={{
               display: "flex",
               alignItems: "center",
-              width: "100%",
               justifyContent: "space-between",
             }}
           >
@@ -268,7 +267,7 @@ export default function Header() {
             </Box>
           </Box>
         </Toolbar>
-        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+        <Box sx={{ display: { xs: "flex", tb: "none" } }}>
           <Navigation isHeader />
         </Box>
       </AppBar>

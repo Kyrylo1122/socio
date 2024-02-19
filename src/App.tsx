@@ -33,6 +33,7 @@ const App = () => {
             <Button
               variant="contained"
               sx={{
+                zIndex: 99999,
                 position: "fixed",
                 p: 3,
                 bgcolor: "primary.white",

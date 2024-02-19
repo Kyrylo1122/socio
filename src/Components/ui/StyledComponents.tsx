@@ -31,7 +31,6 @@ export const Search = styled("div")(({ theme }) => ({
   },
   marginLeft: 0,
   [theme.breakpoints.up("xs")]: {
-    // marginLeft: theme.spacing(3),
     flex: 1,
     maxWidth: "200px",
   },
@@ -39,6 +38,8 @@ export const Search = styled("div")(({ theme }) => ({
     maxWidth: "800px",
   },
   [theme.breakpoints.up("md")]: {
+    maxWidth: "300px",
+
     flex: 1,
   },
 }));

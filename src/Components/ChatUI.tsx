@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper, Button, List, ListItem } from "@mui/material";
 import { useChatContext } from "src/hooks/useChatContext";
 import {
   Timestamp,
@@ -75,7 +75,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   };
 
   return (
-    <Box sx={{ position: "fixed" }}>
+    <Box>
       {data.chatId !== "null" ? (
         <Box
           sx={{
@@ -87,7 +87,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
           <Box
             sx={{
               gap: 2,
-              p: isDialog ? 2 : { xs: 1, md: 3 },
+              p: isDialog ? 2 : { xs: 1, md: 2 },
               display: "flex",
 
               width: "100%",
@@ -96,18 +96,30 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
             }}
           >
             <AvatarImage
-              sx={{ width: isDialog ? 50 : 75, height: isDialog ? 50 : 75 }}
+              sx={{
+                width: isDialog ? 50 : { xs: 65, md: 75 },
+                height: isDialog ? 50 : { xs: 65, md: 75 },
+              }}
               photoUrl={data.user.photoUrl}
               name={data.user.name}
               defaultCharacter={data.user.defaultCharacter}
             />
             <Typography variant="h2">{data.user.name}</Typography>
           </Box>
-          <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={ref}>
+          <Box sx={{ flexGrow: 1, overflow: "auto" }} ref={ref}>
             {messages.length ? (
-              messages.map((message) => (
-                <Message key={message.id} message={message} />
-              ))
+              <List sx={{ width: "100%" }}>
+                {messages.map((message) => (
+                  <ListItem
+                    sx={{
+                      width: "100%",
+                    }}
+                    key={message.id}
+                  >
+                    <Message message={message} />
+                  </ListItem>
+                ))}
+              </List>
             ) : (
               <Box
                 sx={{
@@ -165,20 +177,24 @@ export const Message = ({ message }: { message: IMessageResponse }) => {
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
       sx={{
-        display: "flex",
-        justifyContent: isBot ? "flex-start" : "flex-end",
-        mb: 2,
+        mr: isBot ? "auto" : 0,
+        ml: isBot ? 0 : "auto",
+        width: "75%",
       }}
     >
       <Paper
         variant="outlined"
         sx={{
           p: 1,
-          backgroundColor: isBot ? "primary.light" : "secondary.light",
+          backgroundColor: isBot ? "primary.grey" : "secondary.light",
+          color: "primary.white",
+
           position: "relative",
         }}
       >
-        <Typography variant="body1">{message.text.value}</Typography>
+        <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+          {message.text.value}
+        </Typography>
         <Typography variant="body2">
           {formatDate(message?.date?.seconds)}
         </Typography>
@@ -187,7 +203,10 @@ export const Message = ({ message }: { message: IMessageResponse }) => {
             sx={{
               position: "absolute",
               bottom: 0,
-              left: -50,
+
+              right: isBot ? -50 : "auto",
+              left: isBot ? "auto" : -50,
+
               color: "primary.accent",
             }}
             variant="text"

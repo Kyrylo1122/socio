@@ -49,6 +49,7 @@ const UserChatItemMarkup = ({
   return (
     <Card
       sx={{
+        p: { md: "4px 8px" },
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",

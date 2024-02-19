@@ -12,7 +12,7 @@ const Main = () => {
       sx={{
         display: "flex",
         overflow: "auto",
-        pt: user.uid ? { xs: 15, sm: 11 } : 4,
+        pt: user.uid ? { xs: 15, sm: 20, tb: 11 } : 4,
         pb: 12,
       }}
     >
@@ -21,7 +21,7 @@ const Main = () => {
           sx={{
             position: "relative",
             flex: 1,
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", tb: "block" },
           }}
         >
           <Sidebar />

@@ -33,18 +33,17 @@ const Chat = () => {
       sx={{
         display: "flex",
         w: "100%",
-        position: "relative",
       }}
     >
       <Box
         sx={{
-          position: "static",
-          overflow: "hidden",
+          position: "relative",
+          overflow: "auto",
           flex: 1,
         }}
       >
         {sortedMessages ? (
-          <List>
+          <List sx={{ position: "absolute", width: "100%" }}>
             {sortedMessages.map((chat) => (
               <ListItem
                 key={chat[0]}
@@ -64,15 +63,18 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          bgcolor: "brown",
           position: "relative",
-          flex: 1.5,
+          flex: { xs: 1, md: 1.5, lg: 2 },
 
           overflow: "hidden",
-          paddingBottom: 10,
+
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <ChatUI isDialog={false} />
+        <Box sx={{ width: "100% " }}>
+          <ChatUI isDialog={false} />
+        </Box>
       </Box>
     </Box>
   );
