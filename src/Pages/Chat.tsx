@@ -32,7 +32,7 @@ const Chat = () => {
     <Box
       sx={{
         display: "flex",
-        w: "100%",
+        height: "100%",
       }}
     >
       <Box

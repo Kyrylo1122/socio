@@ -12,6 +12,7 @@ const Main = () => {
       sx={{
         display: "flex",
         overflow: "auto",
+        height: "100%",
         pt: user.uid ? { xs: 15, sm: 20, tb: 11 } : 4,
         pb: 12,
       }}
