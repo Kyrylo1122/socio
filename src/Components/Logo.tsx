@@ -5,7 +5,6 @@ import layingImage from "/LayingDoodleYYY.png";
 interface ILogo {
   sx?: SxProps<Theme>;
 }
-const style = { fontFamily: `Kablammo`, color: "#f9aa33" };
 
 const Logo = ({ sx = [] }: ILogo) => {
   return (
@@ -16,14 +15,20 @@ const Logo = ({ sx = [] }: ILogo) => {
       }}
     >
       {" "}
-      <Typography variant="h2" sx={[style, ...(Array.isArray(sx) ? sx : [sx])]}>
+      <Typography
+        variant="h2"
+        sx={{ fontFamily: `Kablammo`, color: "#f9aa33" }}
+      >
         SOCIO
       </Typography>{" "}
       <Box
         component="img"
         src={layingImage}
         alt="logo"
-        sx={{ width: { xs: 75, sm: 100, md: 150 } }}
+        sx={[
+          { width: { xs: 75, sm: 100, md: 150 } },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
       />
     </Box>
   );

@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 import layingImage from "/LayingDoodleYYY.png";
 import Spinner from "src/Components/Spinner";
 import { useEffect } from "react";
-import Logo from "src/Components/Logo";
 import { IFormNames } from "src/types";
 import { Input } from "src/Components/ui/Input";
 import { useSignInAccount } from "src/lib/react-query";
@@ -76,12 +75,13 @@ const SignIn = () => {
               alignItems: "center",
               justifyContent: "space-between",
               display: { xs: "flex", md: "none" },
-              width: { xs: "200px", sm: "480px" },
             }}
           >
-            {" "}
-            <Logo />
-            <CardMedia component="img" image={layingImage} />
+            <CardMedia
+              sx={{ m: "0 auto", maxWidth: "400px" }}
+              component="img"
+              image={layingImage}
+            />
           </Box>
         </Slide>
         <Slide direction="right" in={true} mountOnEnter unmountOnExit>
