@@ -177,10 +177,11 @@ const SignUp = () => {
                   autoComplete="current-password"
                   name="password"
                   register={register}
+                  validation={{ minLength: 6 }}
                 />
                 {errors.password && (
                   <Typography color="error" variant="body2">
-                    {t("field_required")}
+                    {t("field_required_password")}
                   </Typography>
                 )}
 

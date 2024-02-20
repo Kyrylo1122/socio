@@ -136,7 +136,7 @@ const SignIn = () => {
                 name="password"
                 register={register}
               />
-              {errors.password && <p>{t("field_required")} </p>}
+              {errors.password && <p>{t("field_required_password")} </p>}
 
               <FormButton type="submit">{t("sign_in_btn")}</FormButton>
               <Grid container>

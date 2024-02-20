@@ -45,6 +45,7 @@
   "error_signup_failed": "SignUp failed. Please repeat it again",
 
   "field_required": "This field is required",
+  "field_required_password": "This field is required and have to be at least 6 sign",
   "choose_your_character": "Choose your character",
   "do_not_have_account": "Don't have an account? Sign Up",
   "back_to_sign_in": "Back to sign in",

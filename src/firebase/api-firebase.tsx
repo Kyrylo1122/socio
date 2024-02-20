@@ -258,66 +258,47 @@ export const createUserAccount = async ({
   password,
   defaultCharacter,
 }: IUserNew) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const { user } = userCredential;
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  const { user } = userCredential;
 
-    if (!user) throw Error;
-    await updateDatabase({
+  if (!user) throw Error;
+  await updateDatabase({
+    id: user.uid,
+    collectionName: "users",
+    data: {
+      uid: user.uid,
+      name,
+      email,
+      defaultCharacter: defaultCharacter ?? 0,
+      bio: "Welcome on my page",
+      backgroundImage: null,
+      country: "",
+      city: "",
+      photoUrl: null,
+      status: null,
+    },
+  });
+  await Promise.allSettled([
+    updateDatabase({
       id: user.uid,
-      collectionName: "users",
-      data: {
-        uid: user.uid,
-        name,
-        email,
-        defaultCharacter: defaultCharacter ?? 0,
-        bio: "Welcome on my page",
-        backgroundImage: null,
-        country: "",
-        city: "",
-        photoUrl: null,
-        status: null,
-      },
-    });
-    await Promise.allSettled([
-      updateDatabase({
-        id: user.uid,
-        collectionName: "userChats",
-        data: {},
-      }),
-      updateDatabase({
-        id: user.uid,
-        collectionName: "posts",
-        data: { posts: [] },
-      }),
-      updateDatabase({
-        id: user.uid,
-        collectionName: "saves",
-        data: { posts: [] },
-      }),
-    ]);
-    // await updateDatabase({
-    //   id: user.uid,
-    //   collectionName: "userChats",
-    //   data: {},
-    // });
-    // await updateDatabase({
-    //   id: user.uid,
-    //   collectionName: "posts",
-    //   data: { posts: [] },
-    // });
-    // await updateDatabase({
-    //   id: user.uid,
-    //   collectionName: "saves",
-    //   data: { posts: [] },
-    // });
-  } catch (error) {
-    console.error(error);
-  }
+      collectionName: "userChats",
+      data: {},
+    }),
+    updateDatabase({
+      id: user.uid,
+      collectionName: "posts",
+      data: { posts: [] },
+    }),
+    updateDatabase({
+      id: user.uid,
+      collectionName: "saves",
+      data: { posts: [] },
+    }),
+  ]);
 };
 
 export const signInAccount = async ({

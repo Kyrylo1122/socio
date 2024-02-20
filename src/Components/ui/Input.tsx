@@ -3,12 +3,13 @@ import { TextField, TextFieldProps } from "@mui/material";
 import { IFormNames } from "src/types";
 
 type InputProps = {
+  validation?: any;
   name: Path<IFormNames>;
   register: UseFormRegister<IFormNames>;
 };
 type InputType = TextFieldProps & InputProps;
 
-export const Input = ({ register, name, ...rest }: InputType) => {
+export const Input = ({ register, validation, name, ...rest }: InputType) => {
   return (
     <TextField
       margin="normal"
@@ -21,7 +22,7 @@ export const Input = ({ register, name, ...rest }: InputType) => {
           bgcolor: "none",
         },
       }}
-      {...register(name, { required: true })}
+      {...register(name, { required: true, ...validation })}
       {...rest}
     />
   );
