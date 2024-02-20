@@ -119,6 +119,7 @@ const SignIn = () => {
               sx={{ mt: 1 }}
             >
               <Input
+                type="email"
                 label={t("email")}
                 autoComplete="email"
                 name="email"
