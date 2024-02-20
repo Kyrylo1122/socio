@@ -127,7 +127,9 @@ const SignIn = () => {
               />
 
               <Typography variant="body2" color="error">
-                {errors.email ? "This field is required" : " "}
+                {errors.email && (
+                  <Typography>{t("field_required")} </Typography>
+                )}
               </Typography>
 
               <Input
@@ -136,8 +138,13 @@ const SignIn = () => {
                 autoComplete="current-password"
                 name="password"
                 register={register}
+                isPassword
               />
-              {errors.password && <p>{t("field_required_password")} </p>}
+              {errors.password && (
+                <Typography color="red">
+                  {t("field_required_password")}
+                </Typography>
+              )}
 
               <FormButton type="submit">{t("sign_in_btn")}</FormButton>
               <Grid container>
