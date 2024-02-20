@@ -1,5 +1,5 @@
 import { List, ListItem, Typography } from "@mui/material";
-import PostCard from "./PostCard/PostCard";
+import PostCard from "./PostCard";
 import { IPostResponse } from "src/types";
 import { useTranslation } from "react-i18next";
 import { useDeletePost, useDeleteSavePost } from "src/lib/react-query";

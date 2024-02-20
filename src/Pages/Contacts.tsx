@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import AvatarImage from "src/Components/AvatarImage";
+import AvatarImage from "src/Components/ProfileAvatars/AvatarImage";
 import { useUserContext } from "src/hooks/useUserContext";
 import { AvatarImageProps } from "src/types";
 import { MailOutline } from "@mui/icons-material";

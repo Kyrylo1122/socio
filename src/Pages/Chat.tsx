@@ -1,9 +1,9 @@
 import { Box, List, ListItem } from "@mui/material";
 import { useUserContext } from "src/hooks/useUserContext";
 
-import UserChatItemMarkup from "src/Components/UserChatItemMarkup";
+import UserChatItemMarkup from "src/Components/Chat/UserChatItemMarkup";
 
-import ChatUI from "src/Components/ChatUI";
+import ChatUI from "src/Components/Chat/ChatUI";
 
 import { useGetUserMessages } from "src/lib/react-query";
 import useSelectUserChat from "src/hooks/useSelectUserChat";

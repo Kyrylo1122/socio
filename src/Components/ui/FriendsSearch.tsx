@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useUserContext } from "src/hooks/useUserContext";
-import AvatarImage from "../AvatarImage";
+import AvatarImage from "../ProfileAvatars/AvatarImage";
 import { useTranslation } from "react-i18next";
 import { Button, Box } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";

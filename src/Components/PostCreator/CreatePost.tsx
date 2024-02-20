@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import FileUploader from "./FileUploader";
+import FileUploader from "../FileUploader";
 import { Controller, useForm } from "react-hook-form";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,15 +23,15 @@ import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 // import Spinner from "./Spinner";
 import { useUserContext } from "src/hooks/useUserContext";
 import ChipsArray from "./ChipArray";
-import TagsForm from "./TagsForm";
+import TagsForm from "../TagsForm";
 
 import useThemeContext from "src/hooks/useThemeContext";
 import { useTranslation } from "react-i18next";
-import PostCardHeader from "./PostCard/PostCardHeader";
+import PostCardHeader from "../PostCard/PostCardHeader";
 import { useCreatePost, useCreatePostReaction } from "src/lib/react-query";
 import { Timestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
-import { IconBox, StyledButton } from "./ui/StyledComponents";
+import { IconBox, StyledButton } from "../ui/StyledComponents";
 
 interface ICreatePost {
   close: () => void;
@@ -131,6 +131,9 @@ const CreatePost = ({ close }: ICreatePost) => {
         </Typography>
         <StyledButton
           sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             height: { xs: 30, sm: 40 },
             width: { xs: 30, sm: 40 },
 
@@ -313,8 +316,9 @@ const CreatePost = ({ close }: ICreatePost) => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: { xs: "flex-start", tb: "center" },
             alignContent: "center",
+            flexWrap: { xs: "wrap", tb: "nowrap" },
           }}
         >
           <IconBox
@@ -346,29 +350,9 @@ const CreatePost = ({ close }: ICreatePost) => {
             <TagIcon color="secondary" />
             {t(isOpenTags ? "remove_tags" : "add_tags")}
           </StyledButton>
-          <Fade in={!fileUrl} {...{ timeout: 500 }}>
-            <Box>
-              <Button
-                type="submit"
-                variant="text"
-                sx={{
-                  pr: 2,
-                  pl: 2,
-                  color: "text.white",
-
-                  background: "Background",
-                  "&:hover,&:focus": {
-                    backgroundColor: "primary.accent",
-                  },
-                }}
-              >
-                {t("share")}
-              </Button>
-            </Box>
-          </Fade>
         </Box>
 
-        <Fade in={Boolean(fileUrl)} unmountOnExit>
+        <Fade in={true} unmountOnExit>
           <Box sx={{ width: "100%" }}>
             <Button
               fullWidth

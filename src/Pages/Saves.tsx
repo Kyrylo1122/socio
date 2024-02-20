@@ -1,5 +1,5 @@
 import PostSkeleton from "src/Components/Skeleton/PostSkeleton";
-import PostList from "src/Components/PostList";
+import PostList from "src/Components/PostCard/PostList";
 import useSavesContext from "src/hooks/useSavesContext";
 
 const Saves = () => {

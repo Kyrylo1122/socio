@@ -8,7 +8,7 @@ import {
   Divider,
 } from "@mui/material";
 
-import CreatePost from "src/Components/CreatePost";
+import CreatePost from "src/Components/PostCreator/CreatePost";
 import Modal from "src/Components/Modal";
 import { useTranslation } from "react-i18next";
 import UserInfo from "src/Components/UserInfo";
@@ -18,13 +18,13 @@ import { useDeleteAvatarImage, useGetUserPosts } from "src/lib/react-query";
 import { toast } from "react-toastify";
 import AvatarSkeleton from "src/Components/Skeleton/AvatarSkeleton";
 
-import PostList from "src/Components/PostList";
-import PostCreator from "src/Components/PostCreator";
+import PostList from "src/Components/PostCard/PostList";
+import PostCreator from "src/Components/PostCreator/PostCreator";
 import { createAvatarLink } from "src/utils/createAvatarLink";
 import { useUserContext } from "src/hooks/useUserContext";
 import { IUser } from "src/types";
 import Spinner from "./Spinner";
-import AvatarImage from "./AvatarImage";
+import AvatarImage from "./ProfileAvatars/AvatarImage";
 import PostSkeleton from "./Skeleton/PostSkeleton";
 import { DocumentData } from "firebase/firestore";
 

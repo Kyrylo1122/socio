@@ -7,7 +7,7 @@ import {
   IconButton,
   Popover,
 } from "@mui/material";
-import AvatarImage from "./AvatarImage";
+import AvatarImage from "../ProfileAvatars/AvatarImage";
 import { AvatarImageProps } from "src/types";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";

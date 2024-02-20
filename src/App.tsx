@@ -1,10 +1,10 @@
 import { Box, Button, Fade } from "@mui/material";
 
-import Header from "./Components/Header/Header";
+import Header from "./Components/Header";
 import Main from "./Components/Main";
 import { useUserContext } from "./hooks/useUserContext";
 import MarkChatUnreadIcon from "@mui/icons-material/MarkChatUnread";
-import CustomizedDialogs from "./Components/Dialog";
+import CustomizedDialogs from "./Components/Chat/Dialog";
 import SubtitlesOffIcon from "@mui/icons-material/SubtitlesOff";
 import useDialogContext from "./hooks/useDialogContext";
 import Footer from "./Components/Footer";

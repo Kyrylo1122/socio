@@ -20,7 +20,7 @@ import { IPostResponse } from "src/types";
 import useSavesContext from "src/hooks/useSavesContext";
 import { toast } from "react-toastify";
 import SharePost from "./SharePost";
-import { ExpandMore } from "./ui/StyledComponents";
+import { ExpandMore } from "../ui/StyledComponents";
 
 const IconBtnStyle = {
   borderRadius: "50%",

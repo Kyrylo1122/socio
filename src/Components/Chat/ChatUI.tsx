@@ -12,16 +12,16 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "src/hooks/useUserContext";
 import { v4 as uuid } from "uuid";
-import SimpleInputForm from "./SimpleInputForm";
-import AvatarImage from "./AvatarImage";
+import SimpleInputForm from "../SimpleInputForm";
+import AvatarImage from "../ProfileAvatars/AvatarImage";
 import { formatDate } from "src/utils/formatDate";
 
 import { Delete } from "@mui/icons-material";
 import { useUpdateChats, useUpdateUserChats } from "src/lib/react-query";
 import { IMessageResponse } from "src/types";
 import { useMessageContext } from "src/hooks/useMessageContext";
-import NoChatMessages from "./NoChatMessages/NoChatMessages";
-import NoChatMessagesBtn from "./NoChatMessages/NoChatMessagesBtn";
+import NoChatMessages from "../NoChatMessages/NoChatMessages";
+import NoChatMessagesBtn from "../NoChatMessages/NoChatMessagesBtn";
 
 const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   const { t } = useTranslation();

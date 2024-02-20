@@ -6,7 +6,7 @@ import FileUploader from "./FileUploader";
 import { useRef, useState } from "react";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { useUploadAvatarImage } from "src/lib/react-query";
-import AvatarEditor from "./CustomAvatarEditor";
+import AvatarEditor from "./ProfileAvatars/CustomAvatarEditor";
 import dataURLtoFile from "src/utils/dataURLtoFile";
 import { StyledBox, StyledBtn } from "./ui/StyledComponents";
 import AvatarEditorType from "react-avatar-editor";

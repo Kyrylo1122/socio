@@ -3,8 +3,8 @@ import { SpeedDial, SpeedDialIcon } from "@mui/material";
 import Editor from "react-avatar-editor";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
-import { SliderRotate, SliderScale } from "./ui/Sliders";
-import { StyledSpeedDialAction } from "./ui/StyledComponents";
+import { SliderRotate, SliderScale } from "../ui/Sliders";
+import { StyledSpeedDialAction } from "../ui/StyledComponents";
 import AvatarEditorType from "react-avatar-editor";
 
 interface IProp {

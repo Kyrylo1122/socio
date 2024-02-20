@@ -4,7 +4,7 @@ import { createAvatarLink } from "src/utils/createAvatarLink";
 import { IComment } from "src/types";
 import { formatDate } from "src/utils/formatDate";
 import { useDeleteComment } from "src/lib/react-query";
-import PlaygroundSpeedDial from "./SpeedDial";
+import PlaygroundSpeedDial from "../ui/SpeedDial";
 import { useTranslation } from "react-i18next";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";

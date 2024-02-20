@@ -1,7 +1,7 @@
 import { SpeedDialAction } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useThemeContext from "src/hooks/useThemeContext";
-import { StyledSpeedDial } from "./ui/StyledComponents";
+import { StyledSpeedDial } from "./StyledComponents";
 
 interface IAction {
   icon: React.ReactElement;
