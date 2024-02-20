@@ -8,6 +8,11 @@ const styleBtn = {
     "text-transform": "none",
     "line-height": "1.1",
   },
+  chat: {
+    "line-height": "1.1",
+    "font-size": { xs: "0.6rem", sm: "0.75rem" },
+    padding: { md: "16px 16px" },
+  },
 };
 
 const NoChatMessagesBtn = ({
@@ -22,23 +27,23 @@ const NoChatMessagesBtn = ({
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ display: "flex", gap: 3 }}>
+    <Box sx={{ display: "flex", gap: { xs: 1, sm: 2, md: 3 } }}>
       <Button
-        sx={isDialog ? styleBtn.dialog : null}
+        sx={isDialog ? styleBtn.dialog : styleBtn.chat}
         variant="contained"
         onClick={() => setDefaultInputValue(t("hi_name", { name }))}
       >
         {t("hi_name", { name })}
       </Button>
       <Button
-        sx={isDialog ? styleBtn.dialog : null}
+        sx={isDialog ? styleBtn.dialog : styleBtn.chat}
         variant="contained"
         onClick={() => setDefaultInputValue(t("what's_up", { name }))}
       >
         {t("what's_up", { name })}
       </Button>
       <Button
-        sx={isDialog ? styleBtn.dialog : null}
+        sx={isDialog ? styleBtn.dialog : styleBtn.chat}
         variant="contained"
         defaultValue={t("yo")}
         onClick={() => setDefaultInputValue(t("yo"))}

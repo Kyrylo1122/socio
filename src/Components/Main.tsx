@@ -29,7 +29,11 @@ const Main = () => {
         </Box>
       ) : null}
       <Box
-        sx={{ flex: { xs: 1, sm: 3, md: 4 }, bgcolor: "background.default" }}
+        sx={{
+          flex: { xs: 1, sm: 3, md: 4 },
+          bgcolor: "background.default",
+          width: { xs: 280 },
+        }}
       >
         <Outlet />
       </Box>

@@ -44,7 +44,8 @@ function ListItemLink(props: ListItemLinkProps) {
         color: "text.primary",
         ":hover": { color: "text.accent" },
         "&.active": {
-          bgcolor: "background.paper",
+          //   bgcolor: "background.paper",
+          color: "text.accent",
         },
       }}
       component={Link}

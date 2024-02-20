@@ -13,12 +13,12 @@ export default function CustomizedDialogs() {
     <Box
       sx={{
         bgcolor: "background.default",
-        width: "350px",
+        width: { xs: "100%", sm: 350 },
         height: "500px",
         position: "fixed",
-        zIndex: 2000,
+        zIndex: 100000,
         borderRadius: 2,
-        right: 100,
+        right: { xs: 0, sm: 100 },
         bottom: 0,
 
         boxShadow: "6px 8px 24px 0px rgba(66, 68, 90, 1)",

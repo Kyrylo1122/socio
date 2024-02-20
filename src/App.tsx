@@ -35,12 +35,12 @@ const App = () => {
               sx={{
                 zIndex: 99999,
                 position: "fixed",
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 bgcolor: "primary.white",
                 color: "primary.accent",
                 borderRadius: "50%",
-                bottom: 16,
-                right: 16,
+                bottom: { xs: 10, sm: 16 },
+                right: { xs: 10, sm: 16 },
               }}
               onClick={() => toggle()}
             >

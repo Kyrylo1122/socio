@@ -38,7 +38,11 @@ const SimpleInputForm = ({
         )}
         {...register("value")}
       />
-      <Button type="submit" variant="contained">
+      <Button
+        sx={{ fontSize: { xs: "0.6rem", sm: "0.8rem" } }}
+        type="submit"
+        variant="contained"
+      >
         {t("submit")}
         <SendIcon />
       </Button>

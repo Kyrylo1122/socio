@@ -85,7 +85,7 @@ const PostCard = ({
         flexDirection: "column",
         gap: 1,
 
-        p: 2,
+        p: { xs: 1, sm: 2 },
 
         width: "100%",
         backgroundImage: "none",
@@ -122,7 +122,14 @@ const PostCard = ({
         isComment={true}
         handleClick={handleCreateComment}
       />
-      <Box sx={{ display: "flex", p: 1, gap: 4, justifyContent: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          p: 1,
+          gap: { xs: 1, sm: 4 },
+          justifyContent: "center",
+        }}
+      >
         <PostStats
           expanded={expanded}
           commentsLength={data?.comments.length}

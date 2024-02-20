@@ -75,7 +75,7 @@ const ChatUI = ({ isDialog }: { isDialog: boolean }) => {
   };
 
   return (
-    <Box>
+    <Box sx={{ p: 0.5 }}>
       {data.chatId !== "null" ? (
         <Box
           sx={{

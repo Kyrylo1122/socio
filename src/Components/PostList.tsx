@@ -45,6 +45,7 @@ const PostList = ({
   return (
     <List
       sx={{
+        width: "100%",
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",

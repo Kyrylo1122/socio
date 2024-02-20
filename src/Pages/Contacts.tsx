@@ -38,12 +38,22 @@ const ContactsMarkup = ({
 
   return (
     <Box
-      sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+      sx={{
+        display: "flex",
+        width: "100%",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
     >
       <Box
         component={Link}
         to={`/${uid}`}
-        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        sx={{
+          display: "flex",
+          flex: { xs: 1, sm: 2 },
+          alignItems: "center",
+          gap: 1,
+        }}
       >
         <AvatarImage
           name={name}
@@ -54,9 +64,9 @@ const ContactsMarkup = ({
             height: { xs: 50, sm: 60, md: 70 },
           }}
         />
-        <Typography>{name}</Typography>
+        <Typography sx={{ color: "text.primary" }}>{name}</Typography>
       </Box>
-      <Box>
+      <Box sx={{ flex: 1 }}>
         <Button
           onClick={handleSendMsg}
           variant="contained"

@@ -22,7 +22,12 @@ import { toast } from "react-toastify";
 import SharePost from "./SharePost";
 import { ExpandMore } from "./ui/StyledComponents";
 
-const IconBtnStyle = { borderRadius: "50%", m: 0, p: 2, minWidth: "auto" };
+const IconBtnStyle = {
+  borderRadius: "50%",
+  m: 0,
+  p: { xs: 0.1, sm: 2 },
+  minWidth: "auto",
+};
 
 interface IPostStats {
   likes: string[];

@@ -7,23 +7,32 @@ import ChatUI from "src/Components/ChatUI";
 
 import { useGetUserMessages } from "src/lib/react-query";
 import useSelectUserChat from "src/hooks/useSelectUserChat";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import useDialogContext from "src/hooks/useDialogContext";
+import { IUserShortInfo } from "src/types";
 
 const Chat = () => {
   const { user: currentUser } = useUserContext();
   const { data: msg } = useGetUserMessages(currentUser.uid);
   const { handleSelect } = useSelectUserChat();
-  const { close, setIsInvisibleBtn, setIsVisibleBtn } = useDialogContext();
+  const { isOpen, open, close, setIsInvisibleBtn, setIsVisibleBtn } =
+    useDialogContext();
 
   useEffect(() => {
     setIsInvisibleBtn();
-    close();
+    // close();
     return () => {
       setIsVisibleBtn();
     };
   }, []);
+  useLayoutEffect(() => {
+    if (window.innerWidth > 600) close();
+  }, [close]);
 
+  const handleClick = async (chat: IUserShortInfo) => {
+    if (!isOpen) open();
+    await handleSelect(chat);
+  };
   if (!msg) return;
   const sortedMessages = Object.entries(msg)?.sort(
     (a, b) => b[1].date - a[1].date
@@ -46,8 +55,9 @@ const Chat = () => {
           <List sx={{ position: "absolute", width: "100%" }}>
             {sortedMessages.map((chat) => (
               <ListItem
+                sx={{ m: "8px 0", p: 0 }}
                 key={chat[0]}
-                onClick={async () => await handleSelect(chat[1].userInfo)}
+                onClick={() => handleClick(chat[1].userInfo)}
               >
                 <UserChatItemMarkup
                   name={chat[1].userInfo.name}
@@ -64,11 +74,11 @@ const Chat = () => {
       <Box
         sx={{
           position: "relative",
-          flex: { xs: 1, md: 1.5, lg: 2 },
+          flex: 2,
 
           overflow: "hidden",
 
-          display: "flex",
+          display: { xs: "none", sm: "flex" },
           justifyContent: "center",
         }}
       >
