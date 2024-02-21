@@ -13,6 +13,7 @@ const style = {
   bgcolor: "background.paper",
   borderRadius: "5px",
   boxShadow: 24,
+  overflow: "hidden",
 };
 export interface IBasicModal {
   open: boolean;

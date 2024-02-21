@@ -20,7 +20,6 @@ const Chat = () => {
 
   useEffect(() => {
     setIsInvisibleBtn();
-    // close();
     return () => {
       setIsVisibleBtn();
     };

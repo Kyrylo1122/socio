@@ -26,20 +26,15 @@ import { IUser } from "src/types";
 import Spinner from "./Spinner";
 import AvatarImage from "./ProfileAvatars/AvatarImage";
 import PostSkeleton from "./Skeleton/PostSkeleton";
-import { DocumentData } from "firebase/firestore";
+import { ContactsList } from "./Contacts/ContactsList";
 
-const PageMarkUp = ({
-  user,
-  friends,
-}: {
-  user: IUser;
-  friends: DocumentData[] | undefined;
-}) => {
+const PageMarkUp = ({ user, friends }: { user: IUser; friends: IUser[] }) => {
   const { t } = useTranslation();
   const { user: currentUser } = useUserContext();
   const currentUserPage = user?.uid === currentUser?.uid;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [friendsOpen, setFriendsOpen] = useState(false);
   const { data: posts, isFetching: isLoadPosts } = useGetUserPosts(user.uid);
   const { mutateAsync: deleteAvatarImg, isPending } = useDeleteAvatarImage();
 
@@ -59,7 +54,10 @@ const PageMarkUp = ({
 
   const UserFriends = () => {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{ cursor: "pointer", display: "flex", flexDirection: "column" }}
+        onClick={() => setFriendsOpen(true)}
+      >
         <Typography variant="h4">
           {t(currentUserPage ? "my_friends" : "user_friends", {
             name: user.name,
@@ -216,6 +214,18 @@ const PageMarkUp = ({
           <CreatePost close={closeModal} />
         </Modal>
       ) : null}
+      <Modal
+        sx={{
+          p: { xs: 0, sm: 1, md: 2 },
+          border: 0,
+          height: "60vh",
+          overflow: "auto",
+        }}
+        open={friendsOpen}
+        close={() => setFriendsOpen(false)}
+      >
+        <ContactsList friends={friends} />
+      </Modal>
     </Box>
   );
 };
